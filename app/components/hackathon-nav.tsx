@@ -29,8 +29,8 @@ const hackathonPages = [
     }
 ]
 
-function HackthonNavItem({ name, slug }: { name: string, slug: string }) {
-    const headerList = headers();
+async function HackthonNavItem({ name, slug }: { name: string, slug: string }) {
+    const headerList = await headers();
     const pathname = headerList.get("x-current-path") as string;
     const parts = pathname.split('/').filter(Boolean);
     const finalPart = parts.length > 2 ? `/${parts.slice(2).join('/')}` : '/';
@@ -41,7 +41,7 @@ function HackthonNavItem({ name, slug }: { name: string, slug: string }) {
     )
 }
 
-export default function HackathonNav({ hackathon }: { hackathon: any }) {
+export default async function HackathonNav({ hackathon }: { hackathon: any }) {
     return(
         <div>
             <div className="text-white flex flex-col gap-1 items-start">

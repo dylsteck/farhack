@@ -5,7 +5,7 @@ import { getHackathon } from '@/app/lib/fetchers';
 import HackathonNav from '@/app/components/hackathon-nav';
 
 export default async function HackathonBySlugPage() {
-    const headerList = headers();
+    const headerList = await headers();
     const pathname = headerList.get("x-current-path") as string;
     const pathnameParts = pathname.split('/');
     const slug = pathnameParts[2];

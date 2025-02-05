@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import HackathonSchedule from '@/app/components/hackathon-schedule';
 
 export default async function HackathonSchedulePage() {
-    const headerList = headers();
+    const headerList = await headers();
     const pathname = headerList.get("x-current-path") as string;
     const pathnameParts = pathname.split('/');
     const slug = pathnameParts[2];

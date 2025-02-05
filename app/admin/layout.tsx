@@ -111,7 +111,7 @@ export default async function AdminLayout({
     .where("name", "=", (session as any).user.name)
     .executeTakeFirst();
 
-  const headerList = headers();
+  const headerList = await headers();
   const pathname = headerList.get("x-current-path");
 
   const isCurrent = (path: string) => pathname === path;

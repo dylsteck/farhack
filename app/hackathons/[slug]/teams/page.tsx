@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import HackathonTeams from '@/app/components/hackathon-teams';
 
 export default async function HackathonTeamsPage() {
-    const headerList = headers();
+    const headerList = await headers();
     const pathname = headerList.get("x-current-path") as string;
     const pathnameParts = pathname.split('/');
     const slug = pathnameParts[2];

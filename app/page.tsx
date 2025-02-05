@@ -11,7 +11,7 @@ export default async function Home() {
           .selectAll()
           .where('name', '=', session.user.name ?? "")
           .executeTakeFirst();
-
+          
     session.user = {
       id: user?.id.toString() ?? "0",
       name: session.user.name,

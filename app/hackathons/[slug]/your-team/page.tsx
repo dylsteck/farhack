@@ -16,7 +16,7 @@ import Error from '@/app/components/error';
 import { createTeam, handleDeleteTeam, handleGenerateInvite, handleLeaveTeam, handleSaveTeam, handleSubmitTeam } from '@/app/lib/server/teams';
 
 export default async function YourTeamPage() {
-    const headerList = headers();
+    const headerList = await headers();
     const slug = (headerList.get("x-current-path") as string).split('/')[2];
     const session = await auth();
 

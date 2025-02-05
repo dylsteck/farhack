@@ -67,9 +67,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }): Promise<JSX.Element> {
   const session = await auth()
-  const headerList = headers();
+  const headerList = await headers();
   const pathname = headerList.get("x-current-path");
-  const isAdmin = pathname && pathname.includes('/admin');
+  const isAdmin = pathname && pathname.includes("/admin");
 
   if (session?.user) {
     session.user = {

@@ -7,7 +7,7 @@ import { headers } from "next/headers";
 import WarpcastIcon from '@/app/components/icons/warpcast-icon';
 
 export default async function ProfileByUsernamePage() {
-  const headerList = headers();
+  const headerList = await headers();
   const pathname = headerList.get("x-current-path");
   const username = pathname ? pathname.split('/').pop() : undefined;
   if (!username) {

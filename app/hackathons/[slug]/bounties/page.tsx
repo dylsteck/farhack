@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import HackathonBounites from '@/app/components/hackathon-bounties';
 
 export default async function HackathonBounitesPage() {
-    const headerList = headers();
+    const headerList = await headers();
     const pathname = headerList.get("x-current-path") as string;
     const pathnameParts = pathname.split('/');
     const slug = pathnameParts[2];

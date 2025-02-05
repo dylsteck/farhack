@@ -6,7 +6,7 @@ import { auth } from '@/auth';
 import { acceptInvite } from '@/app/lib/server/invites';
 
 export default async function AcceptInvitePage() {
-    const headerList = headers();
+    const headerList = await headers();
     const pathname = headerList.get("x-current-path") as string;
     const hackathonSlug = pathname.split('/')[2];
     const query = headerList.get("x-current-query") as string;

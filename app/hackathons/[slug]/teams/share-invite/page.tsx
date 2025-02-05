@@ -7,7 +7,7 @@ import CopyClipboardIcon from '@/app/components/copy-to-clipboard';
 import { BASE_URL } from '@/app/lib/utils';
 
 export default async function ShareInvitePage() {
-    const headerList = headers();
+    const headerList = await headers();
     const pathname = headerList.get("x-current-path") as string;
     const query = headerList.get("x-current-query") as string;
 

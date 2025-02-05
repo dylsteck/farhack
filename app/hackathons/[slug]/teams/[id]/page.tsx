@@ -15,7 +15,7 @@ import { getHackathon, getTeam } from '@/app/lib/fetchers';
 import { createInvite } from '@/app/lib/server/invites';
 
 export default async function TeamByIdPage() {
-    const headerList = headers();
+    const headerList = await headers();
     const pathname = headerList.get("x-current-path") as string;
     const pathnameParts = pathname.split('/');
     const slug = pathnameParts[2];
