@@ -53,18 +53,6 @@ function Content() {
 
   return (
     <div className="flex flex-row gap-10 items-center">
-      {/* WIP: new nav items, need to add their content and also add mobile responsiveness here */}
-      {/* <div className={`flex flex-row gap-3 items-center ${session ? 'pt-2' : ''}`}>
-        <a className="underline" href="/about">
-          About
-        </a>
-        <a className="underline" href="/farstack">
-          FarStack
-        </a>
-        <a className="underline" href="/fridays">
-          Fridays
-        </a>
-      </div> */}
       {!session ? (
         <div className={`${karla.className} text-white`}>
           <SignInButton

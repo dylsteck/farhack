@@ -108,21 +108,13 @@ export default async function RootLayout({
               {isAdmin ? children : 
                   <div className="flex flex-col gap-4 min-h-screen">
                     <nav className="w-full bg-black/75 flex items-center justify-between p-4 pb-3 border-b border-white/20">
-                      <div className="flex items-center gap-6">
-                        <Link
+                      <Link
                           href="/"
                           className="flex items-center gap-2 text-lg font-semibold md:text-base"
                         >
                           <FarhackLogo width={35} height={35} />
                           <p className={`text-white text-2xl mr-4 ${karla.className}`}>FarHack</p>
                         </Link>
-                        <Link
-                          href="https://warpcast.com/~/channel/farhack"
-                          className="text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                          /farhack
-                        </Link>
-                      </div>
                       <div className="flex items-center gap-6">
                         <SignInWithFarcaster />
                       </div>
