@@ -19,3 +19,4 @@ export const BASE_URL = isDev
   : 'https://farhack.xyz';
 
 export const BANNER_IMG = 'https://i.imgur.com/4sLMVg2.png';
+export const ICON_IMG = 'https://farhack.xyz/icons/icon-512x512.png';

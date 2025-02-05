@@ -3,7 +3,7 @@ import './globals.css'
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { auth } from '../auth';
-import { karla } from "./lib/utils";
+import { BANNER_IMG, BASE_URL, ICON_IMG, karla } from "./lib/utils";
 import FarhackLogo from "./components/icons/farhack-logo";
 import SignInWithFarcaster from "./components/sign-in-with-farcaster";
 import Head from 'next/head';
@@ -12,6 +12,7 @@ import OnchainProviders from './components/onchain-providers';
 import { headers } from 'next/headers';
 import Link from 'next/link';
 import { Package2 } from 'lucide-react';
+import FrameProvider from './components/frame-provider';
 
 export function generateMetadata(){
   return{
@@ -41,6 +42,22 @@ export function generateMetadata(){
         'max-snippet': -1,
       },
     },
+    other: {
+      "fc:frame": JSON.stringify({
+        version: "next",
+        imageUrl: BANNER_IMG,
+        button: {
+          title: "View FarHack",
+          action: {
+            type: "launch_frame",
+            name: "FarHack",
+            url: `${BASE_URL}`,
+            splashImageUrl: ICON_IMG,
+            splashBackgroundColor: "#000000",
+          },
+        },
+    })
+    }
   } as Metadata
 }
 
@@ -66,23 +83,9 @@ export default async function RootLayout({
     <html lang="en">
       <Head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="og:title" content="FarHack" />
         <title>FarHack</title>
-        <meta name="application-name" content="FarHack" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="FarHack" />
-        <meta name="description" content="The ultimate Farcaster hackathon" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="msapplication-TileColor" content="#000000" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="theme-color" content="#000000" />
-
-        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
       <Script
         strategy="lazyOnload"
@@ -99,53 +102,37 @@ export default async function RootLayout({
         `}
       </Script>
       <body className={`${karla.className} dark bg-black`}>
-        <OnchainProviders>
-          <SessionProvider basePath={"/api/auth"} session={session}>
-            {isAdmin ? children : 
-                <div className="flex flex-col gap-4 min-h-screen">
-                  <nav className="w-full bg-black/75 flex items-center justify-between p-4 pb-3 border-b border-white/20">
-                    <div className="flex items-center gap-6">
-                      <Link
-                        href="/"
-                        className="flex items-center gap-2 text-lg font-semibold md:text-base"
-                      >
-                        <FarhackLogo width={35} height={35} />
-                        <p className={`text-white text-2xl mr-4 ${karla.className}`}>FarHack</p>
-                      </Link>
-                      <Link
-                        href="https://warpcast.com/~/channel/farhack"
-                        className="text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        /farhack
-                      </Link>
-                      {/* <Link
-                        href="#"
-                        className="text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        About
-                      </Link>
-                      <Link
-                        href="#"
-                        className="text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        Hackathons
-                      </Link> */}
-                      {/* <Link
-                        href="#"
-                        className="rounded-full bg-[#3a3a3a] text-white/75 hover:text-white px-2 py-1"
-                      >
-                        + New Hackathon
-                      </Link> */}
-                    </div>
-                    <div className="flex items-center gap-6">
-                      <SignInWithFarcaster />
-                    </div>
-                  </nav>
-                  {children}
-              </div>
-            }
-          </SessionProvider>
-        </OnchainProviders>
+        <SessionProvider basePath={"/api/auth"} session={session}>
+          <OnchainProviders>
+            <FrameProvider>
+              {isAdmin ? children : 
+                  <div className="flex flex-col gap-4 min-h-screen">
+                    <nav className="w-full bg-black/75 flex items-center justify-between p-4 pb-3 border-b border-white/20">
+                      <div className="flex items-center gap-6">
+                        <Link
+                          href="/"
+                          className="flex items-center gap-2 text-lg font-semibold md:text-base"
+                        >
+                          <FarhackLogo width={35} height={35} />
+                          <p className={`text-white text-2xl mr-4 ${karla.className}`}>FarHack</p>
+                        </Link>
+                        <Link
+                          href="https://warpcast.com/~/channel/farhack"
+                          className="text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          /farhack
+                        </Link>
+                      </div>
+                      <div className="flex items-center gap-6">
+                        <SignInWithFarcaster />
+                      </div>
+                    </nav>
+                    {children}
+                </div>
+              }
+            </FrameProvider>
+          </OnchainProviders>
+        </SessionProvider>
       </body>
     </html>
   );
