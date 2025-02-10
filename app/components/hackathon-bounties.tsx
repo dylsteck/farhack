@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { db } from '@/kysely';
-import HackathonNav from '@/app/components/hackathon-nav';
+import { HackathonNav } from '@/app/components/hackathon-nav';
 import { Bounty } from '@/app/lib/types';
 import { TrophyIcon } from '@heroicons/react/20/solid';
 import { getHackathon } from '../lib/fetchers';

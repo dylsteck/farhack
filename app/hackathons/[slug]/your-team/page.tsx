@@ -1,9 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { headers } from 'next/headers';
 import { db, sql } from '@/kysely';
 import { auth } from '@/auth';
-import HackathonNav from '@/app/components/hackathon-nav';
+import { HackathonNav } from '@/app/components/hackathon-nav';
 import InviteButton from '@/app/components/invite-button';
 import CreateTeamButton from '@/app/components/create-team-button';
 import DeleteOrLeaveTeamButton from '@/app/components/delete-or-leave-team-button';
@@ -15,9 +14,9 @@ import { getHackathon } from '@/app/lib/fetchers';
 import Error from '@/app/components/error';
 import { createTeam, handleDeleteTeam, handleGenerateInvite, handleLeaveTeam, handleSaveTeam, handleSubmitTeam } from '@/app/lib/server/teams';
 
-export default async function YourTeamPage() {
-    const headerList = await headers();
-    const slug = (headerList.get("x-current-path") as string).split('/')[2];
+export default async function YourTeamPage(props: { params: Promise<any> }) {
+    const params = await props.params;
+    const { slug } = params;
     const session = await auth();
 
     if (!session?.user) return <Error message={`You are not logged in.`} />

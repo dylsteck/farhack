@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import HackathonNav from '@/app/components/hackathon-nav';
+import { HackathonNav } from '@/app/components/hackathon-nav';
 import { Team } from '@/app/lib/types';
 import { UserGroupIcon } from '@heroicons/react/20/solid';
 import { getHackathon, getTeams } from '../lib/fetchers';
@@ -49,15 +49,12 @@ export default async function HackathonTeams({ slug }: { slug: string }) {
                             const coverImage = team.embeds.find((embed: any) => embed.type === 'image')?.url;
                             return (
                                 <div key={team.id} className="flex flex-col justify-between gap-1 items-start p-4 rounded-md bg-baseGrey hover:bg-gray-500 text-white transition-colors duration-200">
-                                    <a href={`${BASE_URL}/hackathons/${hackathon.slug}/teams/${team.id}`}>
                                         {coverImage && <img src={coverImage} alt={team.name} className="w-full h-32 object-cover rounded-md mb-2" />}
                                         <div className="flex items-center gap-2">
                                             <UserGroupIcon className="h-6 w-6 text-white" />
                                             <p className="font-semibold">{team.name}</p>
-                                            {/* <CopyClipboardIcon value={`${BASE_URL}/hackathons/${hackathon.slug}/${team.id}`} isShare={true} /> */}
                                         </div>
                                         <p className="text-sm mt-2">{team.description}</p>
-                                    </a>
                                 </div>
                             );
                         })}

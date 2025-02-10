@@ -1,13 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { headers } from 'next/headers';
 import HackathonBounites from '@/app/components/hackathon-bounties';
 
-export default async function HackathonBounitesPage() {
-    const headerList = await headers();
-    const pathname = headerList.get("x-current-path") as string;
-    const pathnameParts = pathname.split('/');
-    const slug = pathnameParts[2];
+export default async function HackathonBounitesPage(props: { params: Promise<any> }) {
+    const params = await props.params;
+    const { slug } = params;
 
     if (!slug) {
         return (

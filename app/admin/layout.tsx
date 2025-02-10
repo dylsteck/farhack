@@ -112,9 +112,15 @@ export default async function AdminLayout({
     .executeTakeFirst();
 
   const headerList = await headers();
-  const pathname = headerList.get("x-current-path");
+  let pathname = '';
+  for (const [key, value] of headerList.entries()) {
+    if(key === 'referer'){
+      pathname = value;
+      break;
+    }
+  }
 
-  const isCurrent = (path: string) => pathname === path;
+  const isCurrent = (path: string) => pathname.endsWith(path);
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">

@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import './globals.css'
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
@@ -68,9 +67,16 @@ export default async function RootLayout({
 }): Promise<JSX.Element> {
   const session = await auth()
   const headerList = await headers();
-  const pathname = headerList.get("x-current-path");
-  const isAdmin = pathname && pathname.includes("/admin");
-
+  let pathname = '';
+  for (const [key, value] of headerList.entries()) {
+    if(key === 'referer'){
+      pathname = value;
+      break;
+    }
+  }
+  let isAdmin = false;
+  isAdmin = pathname.includes("/admin/") || pathname.endsWith("/admin");
+  
   if (session?.user) {
     session.user = {
       id: session.user.id,
