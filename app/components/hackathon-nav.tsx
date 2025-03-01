@@ -1,30 +1,34 @@
 import React from 'react';
 import { HackthonNavItem } from './hackathon-nav-item';
+import { Hackathon } from '../lib/types';
 
-const hackathonPages = [
-    {
-        name: 'Home',
-        slug: '/'
-    },
-    {
-        name: 'Tracks',
-        slug: '/tracks'
-    },
-    {
-        name: 'Bounties',
-        slug: '/bounties'
-    },
-    {
-        name: 'Teams',
-        slug: '/teams'
-    },
-    {
-        name: 'Your team',
-        slug: '/your-team'
-    }
-]
+export function HackathonNav({ hackathon }: { hackathon: Hackathon }) {
+    const hackathonPages = [
+        {
+            name: 'Home',
+            slug: '/'
+        },
+        {
+            name: 'Tracks',
+            slug: '/tracks',
+            visible: hackathon.tracks && hackathon.tracks.length > 0
+        },
+        {
+            name: 'Bounties',
+            slug: '/bounties',
+            visible: hackathon.bounties && hackathon.bounties.length > 0
+        },
+        {
+            name: 'Teams',
+            slug: '/teams',
+            visible: true
+        },
+        {
+            name: 'Your team',
+            slug: '/your-team'
+        }
+    ].filter(page => page.visible !== false);
 
-export function HackathonNav({ hackathon }: { hackathon: any }) {
     return(
         <div>
             <div className="text-white flex flex-col gap-1 items-start">

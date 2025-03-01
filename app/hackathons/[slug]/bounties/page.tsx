@@ -1,5 +1,8 @@
 import React from 'react';
 import HackathonBounites from '@/app/components/hackathon-bounties';
+import { farhackSDK } from '@/app/lib/api';
+import { Hackathon } from '@/app/lib/types';
+import Error from '@/app/components/error';
 
 export default async function HackathonBounitesPage(props: { params: Promise<any> }) {
     const params = await props.params;
@@ -13,5 +16,9 @@ export default async function HackathonBounitesPage(props: { params: Promise<any
         );
     }
 
-    return <HackathonBounites slug={slug} />;
+    const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
+
+    if(!hackathon) return <Error message={`Hackathon with slug ${slug} not found.`} />
+
+    return <HackathonBounites hackathon={hackathon} />;
 }
