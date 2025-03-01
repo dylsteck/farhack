@@ -1,4 +1,4 @@
-import { db } from '@/kysely';
+import { addTicket } from '@/db/queries';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -11,19 +11,8 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
-        const resp = await db.insertInto('tickets')
-            .values({
-                user_id,
-                user_address,
-                hackathon_id,
-                txn_hash,
-                ticket_type,
-                amount,
-                created_at: new Date()
-            })
-            .returningAll()
-            .executeTakeFirst();
-
+        const resp = await addTicket(user_id, user_address, hackathon_id, txn_hash, ticket_type, amount);
+        
         if (!resp) {
             return NextResponse.json({ error: "Failed to create ticket" }, { status: 500 });
         }

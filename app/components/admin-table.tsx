@@ -11,15 +11,9 @@ import Image from "next/image"
 import { type User } from "../lib/types"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import WarpcastIcon from "./icons/warpcast-icon"
+import { createUser, removeUser, updateUser } from "@/db/queries"
 
-interface AdminTableProps {
-  createUser: (user: Omit<User, "id" | "created_at">) => Promise<User>
-  updateUser: (user: User) => Promise<void>
-  removeUser: (userId: number) => Promise<void>
-  users: User[]
-}
-
-export default function AdminTable({ createUser, updateUser, removeUser, users }: AdminTableProps) {
+export default function AdminTable({ users }: { users: User[] }) {
   const [editUser, setEditUser] = useState<User | null>(null)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -52,18 +46,28 @@ export default function AdminTable({ createUser, updateUser, removeUser, users }
 
   const handleSubmitNewUser = async () => {
     if (name && validateUrl(image) && adminHackathons) {
-      const newUser = { name, image, is_admin: true, admin_hackathons: adminHackathons }
-      const createdUser = await createUser(newUser)
-      setUserList([...userList, createdUser])
+      const createdUser = await createUser(name, "default_fid", image, true)
+      const sanitizedUser = {
+        ...createdUser,
+        name: createdUser.name || "",
+        image: createdUser.image || "",
+        admin_hackathons: createdUser.admin_hackathons || ""
+      }
+      setUserList([...userList, sanitizedUser])
       setIsAddModalOpen(false)
     }
   }
 
   const handleSubmitEditUser = async () => {
     if (editUser && name && validateUrl(image) && adminHackathons) {
-      const updatedUser = { ...editUser, name, image, admin_hackathons: adminHackathons }
-      await updateUser(updatedUser)
-      setUserList(userList.map(user => user.id === updatedUser.id ? updatedUser : user))
+      const updatedUser = await updateUser(editUser.id, { name, image, admin_hackathons: adminHackathons })
+      const sanitizedUser = {
+        ...updatedUser,
+        name: updatedUser.name || "",
+        image: updatedUser.image || "",
+        admin_hackathons: updatedUser.admin_hackathons || ""
+      }
+      setUserList(userList.map(user => user.id === sanitizedUser.id ? sanitizedUser : user))
       setIsEditModalOpen(false)
     }
   }
@@ -91,131 +95,128 @@ export default function AdminTable({ createUser, updateUser, removeUser, users }
 
   return (
     <Card>
-        <CardHeader className="px-7">
-            <div className="flex flex-row justify-between">
-                <div className="flex flex-col gap-1 items-start">
-                    <CardTitle>Admins</CardTitle>
-                    <CardDescription>List of all admins</CardDescription>
-                </div>
-                <Button className="mb-3" onClick={handleAddUser}>Add Admin</Button>
+      <CardHeader className="px-7">
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-col gap-1 items-start">
+            <CardTitle>Admins</CardTitle>
+            <CardDescription>List of all admins</CardDescription>
+          </div>
+          <Button className="mb-3" onClick={handleAddUser}>Add Admin</Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>FID</TableHead>
+              <TableHead>Created At</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Profile</TableHead>
+              <TableHead>Hackathon Access</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {userList.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.id}</TableCell>
+                <TableCell>{new Date(user.created_at).toLocaleDateString()}</TableCell>
+                <TableCell className="flex flex-row gap-2 items-center mt-1">
+                  <Image src={user.image || ""} alt={user.name || ""} width={22} height={22} className="rounded-full" />
+                  {user.name || ""}
+                </TableCell>
+                <TableCell>
+                  <a href={`https://warpcast.com/${user.name || ""}`} target="_blank">
+                    <WarpcastIcon />
+                  </a>
+                </TableCell>
+                <TableCell>{user.admin_hackathons === 'all' ? "All" : user.admin_hackathons}</TableCell>
+                <TableCell>
+                  <Button className="mr-2" onClick={() => handleEditUser(user)}>Edit</Button>
+                  <Button onClick={() => handleRemoveUser(user)}>Remove</Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+          <DialogTrigger />
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add New Admin</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <Label htmlFor="image">Image URL</Label>
+              <Input
+                id="image"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+                className={image && !validateUrl(image) ? "border-red-500" : ""}
+              />
+              {image && !validateUrl(image) && <p className="text-red-500">Please enter a valid URL.</p>}
+              <Label htmlFor="adminHackathons">Admin Hackathons</Label>
+              <Input
+                id="adminHackathons"
+                value={adminHackathons}
+                onChange={(e) => setAdminHackathons(e.target.value)}
+              />
             </div>
-        </CardHeader>
-        <CardContent>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>FID</TableHead>
-                        <TableHead>Created At</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Profile</TableHead>
-                        <TableHead>Hackathon Access</TableHead>
-                        <TableHead>Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                {userList.map((user) => (
-                    <TableRow key={user.id}>
-                    <TableCell>{user.id}</TableCell>
-                    <TableCell>{new Date(user.created_at).toLocaleDateString()}</TableCell>
-                    <TableCell className="flex flex-row gap-2 items-center mt-1">
-                        <Image src={user.image} alt={user.name} width={22} height={22} className="rounded-full" />
-                        {user.name}
-                    </TableCell>
-                    <TableCell>
-                        <a href={`https://warpcast.com/${user.name}`} target="_blank">
-                            <WarpcastIcon />
-                        </a>
-                    </TableCell>
-                    <TableCell>{user.admin_hackathons === 'all' ? "All" : user.admin_hackathons}</TableCell>
-                    <TableCell>
-                        <Button className="mr-2" onClick={() => handleEditUser(user)}>Edit</Button>
-                        <Button onClick={() => handleRemoveUser(user)}>Remove</Button>
-                    </TableCell>
-                    </TableRow>
-                ))}
-                </TableBody>
-            </Table>
-
-            <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-                <DialogTrigger />
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Add New Admin</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-2">
-                        <Label htmlFor="name">Name</Label>
-                        <Input
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        />
-                        <Label htmlFor="image">Image URL</Label>
-                        <Input
-                        id="image"
-                        value={image}
-                        onChange={(e) => setImage(e.target.value)}
-                        className={image && !validateUrl(image) ? "border-red-500" : ""}
-                        />
-                        {image && !validateUrl(image) && <p className="text-red-500">Please enter a valid URL.</p>}
-                        <Label htmlFor="adminHackathons">Admin Hackathons</Label>
-                        <Input
-                        id="adminHackathons"
-                        value={adminHackathons}
-                        onChange={(e) => setAdminHackathons(e.target.value)}
-                        />
-                    </div>
-                    <DialogFooter>
-                        <Button onClick={handleSubmitNewUser}>Add</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-
-            <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-                <DialogTrigger />
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Edit Admin</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-2">
-                        <Label htmlFor="name">Name</Label>
-                        <Input
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        />
-                        <Label htmlFor="image">Image URL</Label>
-                        <Input
-                        id="image"
-                        value={image}
-                        onChange={(e) => setImage(e.target.value)}
-                        className={image && !validateUrl(image) ? "border-red-500" : ""}
-                        />
-                        {image && !validateUrl(image) && <p className="text-red-500">Please enter a valid URL.</p>}
-                        <Label htmlFor="adminHackathons">Admin Hackathons</Label>
-                        <Input
-                        id="adminHackathons"
-                        value={adminHackathons}
-                        onChange={(e) => setAdminHackathons(e.target.value)}
-                        />
-                    </div>
-                    <DialogFooter>
-                        <Button onClick={handleSubmitEditUser}>Save</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-
-            <Dialog open={isRemoveModalOpen} onOpenChange={setIsRemoveModalOpen}>
-                <DialogTrigger />
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Remove Admin</DialogTitle>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <Button variant="destructive" onClick={handleConfirmRemoveUser}>Confirm Remove</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-        </CardContent>
+            <DialogFooter>
+              <Button onClick={handleSubmitNewUser}>Add</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+          <DialogTrigger />
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Admin</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <Label htmlFor="image">Image URL</Label>
+              <Input
+                id="image"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+                className={image && !validateUrl(image) ? "border-red-500" : ""}
+              />
+              {image && !validateUrl(image) && <p className="text-red-500">Please enter a valid URL.</p>}
+              <Label htmlFor="adminHackathons">Admin Hackathons</Label>
+              <Input
+                id="adminHackathons"
+                value={adminHackathons}
+                onChange={(e) => setAdminHackathons(e.target.value)}
+              />
+            </div>
+            <DialogFooter>
+              <Button onClick={handleSubmitEditUser}>Save</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        <Dialog open={isRemoveModalOpen} onOpenChange={setIsRemoveModalOpen}>
+          <DialogTrigger />
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Remove Admin</DialogTitle>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="destructive" onClick={handleConfirmRemoveUser}>Confirm Remove</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </CardContent>
     </Card>
   )
 }

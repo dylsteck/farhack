@@ -1,18 +1,9 @@
-import { db } from '@/kysely';
+import { getTeams } from '@/db/queries';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-    const searchParams = req.nextUrl.searchParams;
-    const id = searchParams.get("id");
-
     try {
-        let query: any = db.selectFrom('teams').selectAll();
-
-        if (id) {
-            query = query.where('id', '=', id as any);
-        }
-
-        const resp = await query.execute();
+        const resp = await getTeams();
 
         if (resp.length === 0) {
             return NextResponse.json({ error: "Record not found" }, { status: 404 });

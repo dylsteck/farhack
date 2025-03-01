@@ -1,10 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { db } from '@/kysely';
 import { HackathonNav } from '@/app/components/hackathon-nav';
-import { Bounty } from '@/app/lib/types';
+import { Bounty, Hackathon } from '@/app/lib/types';
 import { TrophyIcon } from '@heroicons/react/20/solid';
-import { getHackathon } from '../lib/fetchers';
+import { farhackSDK } from '../lib/api';
 
 export default async function HackathonBounties({ slug }: { slug: string }) {
     
@@ -16,7 +15,7 @@ export default async function HackathonBounties({ slug }: { slug: string }) {
         );
     }
 
-    const hackathon = await getHackathon(slug);
+    const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
 
     if (!hackathon) {
         return (

@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { type HackathonsTable, db } from "@/kysely";
-import { TicketIcon } from "@heroicons/react/20/solid";
+import { getHackathons } from "@/db/queries";
 
 interface Hackathon {
   id: number;
@@ -52,13 +51,13 @@ function HackathonListItem({ hackathon }: { hackathon: Hackathon }) {
 }
 
 export default async function Hackathons() {
-  const hackathons: Hackathon[] = await db.selectFrom("hackathons").selectAll().execute();
+  const hackathons: Hackathon[] = await getHackathons() as Hackathon[];
   if (hackathons) {
     hackathons.sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
     return (
       <div className="pt-5 md:pt-8">
-        <p className="pb-4 text-2xl font-medium">Hackathons</p>
-        <div className="flex flex-col md:flex-row justify-center md:justify-start items-center md:items-start gap-10">
+        <p className="pb-4 text-2xl font-medium text-center">Hackathons</p>
+        <div className="flex flex-wrap justify-center items-center gap-10">
           {hackathons.map((hackathon) => (
             <HackathonListItem key={hackathon.id} hackathon={hackathon} />
           ))}
@@ -66,5 +65,9 @@ export default async function Hackathons() {
       </div>
     );
   }
-  return <div>Loading...</div>;
+  return (
+    <div className="flex justify-center items-center w-full py-10">
+      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+    </div>
+  );
 }

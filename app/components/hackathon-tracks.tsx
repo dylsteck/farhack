@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { HackathonNav } from '@/app/components/hackathon-nav';
-import { Track } from '@/app/lib/types';
+import { Hackathon, Track } from '@/app/lib/types';
 import { AcademicCapIcon } from '@heroicons/react/20/solid';
-import { getHackathon } from '../lib/fetchers';
+import { farhackSDK } from '../lib/api';
 
 export default async function HackathonTracks({ slug }: { slug: string }) {
 
@@ -15,7 +15,7 @@ export default async function HackathonTracks({ slug }: { slug: string }) {
         );
     }
 
-    const hackathon = await getHackathon(slug);
+    const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
 
     if (!hackathon) {
         return (

@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { getHackathon } from '@/app/lib/fetchers';
 import { HackathonNav } from '@/app/components/hackathon-nav';
+import { Hackathon } from '@/app/lib/types';
+import { farhackSDK } from '@/app/lib/api';
 
 export default async function HackathonBySlugPage(props: { params: Promise<any> }) {
     const params = await props.params;
     const { slug } = params;
-    const hackathon = await getHackathon(slug);
+    const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
 
     if (!hackathon) {
         return (

@@ -73,7 +73,6 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
 import { auth } from "@/auth";
-import { db } from "@/kysely";
 import { headers } from "next/headers";
 import SignInWithFarcaster from "../components/sign-in-with-farcaster";
 
@@ -104,12 +103,6 @@ export default async function AdminLayout({
       </div>
     );
   }
-
-  const user = await db
-    .selectFrom("users")
-    .select(["id", "name", "image"])
-    .where("name", "=", (session as any).user.name)
-    .executeTakeFirst();
 
   const headerList = await headers();
   let pathname = '';
@@ -353,7 +346,7 @@ export default async function AdminLayout({
                   className="overflow-hidden rounded-full mt-1 md:mt-0"
                 >
                   <Image
-                    src={user?.image ?? "/placeholder-user.jpg"}
+                    src={session.user?.image ?? "/placeholder-user.jpg"}
                     width={36}
                     height={36}
                     alt="Avatar"
@@ -362,7 +355,7 @@ export default async function AdminLayout({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>{(user as any).name ?? ""}</DropdownMenuLabel>
+                <DropdownMenuLabel>{(session.user as any).name ?? ""}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem>Support</DropdownMenuItem>

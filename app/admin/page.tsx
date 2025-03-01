@@ -25,8 +25,6 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { auth } from "@/auth"
-import { sql } from "kysely"
-import { db } from "@/kysely"
 
 type Ticket = {
   id: number
@@ -51,44 +49,12 @@ const getStartOfWeek = () => {
   return new Date(now.setDate(date));
 }
 
-const getAllTimeSales = async () => {
-  const allTimeSales = await db.selectFrom('tickets')
-    .select(sql<string>`COALESCE(SUM(amount), 0)::numeric`.as('total'))
-    .executeTakeFirst();
-
-  return parseFloat(allTimeSales?.total ?? '0');
-}
-
 const formatCurrency = (amount: number) => {
   return amount.toLocaleString("en-US", {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 0,
   });
-}
-
-const getRecentTickets = async (): Promise<Ticket[]> => {
-  return await db.selectFrom('tickets')
-    .innerJoin('users', 'tickets.user_id', 'users.id')
-    .innerJoin('hackathons', 'tickets.hackathon_id', 'hackathons.id')
-    .select([
-      'tickets.id',
-      'tickets.user_id',
-      'tickets.user_address',
-      'tickets.hackathon_id',
-      'tickets.txn_hash',
-      'tickets.ticket_type',
-      'tickets.amount',
-      'tickets.created_at',
-      'users.name',
-      'users.image',
-      'users.is_admin',
-      'users.admin_hackathons',
-      'hackathons.name as hackathon_name'
-    ])
-    .orderBy('tickets.created_at', 'desc')
-    .limit(50)
-    .execute()
 }
 
 export default async function AdminHomePage() {
@@ -101,8 +67,7 @@ export default async function AdminHomePage() {
       </div>
     );
   }
-  const allTimeSales = await getAllTimeSales();
-  const recentTickets = await getRecentTickets();
+  // const recentTickets = await getRecentTickets();
 
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -115,7 +80,7 @@ export default async function AdminHomePage() {
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>Total Sales</CardDescription>
-            <CardTitle className="text-4xl">{formatCurrency(allTimeSales)}</CardTitle>
+            <CardTitle className="text-4xl">{formatCurrency(300)}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-muted-foreground">All time</div>
@@ -143,7 +108,7 @@ export default async function AdminHomePage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {recentTickets.map(ticket => (
+                    {/* {recentTickets.map(ticket => (
                       <TableRow key={ticket.id}>
                         <TableCell className="hidden sm:table-cell">
                           <a className="underline" href={`https://warpcast.com/${ticket.name}`} target="_blank" rel="noopener noreferrer">@{ticket.name}</a>
@@ -164,7 +129,7 @@ export default async function AdminHomePage() {
                           </a>
                         </TableCell>
                       </TableRow>
-                    ))}
+                    ))} */}
                   </TableBody>
                 </Table>
               </div>
