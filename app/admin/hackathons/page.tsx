@@ -14,36 +14,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { db } from "@/kysely"
 import { auth } from "@/auth"
-
-type Hackathon = {
-  id: number
-  name: string
-  description: string
-  start_date: string
-  end_date: string
-  created_at: string
-  square_image: string
-  slug: string
-}
-
-const getHackathons = async (): Promise<Hackathon[]> => {
-  return await db.selectFrom('hackathons')
-    .select([
-      'id',
-      'name',
-      'description',
-      'start_date',
-      'end_date',
-      'created_at',
-      'square_image',
-      'slug'
-    ])
-    .orderBy('start_date', 'desc')
-    .limit(50)
-    .execute() as unknown as Hackathon[]
-}
+import { farhackSDK } from "@/app/lib/api"
+import { Hackathon, User } from "@/app/lib/types"
+import { Button } from "@/components/ui/button"
 
 export default async function HackathonsPage() {
   const session = await auth();
@@ -56,9 +30,8 @@ export default async function HackathonsPage() {
     );
   }
 
-  const user = await db.selectFrom('users').selectAll().where('name', '=', (session as any).user.name ?? "").executeTakeFirst();
-
-  const hackathons = await getHackathons();
+  const user = session.user as unknown as User;
+  const hackathons = await farhackSDK.getHackathons() as Hackathon[];
 
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -80,6 +53,7 @@ export default async function HackathonsPage() {
                   <TableHead>End Date</TableHead>
                   <TableHead>Created At</TableHead>
                   <TableHead>Slug</TableHead>
+                  <TableHead>Edit</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -101,10 +75,21 @@ export default async function HackathonsPage() {
                     <TableRow key={hackathon.id}>
                       <TableCell>{hackathon.name}</TableCell>
                       <TableCell>{hackathon.description}</TableCell>
-                      <TableCell>{new Date(hackathon.start_date).toLocaleDateString()}</TableCell>
-                      <TableCell>{new Date(hackathon.end_date).toLocaleDateString()}</TableCell>
+                      {hackathon.start_date ? 
+                        <TableCell>{new Date(hackathon.start_date).toLocaleDateString()}</TableCell>
+                      : null }
+                      {hackathon.end_date ? 
+                        <TableCell>{new Date(hackathon.end_date).toLocaleDateString()}</TableCell>
+                      : null }
                       <TableCell>{new Date(hackathon.created_at).toLocaleDateString()}</TableCell>
                       <TableCell>{hackathon.slug}</TableCell>
+                      <TableCell>
+                        <Button asChild>
+                          <a href={`/admin/hackathons/${hackathon.slug}`} className="btn">
+                            Edit
+                          </a>
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
               </TableBody>

@@ -15,7 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { db } from "@/kysely"
+import { farhackSDK } from "@/app/lib/api"
+import { getUsers } from "@/db/queries"
 
 type User = {
   id: number
@@ -26,24 +27,8 @@ type User = {
   admin_hackathons: string
 }
 
-const getUsers = async (): Promise<User[]> => {
-  return await db.selectFrom('users')
-    .select([
-      'id',
-      'created_at',
-      'name',
-      'image',
-      'is_admin',
-      'admin_hackathons',
-    ])
-    .orderBy('is_admin', 'desc')
-    .orderBy('created_at', 'desc')
-    .limit(100)
-    .execute() as unknown as User[]
-}
-
 export default async function UsersPage() {
-  const users = await getUsers()
+  const users = await getUsers();
 
   return (
     <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -74,7 +59,7 @@ export default async function UsersPage() {
                     <TableCell>{new Date(user.created_at).toLocaleDateString()}</TableCell>
                     <TableCell>{user.name}</TableCell>
                     <TableCell>
-                      <img src={user.image} alt={user.name} className="h-10 w-10 rounded-full" />
+                      <img src={user.image ?? ''} alt={user.name ?? ''} className="h-10 w-10 rounded-full" />
                     </TableCell>
                     <TableCell>{user.is_admin ? "Yes" : "No"}</TableCell>
                     <TableCell>{user.admin_hackathons}</TableCell>

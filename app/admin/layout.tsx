@@ -76,15 +76,6 @@ import { auth } from "@/auth";
 import { headers } from "next/headers";
 import SignInWithFarcaster from "../components/sign-in-with-farcaster";
 
-function getCurrentPage(pathname: string): string {
-  const segments = pathname.split("/").filter(Boolean);
-  if (segments.length === 1 && segments[0] === "admin") return "Home";
-  return segments[segments.length - 1]
-    .split('-')
-    .map(segment => segment.charAt(0).toUpperCase() + segment.slice(1))
-    .join(" ");
-}
-
 export default async function AdminLayout({
   children,
 }: {
@@ -104,14 +95,7 @@ export default async function AdminLayout({
     );
   }
 
-  const headerList = await headers();
-  let pathname = '';
-  for (const [key, value] of headerList.entries()) {
-    if(key === 'referer'){
-      pathname = value;
-      break;
-    }
-  }
+  const pathname = '';
 
   const isCurrent = (path: string) => pathname.endsWith(path);
 
@@ -162,22 +146,6 @@ export default async function AdminLayout({
                 </a>
               </TooltipTrigger>
               <TooltipContent side="right">Hackathons</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <a
-                  href="/admin/tickets"
-                  className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8 ${
-                    isCurrent("/admin/tickets")
-                      ? "bg-accent text-accent-foreground"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <Ticket className="h-5 w-5" />
-                  <span className="sr-only">Tickets</span>
-                </a>
-              </TooltipTrigger>
-              <TooltipContent side="right">Tickets</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -324,19 +292,6 @@ export default async function AdminLayout({
               </nav>
             </SheetContent>
           </Sheet>
-          <Breadcrumb className="hidden md:flex">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <a href="/admin">Dashboard</a>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>{getCurrentPage(pathname ?? "")}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
           <div className="relative ml-auto flex-1 md:grow-0">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -354,14 +309,11 @@ export default async function AdminLayout({
                   />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              {/* <DropdownMenuContent align="end">
                 <DropdownMenuLabel>{(session.user as any).name ?? ""}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
-                <DropdownMenuSeparator />
                 <DropdownMenuItem>Logout</DropdownMenuItem>
-              </DropdownMenuContent>
+              </DropdownMenuContent> */}
             </DropdownMenu>
           </div>
         </header>

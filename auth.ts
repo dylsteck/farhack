@@ -1,7 +1,11 @@
-import NextAuth from "next-auth";
+import NextAuth, { Session, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { createAppClient, viemConnector } from "@farcaster/auth-client";
 import { createUser, getUser } from "./db/queries";
+
+interface ExtendedSession extends Session {
+  user: User;
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -43,12 +47,34 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!user) {
           return null;
         }
+
         return {
+          ...user, 
           id: user.id.toString(),
-          name: user.name,
-          image: user.image,
         };
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      
+      return token;
+    },
+    async session({
+      session,
+      token,
+    }: {
+      session: ExtendedSession;
+      token: any;
+    }) {
+      if (session.user) {
+        session.user = token.user as User;
+      }
+
+      return session;
+    },
+  },
 });

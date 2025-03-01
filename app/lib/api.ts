@@ -1,5 +1,4 @@
 import { BASE_URL } from "./utils"
-import { getHackathons, getTeams, addTicket } from '@/db/queries';
 
 class FarHackSDK {
   private baseUrl: string
@@ -22,7 +21,7 @@ class FarHackSDK {
         'Content-Type': 'application/json'
     };
 
-    const response = await fetch(`${this.baseUrl}/${url}`, { headers, ...options });
+    const response = await fetch(`${this.baseUrl}${url}`, { headers, ...options });
 
     if (!response.ok) {
         console.error(await response.text());
@@ -33,19 +32,19 @@ class FarHackSDK {
   }
 
   async getHackathon(slug: string) {
-    return this.fetcher(`hackathons/${slug}`);
+    return this.fetcher(`/api/hackathons/${slug}`);
   }
 
   async getHackathons() {
-    return this.fetcher('hackathons');
+    return this.fetcher('/api/hackathons');
   }
 
   async getTeams() {
-    return this.fetcher('hackathons/teams');
+    return this.fetcher('/api/hackathons/teams');
   }
 
   async addTicket(user_id: string, user_address: string, hackathon_id: string, txn_hash: string, ticket_type: string, amount: number) {
-    return this.fetcher('hackathons/tickets', {
+    return this.fetcher('/api/hackathons/tickets', {
       method: 'POST',
       body: JSON.stringify({ user_id, user_address, hackathon_id, txn_hash, ticket_type, amount })
     });
