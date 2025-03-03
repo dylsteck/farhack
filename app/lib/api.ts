@@ -1,3 +1,4 @@
+import { Team } from "./types"
 import { BASE_URL } from "./utils"
 
 class FarHackSDK {
@@ -52,6 +53,50 @@ class FarHackSDK {
       method: 'POST',
       body: JSON.stringify({ user_id, user_address, hackathon_id, txn_hash, ticket_type, amount })
     });
+  }
+
+  async createTeam(name: string, description: string, hackathonId: number, userId: number): Promise<Team> {
+    const response = await fetch('/api/hackathons/teams', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, description, hackathonId, userId }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create team');
+    }
+
+    return await response.json();
+  }
+
+  async updateTeam(id: number, updates: Partial<Team>): Promise<void> {
+    const response = await fetch('/api/hackathons/teams', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id, ...updates }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update team');
+    }
+  }
+
+  async deleteTeam(id: number): Promise<void> {
+    const response = await fetch('/api/hackathons/teams', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete team');
+    }
   }
 }
 

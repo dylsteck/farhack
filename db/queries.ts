@@ -61,20 +61,22 @@ export async function createTeam(
   description: string,
   hackathonId: number,
   userId: number
-) {
+): Promise<Team> {
   const emptyJsonArray = JSON.stringify([]);
-  await db
+  const result = await db
     .insert(teams)
     .values({
       id: sql`DEFAULT`,
       name: name,
       description: description,
       hackathon_id: hackathonId,
-      fids: sql`ARRAY[${userId}]`,
+      fids: sql`ARRAY[${sql`${userId}`}::integer]`,
       wallet_address: '',
       embeds: sql`${emptyJsonArray}::jsonb`
     })
+    .returning()
     .execute();
+  return result[0];
 }
 
 export async function createUser(
@@ -276,7 +278,6 @@ export async function getTeam(type: 'teamId' | 'userId', identifier: number): Pr
   }
   return null;
 }
-
 
 export async function updateTeam(team: Team): Promise<void> {
   const { id, ...updates } = team;

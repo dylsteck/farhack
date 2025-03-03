@@ -72,6 +72,11 @@ export interface ScheduleItem {
   url: string;
 }
 
+export interface Embed {
+  type: 'url' | 'image';
+  url: string;
+}
+
 export interface Team {
   id: number;
   fids: number[];
@@ -79,6 +84,8 @@ export interface Team {
   description: string;
   hackathon_id: number;
   submitted_at: Date;
+  wallet_address: string;
+  embeds?: Embed[];
 }
 
 export interface Invite {
