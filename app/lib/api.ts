@@ -1,32 +1,32 @@
-import { Team } from "./types"
-import { BASE_URL } from "./utils"
+import { Team } from "./types";
+import { BASE_URL } from "./utils";
 
 class FarHackSDK {
-  private baseUrl: string
-  private static instance: FarHackSDK
+  private baseUrl: string;
+  private static instance: FarHackSDK;
 
   constructor() {
-    this.baseUrl = BASE_URL
+    this.baseUrl = BASE_URL;
   }
 
   static getInstance(): FarHackSDK {
     if (!FarHackSDK.instance) {
-      FarHackSDK.instance = new FarHackSDK()
+      FarHackSDK.instance = new FarHackSDK();
     }
-    return FarHackSDK.instance
+    return FarHackSDK.instance;
   }
 
   private async fetcher<T>(url: string, options?: RequestInit): Promise<T> {
     const headers: Record<string, string> = {
-        'Accept': '*/*',
-        'Content-Type': 'application/json'
+      'Accept': '*/*',
+      'Content-Type': 'application/json'
     };
 
     const response = await fetch(`${this.baseUrl}${url}`, { headers, ...options });
 
     if (!response.ok) {
-        console.error(await response.text());
-        throw new Error(`HTTP error! status: ${response.status}`);
+      console.error(await response.text());
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     return response.json();
@@ -98,6 +98,37 @@ class FarHackSDK {
       throw new Error('Failed to delete team');
     }
   }
+
+  async createInvite(hackathonSlug: string, userId: number, teamId: number): Promise<string> {
+    const response = await fetch(`/api/hackathons/${hackathonSlug}/invites`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, teamId }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create invite');
+    }
+
+    const data = await response.json();
+    return data.token;
+  }
+
+  async acceptInvite(hackathonSlug: string, token: string, userId: number): Promise<void> {
+    const response = await fetch(`/api/hackathons/${hackathonSlug}/invites`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token, userId }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to accept invite');
+    }
+  }
 }
 
-export const farhackSDK = FarHackSDK.getInstance()
+export const farhackSDK = FarHackSDK.getInstance();

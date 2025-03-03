@@ -12,6 +12,7 @@ import { headers } from 'next/headers';
 import Link from 'next/link';
 import { Package2 } from 'lucide-react';
 import FrameProvider from '../components/custom/frame-provider';
+import { Toaster } from 'sonner';
 
 export function generateMetadata(){
   return{
@@ -118,6 +119,7 @@ export default async function RootLayout({
                       </div>
                     </nav>
                     {children}
+                    <Toaster />
                 </div>
               }
             </FrameProvider>
