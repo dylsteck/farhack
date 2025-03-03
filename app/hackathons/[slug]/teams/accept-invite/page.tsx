@@ -1,9 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { headers } from 'next/headers';
-import { db } from '@/kysely';
 import { auth } from '@/auth';
-import { acceptInvite } from '@/app/lib/server/invites';
+import { acceptInvite } from '@/db/queries';
 
 export default async function AcceptInvitePage() {
     const headerList = await headers();
@@ -13,8 +12,7 @@ export default async function AcceptInvitePage() {
 
     const token = query.replace('token=', '');
     const session = await auth();
-
-    const user = await db.selectFrom('users').selectAll().where('name', '=', session?.user?.name ?? "").executeTakeFirst();
+    const user = session?.user;
 
     if (!user) {
         return (
@@ -28,7 +26,7 @@ export default async function AcceptInvitePage() {
 
     try {
         if (token && session?.user) {
-            await acceptInvite(token, user.id);
+            await acceptInvite(token, parseInt(user.id ?? ''));
             inviteStatus = 'accepted';
         }
     } catch (error) {

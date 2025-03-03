@@ -1,4 +1,10 @@
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 import { Lora, Karla } from 'next/font/google';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
 
 export const lora = Lora({
   subsets: ['latin'],
@@ -14,9 +20,9 @@ const isDev = process.env.NODE_ENV === 'development';
 const port = process.env.PORT || 3000;
 const localUrl = `http://localhost:${port}`;
 
-export const BASE_URL = isDev 
-  ? localUrl 
-  : 'https://farhack.xyz';
+// export const BASE_URL = isDev ? localUrl : 'https://farhack.xyz';
+export const BASE_URL = isDev ? localUrl : 'http://localhost:3000';
 
 export const BANNER_IMG = 'https://i.imgur.com/4sLMVg2.png';
 export const ICON_IMG = 'https://farhack.xyz/icons/icon-512x512.png';
+

@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { headers } from 'next/headers';
-import { db, sql } from '@/kysely';
 import { auth } from '@/auth';
-import CopyClipboardIcon from '@/app/components/copy-to-clipboard';
+import CopyClipboardIcon from '@/components/custom/copy-to-clipboard';
 import { BASE_URL } from '@/app/lib/utils';
+import { farhackSDK } from '@/app/lib/api';
 
 export default async function ShareInvitePage() {
     const headerList = await headers();
@@ -14,8 +14,7 @@ export default async function ShareInvitePage() {
     const token = query.replace('token=', '');
     const session = await auth();
     const hackathonSlug = pathname.split('/')[2];
-
-    const user = await db.selectFrom('users').selectAll().where('name', '=', session?.user?.name ?? "").executeTakeFirst();
+    const user = session?.user;
 
     if (!user) {
         return (
@@ -25,10 +24,7 @@ export default async function ShareInvitePage() {
         );
     }
 
-    const team = await db.selectFrom('teams')
-        .selectAll()
-        .where(sql<boolean>`fids @> ARRAY[${user.id}]::int[]`)
-        .executeTakeFirst();
+    const team = await farhackSDK.getTeam("userId", user.id ??"");
 
     if (!team) {
         return (

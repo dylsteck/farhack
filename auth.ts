@@ -1,8 +1,11 @@
-import NextAuth from "next-auth";
+import NextAuth, { Session, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { createAppClient, viemConnector } from "@farcaster/auth-client";
-import { sql } from 'kysely';
-import { db } from "./kysely";
+import { createUser, getUser } from "./db/queries";
+
+interface ExtendedSession extends Session {
+  user: User;
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -33,35 +36,45 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
-        let user = await db.selectFrom('users')
-          .selectAll()
-          .where('id', '=', fid)
-          .executeTakeFirst();
+        let user = await getUser(fid);
 
         if (!user) {
-          await db.insertInto('users').values({
-            id: fid,
-            name: credentials?.name as string,
-            image: credentials?.pfp as string,
-            is_admin: false,
-            admin_hackathons: ''
-          }).execute();
-
-          user = await db.selectFrom('users')
-            .selectAll()
-            .where('id', '=', fid)
-            .executeTakeFirst();
+          // TODO: don't cast the fid to a string
+          await createUser(credentials?.name as string, `${fid}`, credentials?.pfp as string);
+          user = await getUser(fid);
         }
 
         if (!user) {
           return null;
         }
+
         return {
+          ...user, 
           id: user.id.toString(),
-          name: user.name,
-          image: user.image,
         };
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      
+      return token;
+    },
+    async session({
+      session,
+      token,
+    }: {
+      session: ExtendedSession;
+      token: any;
+    }) {
+      if (session.user) {
+        session.user = token.user as User;
+      }
+
+      return session;
+    },
+  },
 });

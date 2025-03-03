@@ -1,18 +1,17 @@
-/* eslint-disable @next/next/no-img-element */
 import './globals.css'
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { auth } from '../auth';
 import { BANNER_IMG, BASE_URL, ICON_IMG, karla } from "./lib/utils";
-import FarhackLogo from "./components/icons/farhack-logo";
-import SignInWithFarcaster from "./components/sign-in-with-farcaster";
+import FarhackLogo from "../components/custom/icons/farhack-logo";
+import SignInWithFarcaster from "../components/custom/sign-in-with-farcaster";
 import Head from 'next/head';
 import Script from 'next/script';
-import OnchainProviders from './components/onchain-providers';
+import OnchainProviders from '../components/custom/onchain-providers';
 import { headers } from 'next/headers';
 import Link from 'next/link';
 import { Package2 } from 'lucide-react';
-import FrameProvider from './components/frame-provider';
+import FrameProvider from '../components/custom/frame-provider';
 
 export function generateMetadata(){
   return{
@@ -68,16 +67,15 @@ export default async function RootLayout({
 }): Promise<JSX.Element> {
   const session = await auth()
   const headerList = await headers();
-  const pathname = headerList.get("x-current-path");
-  const isAdmin = pathname && pathname.includes("/admin");
-
-  if (session?.user) {
-    session.user = {
-      id: session.user.id,
-      name: session.user.name,
-      image: session.user.image,
+  let pathname = '';
+  for (const [key, value] of headerList.entries()) {
+    if(key === 'referer'){
+      pathname = value;
+      break;
     }
   }
+  let isAdmin = false;
+  isAdmin = pathname.includes("/admin/") || pathname.endsWith("/admin");
 
   return (
     <html lang="en">

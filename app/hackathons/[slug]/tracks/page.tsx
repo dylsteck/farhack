@@ -1,24 +1,24 @@
-/* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { db } from '@/kysely';
-import { headers } from 'next/headers';
-import HackathonNav from '@/app/components/hackathon-nav';
-import { Track } from '@/app/lib/types';
-import HackathonTracks from '@/app/components/hackathon-tracks';
+import Tracks from '@/components/custom/hackathon/tracks';
+import { farhackSDK } from '@/app/lib/api';
+import { Hackathon } from '@/app/lib/types';
+import Error from '@/components/custom/error';
 
-export default async function HackathonTracksPage() {
-    const headerList = await headers();
-    const pathname = headerList.get("x-current-path") as string;
-    const pathnameParts = pathname.split('/');
-    const slug = pathnameParts[2];
+export default async function HackathonTracksPage(props: { params: Promise<any> }) {
+    const params = await props.params;
+    const { slug } = params;
 
     if (!slug) {
         return (
             <div className="flex items-center justify-center min-h-screen text-white text-2xl">
-                <p>No data found. <a href="/" className="underline">Return to home</a></p>
+                <p>No slug found. <a href="/" className="underline">Return to home</a></p>
             </div>
         );
     }
 
-    return <HackathonTracks slug={slug} />;
+    const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
+
+    if(!hackathon) return <Error message={`Hackathon with slug ${slug} not found.`} />
+
+    return <Tracks hackathon={hackathon} />;
 }

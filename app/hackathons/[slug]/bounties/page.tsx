@@ -1,13 +1,12 @@
-/* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { headers } from 'next/headers';
-import HackathonBounites from '@/app/components/hackathon-bounties';
+import Bounties from '@/components/custom/hackathon/bounties';
+import { farhackSDK } from '@/app/lib/api';
+import { Hackathon } from '@/app/lib/types';
+import Error from '@/components/custom/error';
 
-export default async function HackathonBounitesPage() {
-    const headerList = await headers();
-    const pathname = headerList.get("x-current-path") as string;
-    const pathnameParts = pathname.split('/');
-    const slug = pathnameParts[2];
+export default async function HackathonBounitesPage(props: { params: Promise<any> }) {
+    const params = await props.params;
+    const { slug } = params;
 
     if (!slug) {
         return (
@@ -17,5 +16,9 @@ export default async function HackathonBounitesPage() {
         );
     }
 
-    return <HackathonBounites slug={slug} />;
+    const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
+
+    if(!hackathon) return <Error message={`Hackathon with slug ${slug} not found.`} />
+
+    return <Bounties hackathon={hackathon} />;
 }

@@ -1,16 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { headers } from 'next/headers';
-import { getHackathon } from '@/app/lib/fetchers';
-import HackathonNav from '@/app/components/hackathon-nav';
+import { HackathonNav } from '@/components/custom/hackathon-nav';
+import { Hackathon } from '@/app/lib/types';
+import { farhackSDK } from '@/app/lib/api';
 
-export default async function HackathonBySlugPage() {
-    const headerList = await headers();
-    const pathname = headerList.get("x-current-path") as string;
-    const pathnameParts = pathname.split('/');
-    const slug = pathnameParts[2];
-
-    const hackathon = await getHackathon(slug);
+export default async function HackathonBySlugPage(props: { params: Promise<any> }) {
+    const params = await props.params;
+    const { slug } = params;
+    const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
 
     if (!hackathon) {
         return (
