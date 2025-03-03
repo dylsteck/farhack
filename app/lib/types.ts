@@ -83,7 +83,7 @@ export interface Team {
   name: string;
   description: string;
   hackathon_id: number;
-  submitted_at: Date;
+  submitted_at: Date | null;
   wallet_address: string;
   embeds?: Embed[];
 }
