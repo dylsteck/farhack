@@ -9,7 +9,11 @@ export async function GET(req: NextRequest) {
         const identifier = searchParams.get('identifier');
 
         if (type && identifier) {
-            const resp = await getTeam(type as 'teamId' | 'userId', Number(identifier));
+            const idNum = parseInt(identifier, 10);
+            if (isNaN(idNum)) {
+                throw new Error("Invalid identifier");
+            }
+            const resp = await getTeam(type as 'teamId' | 'userId', idNum);
             return NextResponse.json(resp);
         }
 

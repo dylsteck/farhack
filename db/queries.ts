@@ -40,56 +40,6 @@ export async function acceptInvite(token: string, userId: number): Promise<void>
   });
 }
 
-export async function addItem(
-  hackathonId: number,
-  modalType: string,
-  name: string,
-  description: string,
-  date?: string
-) {
-  const newItem =
-    modalType === 'ScheduleItem'
-      ? { name, description, date: new Date(date!).toISOString() }
-      : { name, description };
-  const field =
-    modalType === 'ScheduleItem'
-      ? "schedule"
-      : modalType === 'Bounty'
-      ? "bounties"
-      : "tracks";
-  await db
-    .update(hackathons)
-    .set({
-      [field]: sql`jsonb_set(coalesce(${sql.identifier(field)}, '[]'::jsonb), '{${new Date().getTime()}}', ${JSON.stringify(newItem)}::jsonb)`
-    })
-    .where(eq(hackathons.id, hackathonId))
-    .execute();
-}
-
-export async function addTicket(
-  userId: number,
-  userAddress: string,
-  hackathonId: number,
-  txnHash: string,
-  ticketType: 'priority' | 'day',
-  amount: number
-): Promise<Ticket> {
-  return await db
-    .insert(tickets)
-    .values({
-      id: sql`DEFAULT`,
-      user_id: userId,
-      user_address: userAddress,
-      hackathon_id: hackathonId,
-      txn_hash: txnHash,
-      ticket_type: ticketType,
-      amount: amount
-    })
-    .returning()
-    .execute()
-    .then((res: Ticket[]) => res[0]);
-}
-
 export async function createInvite(userId: number, teamId: number): Promise<string> {
   const token = crypto.randomUUID();
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
@@ -148,6 +98,74 @@ export async function createUser(
     .then((res: User[]) => res[0]);
 }
 
+// TODO: create a HydratedHackathon(or smth like that) type that has hackathon + teams
+export async function getHackathon(slug: string): Promise<Hackathon> {
+  const hackathon = await db
+    .select({
+      id: hackathons.id,
+      name: hackathons.name,
+      description: hackathons.description,
+      start_date: hackathons.start_date,
+      end_date: hackathons.end_date,
+      created_at: hackathons.created_at,
+      square_image: hackathons.square_image,
+      slug: hackathons.slug,
+      tracks: hackathons.tracks,
+      bounties: hackathons.bounties,
+      schedule: hackathons.schedule,
+      teams: sql`COALESCE(json_agg(teams.*) FILTER (WHERE teams.id IS NOT NULL), '[]'::json)`
+    })
+    .from(hackathons)
+    .leftJoin(teams, eq(teams.hackathon_id, hackathons.id))
+    .where(eq(hackathons.slug, slug))
+    .groupBy(hackathons.id)
+    .limit(1)
+    .execute()
+    .then((res) => res[0]);
+
+  if (!hackathon) {
+    throw new Error("Hackathon not found");
+  }
+
+  return hackathon;
+}
+
+export async function getHackathons(): Promise<Hackathon[]> {
+  return await db
+    .select()
+    .from(hackathons)
+    .execute();
+}
+
+export async function getTeams(): Promise<Team[]> {
+  return await db
+    .select()
+    .from(teams)
+    .execute();
+}
+
+export async function getUsers(): Promise<User[]> {
+  return await db
+    .select()
+    .from(users)
+    .execute();
+}
+
+export async function getUser(userId: number): Promise<User> {
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1)
+    .execute()
+    .then((res: User[]) => res[0]);
+  
+  if (!user) {
+    throw new Error('User not found');
+  }
+  return user;
+}
+
 export async function getAdmins(): Promise<User[]> {
   return await db
     .select()
@@ -172,130 +190,6 @@ export async function handleGenerateInvite(
 ): Promise<string> {
   const token = await createInvite(userId, teamId);
   return `${process.env.BASE_URL}/hackathons/${hackathonSlug}/teams/share-invite?token=${token}`;
-}
-
-export async function handleLeaveTeam(userId: number, teamId: number) {
-  await db
-    .update(teams)
-    .set({ fids: sql`array_remove(fids, ${userId})` })
-    .where(eq(teams.id, teamId))
-    .execute();
-}
-
-export async function handleSaveTeam(
-  name: string,
-  description: string,
-  walletAddress: string,
-  embeds: any,
-  teamId: number
-) {
-  await db
-    .update(teams)
-    .set({
-      name,
-      description,
-      wallet_address: walletAddress,
-      embeds: sql`${JSON.stringify(embeds)}::jsonb`
-    })
-    .where(eq(teams.id, teamId))
-    .execute();
-}
-
-export async function handleSubmitTeam(
-  name: string,
-  description: string,
-  walletAddress: string,
-  embeds: any,
-  teamId: number
-) {
-  await db
-    .update(teams)
-    .set({
-      name,
-      description,
-      wallet_address: walletAddress,
-      embeds: sql`${JSON.stringify(embeds)}::jsonb`,
-      submitted_at: new Date()
-    })
-    .where(eq(teams.id, teamId))
-    .execute();
-}
-
-export async function removeUser(userId: number): Promise<void> {
-  await db
-    .delete(users)
-    .where(eq(users.id, userId))
-    .execute();
-}
-
-export async function updateUser(
-  userId: number,
-  { fid, ...data }: {
-    name?: string;
-    fid?: string;
-    image?: string | null;
-    is_admin?: boolean;
-    admin_hackathons?: string | null;
-  }
-): Promise<User> {
-  return await db
-    .update(users)
-    .set(data)
-    .where(eq(users.id, userId))
-    .returning()
-    .execute()
-    .then((res: User[]) => res[0]);
-}
-
-export async function getHackathons(): Promise<Hackathon[]> {
-  return await db
-    .select()
-    .from(hackathons)
-    .execute();
-}
-
-export async function getTeams(): Promise<Team[]> {
-  return await db
-    .select()
-    .from(teams)
-    .execute();
-}
-
-export async function getUser(userId: number): Promise<User> {
-  const user = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, userId))
-    .limit(1)
-    .execute()
-    .then((res: User[]) => res[0]);
-  
-  if (!user) {
-    throw new Error('User not found');
-  }
-  return user;
-}
-
-export async function getUsers(): Promise<User[]> {
-  return await db
-    .select()
-    .from(users)
-    .execute();
-}
-
-export async function getHackathon(slug: string): Promise<Hackathon> {
-  const hackathon = await db
-    .select()
-    .from(hackathons)
-    .where(eq(hackathons.slug, slug))
-    .limit(1)
-    .execute()
-    .then((res: Hackathon[]) => res[0]);
-  
-  if (!hackathon) {
-    throw new Error('Hackathon not found');
-  }
-  return hackathon;
 }
 
 export async function getAllTimeSales(): Promise<number> {
@@ -349,28 +243,33 @@ export async function getRecentTickets(): Promise<RecentTicket[]> {
     .execute() as RecentTicket[];
 }
 
-export async function getTeam(type: 'teamId' | 'userId' = 'teamId', identifier: number): Promise<Team | null> {
+export async function getTeam(type: 'teamId' | 'userId', identifier: number): Promise<Team | null> {
   if (type === 'teamId') {
-    const team = await db
+    return await db
       .select()
       .from(teams)
       .where(eq(teams.id, identifier))
       .limit(1)
       .execute()
-      .then((res: Team[]) => res[0]);
-    
-    if (!team) {
-      throw new Error('Team not found');
-    }
-    return team;
+      .then((res: Team[]) => res[0] || null);
   } else if (type === 'userId') {
-    const teamsWithUser = await db
+    return await db
       .select()
       .from(teams)
-      .where(sql`${teams.fids} @> ARRAY[${identifier}]`)
-      .execute();
-
-    return teamsWithUser.length > 0 ? teamsWithUser[0] : null;
+      .where(sql`${identifier} = ANY(${teams.fids})`)
+      .limit(1)
+      .execute()
+      .then((res: Team[]) => res[0] || null);
   }
   return null;
+}
+
+
+export async function updateTeam(team: Team): Promise<void> {
+  const { id, ...updates } = team;
+  await db
+    .update(teams)
+    .set(updates)
+    .where(eq(teams.id, id))
+    .execute();
 }

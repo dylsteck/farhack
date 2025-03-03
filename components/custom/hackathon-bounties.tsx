@@ -60,9 +60,8 @@ export default function HackathonBounties({ hackathon }: { hackathon: Hackathon 
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h2 className="text-2xl font-semibold">Bounties</h2>
-              {/* <p className="text-zinc-400 mt-1">Complete challenges to win prizes</p> */}
             </div>
-            
+      
             <div className="flex items-center gap-3 w-full md:w-auto">
               <div className="relative w-full md:w-64">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-500" />
