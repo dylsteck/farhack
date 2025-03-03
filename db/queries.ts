@@ -348,3 +348,29 @@ export async function getRecentTickets(): Promise<RecentTicket[]> {
     .limit(50)
     .execute() as RecentTicket[];
 }
+
+export async function getTeam(type: 'teamId' | 'userId' = 'teamId', identifier: number): Promise<Team | null> {
+  if (type === 'teamId') {
+    const team = await db
+      .select()
+      .from(teams)
+      .where(eq(teams.id, identifier))
+      .limit(1)
+      .execute()
+      .then((res: Team[]) => res[0]);
+    
+    if (!team) {
+      throw new Error('Team not found');
+    }
+    return team;
+  } else if (type === 'userId') {
+    const teamsWithUser = await db
+      .select()
+      .from(teams)
+      .where(sql`${teams.fids} @> ARRAY[${identifier}]`)
+      .execute();
+
+    return teamsWithUser.length > 0 ? teamsWithUser[0] : null;
+  }
+  return null;
+}

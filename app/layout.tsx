@@ -76,14 +76,6 @@ export default async function RootLayout({
   }
   let isAdmin = false;
   isAdmin = pathname.includes("/admin/") || pathname.endsWith("/admin");
-  
-  if (session?.user) {
-    session.user = {
-      id: session.user.id,
-      name: session.user.name,
-      image: session.user.image,
-    }
-  }
 
   return (
     <html lang="en">

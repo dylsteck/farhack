@@ -39,6 +39,10 @@ class FarHackSDK {
     return this.fetcher('/api/hackathons');
   }
 
+  async getTeam(type: 'teamId' | 'userId' = 'teamId', identifier: string) {
+    return this.fetcher(`/api/hackathons/teams?type=${type}&identifier=${identifier}`);
+  }
+
   async getTeams() {
     return this.fetcher('/api/hackathons/teams');
   }

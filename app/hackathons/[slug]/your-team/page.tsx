@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { HackathonNav } from '@/app/components/hackathon-nav';
 import Error from '@/app/components/error';
 import { farhackSDK } from '@/app/lib/api';
+import { Hackathon } from '@/app/lib/types';
 
 export default async function YourTeamPage(props: { params: Promise<any> }) {
     const params = await props.params;
@@ -11,7 +12,7 @@ export default async function YourTeamPage(props: { params: Promise<any> }) {
 
     if (!session?.user) return <Error message={`You are not logged in.`} />
 
-    const hackathon = await farhackSDK.getHackathon(slug);
+    const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
     if (!hackathon) return <Error message={`Hackathon with slug ${slug} not found.`} />
 
     return (

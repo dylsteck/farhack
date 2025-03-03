@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+ /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { headers } from 'next/headers';
 import HackathonTeams from '@/app/components/hackathon-teams';

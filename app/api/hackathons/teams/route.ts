@@ -1,16 +1,21 @@
-import { getTeams } from '@/db/queries';
+import { getTeam, getTeams } from '@/db/queries';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
     try {
-        const resp = await getTeams();
+        const { pathname, searchParams } = new URL(req.url);
+        const id = pathname.split("/").pop();
+        const type = searchParams.get('type');
+        const identifier = searchParams.get('identifier');
 
-        if (resp.length === 0) {
-            return NextResponse.json({ error: "Record not found" }, { status: 404 });
+        if (type && identifier) {
+            const resp = await getTeam(type as 'teamId' | 'userId', Number(identifier));
+            return NextResponse.json(resp);
         }
 
+        const resp = await getTeams();
         return NextResponse.json(resp);
     } catch (error) {
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ error: (error as Error).message || "Internal Server Error" }, { status: 500 });
     }
 }
