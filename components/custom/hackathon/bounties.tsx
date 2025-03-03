@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
-export default function HackathonBounties({ hackathon }: { hackathon: Hackathon }) {
+export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
@@ -53,8 +53,6 @@ export default function HackathonBounties({ hackathon }: { hackathon: Hackathon 
         <div className="flex flex-col space-y-2 mb-8">
           <HackathonNav hackathon={hackathon} />
         </div>
-
-        <Separator className="my-6 bg-zinc-800" />
         
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">

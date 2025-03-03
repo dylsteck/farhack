@@ -11,6 +11,11 @@ module.exports = {
         hostname: 'arweave.net',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'imagedelivery.net',
+        pathname: '/**',
+      },
     ],
   },
   eslint: {

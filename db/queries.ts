@@ -98,8 +98,7 @@ export async function createUser(
     .then((res: User[]) => res[0]);
 }
 
-// TODO: create a HydratedHackathon(or smth like that) type that has hackathon + teams
-export async function getHackathon(slug: string): Promise<Hackathon> {
+export async function getHackathon(slug: string): Promise<Hackathon & { teams: (Omit<Team, "fids"> & { fids: User[] })[] }> {
   const hackathon = await db
     .select({
       id: hackathons.id,
@@ -113,12 +112,9 @@ export async function getHackathon(slug: string): Promise<Hackathon> {
       tracks: hackathons.tracks,
       bounties: hackathons.bounties,
       schedule: hackathons.schedule,
-      teams: sql`COALESCE(json_agg(teams.*) FILTER (WHERE teams.id IS NOT NULL), '[]'::json)`
     })
     .from(hackathons)
-    .leftJoin(teams, eq(teams.hackathon_id, hackathons.id))
     .where(eq(hackathons.slug, slug))
-    .groupBy(hackathons.id)
     .limit(1)
     .execute()
     .then((res) => res[0]);
@@ -127,7 +123,24 @@ export async function getHackathon(slug: string): Promise<Hackathon> {
     throw new Error("Hackathon not found");
   }
 
-  return hackathon;
+  const teamsWithUsers = await db
+    .select({
+      id: teams.id,
+      name: teams.name,
+      description: teams.description,
+      hackathon_id: teams.hackathon_id,
+      submitted_at: teams.submitted_at,
+      wallet_address: teams.wallet_address,
+      embeds: teams.embeds,
+      fids: sql<User[]>`COALESCE(json_agg(users.*) FILTER (WHERE users.id IS NOT NULL), '[]'::json)`,
+    })
+    .from(teams)
+    .leftJoin(users, sql`${users.id} = ANY(${teams.fids})`)
+    .where(eq(teams.hackathon_id, hackathon.id))
+    .groupBy(teams.id)
+    .execute();
+
+  return { ...hackathon, teams: teamsWithUsers };
 }
 
 export async function getHackathons(): Promise<Hackathon[]> {

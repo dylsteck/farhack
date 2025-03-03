@@ -13,6 +13,21 @@ export interface User {
   admin_hackathons: string;
 }
 
+export interface FullHackathon {
+  id: number;
+  name: string;
+  description: string;
+  slug: string;
+  square_image: string;
+  start_date: Date;
+  end_date: Date;
+  created_at: Date;
+  tracks: Track[];
+  bounties: Bounty[];
+  schedule: ScheduleItem[];
+  teams: Team[];
+}
+
 export interface Hackathon {
   id: number;
   name: string;
