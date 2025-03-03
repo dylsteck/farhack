@@ -1,7 +1,7 @@
 import React from 'react';
 import { auth } from '@/auth';
-import { HackathonNav } from '@/app/components/hackathon-nav';
-import Error from '@/app/components/error';
+import { HackathonNav } from '@/components/custom/hackathon-nav';
+import Error from '@/components/custom/error';
 import { farhackSDK } from '@/app/lib/api';
 import { Hackathon } from '@/app/lib/types';
 

@@ -3,7 +3,7 @@
 import { ReactNode } from 'react';
 import { base } from 'wagmi/chains';
 import { WagmiProvider } from 'wagmi';
-import { wagmiConfig } from '../lib/wagmi';
+import { wagmiConfig } from '../../app/lib/wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 

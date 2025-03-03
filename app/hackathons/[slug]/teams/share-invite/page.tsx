@@ -2,7 +2,7 @@
 import React from 'react';
 import { headers } from 'next/headers';
 import { auth } from '@/auth';
-import CopyClipboardIcon from '@/app/components/copy-to-clipboard';
+import CopyClipboardIcon from '@/components/custom/copy-to-clipboard';
 import { BASE_URL } from '@/app/lib/utils';
 import { farhackSDK } from '@/app/lib/api';
 

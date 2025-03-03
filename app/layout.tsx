@@ -3,15 +3,15 @@ import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { auth } from '../auth';
 import { BANNER_IMG, BASE_URL, ICON_IMG, karla } from "./lib/utils";
-import FarhackLogo from "./components/icons/farhack-logo";
-import SignInWithFarcaster from "./components/sign-in-with-farcaster";
+import FarhackLogo from "../components/custom/icons/farhack-logo";
+import SignInWithFarcaster from "../components/custom/sign-in-with-farcaster";
 import Head from 'next/head';
 import Script from 'next/script';
-import OnchainProviders from './components/onchain-providers';
+import OnchainProviders from '../components/custom/onchain-providers';
 import { headers } from 'next/headers';
 import Link from 'next/link';
 import { Package2 } from 'lucide-react';
-import FrameProvider from './components/frame-provider';
+import FrameProvider from '../components/custom/frame-provider';
 
 export function generateMetadata(){
   return{

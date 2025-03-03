@@ -1,6 +1,6 @@
 import React from 'react';
 import { HackthonNavItem } from './hackathon-nav-item';
-import { Hackathon } from '../lib/types';
+import { Hackathon } from '../../app/lib/types';
 
 export function HackathonNav({ hackathon }: { hackathon: Hackathon }) {
     const hackathonPages = [

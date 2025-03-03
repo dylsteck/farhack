@@ -1,7 +1,7 @@
  /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { headers } from 'next/headers';
-import HackathonTeams from '@/app/components/hackathon-teams';
+import HackathonTeams from '@/components/custom/hackathon-teams';
 
 export default async function HackathonTeamsPage(props: { params: Promise<any> }) {
     const params = await props.params;

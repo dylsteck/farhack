@@ -1,4 +1,4 @@
-import Hackathons from "./components/hackathons";
+import Hackathons from "../components/custom/hackathons";
 
 export default async function Home() {
   return (

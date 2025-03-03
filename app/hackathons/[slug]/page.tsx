@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { HackathonNav } from '@/app/components/hackathon-nav';
+import { HackathonNav } from '@/components/custom/hackathon-nav';
 import { Hackathon } from '@/app/lib/types';
 import { farhackSDK } from '@/app/lib/api';
 

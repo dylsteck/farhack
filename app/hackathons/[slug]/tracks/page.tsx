@@ -1,5 +1,5 @@
 import React from 'react';
-import HackathonTracks from '@/app/components/hackathon-tracks';
+import HackathonTracks from '@/components/custom/hackathon-tracks';
 
 export default async function HackathonTracksPage(props: { params: Promise<any> }) {
     const params = await props.params;

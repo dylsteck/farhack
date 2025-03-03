@@ -1,8 +1,8 @@
 import React from 'react';
-import HackathonBounites from '@/app/components/hackathon-bounties';
+import HackathonBounites from '@/components/custom/hackathon-bounties';
 import { farhackSDK } from '@/app/lib/api';
 import { Hackathon } from '@/app/lib/types';
-import Error from '@/app/components/error';
+import Error from '@/components/custom/error';
 
 export default async function HackathonBounitesPage(props: { params: Promise<any> }) {
     const params = await props.params;

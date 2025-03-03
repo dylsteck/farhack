@@ -8,7 +8,7 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Image from "next/image"
-import { type User } from "../lib/types"
+import { type User } from "../../app/lib/types"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import WarpcastIcon from "./icons/warpcast-icon"
 import { createUser, removeUser, updateUser } from "@/db/queries"

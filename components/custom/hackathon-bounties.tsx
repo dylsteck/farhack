@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { HackathonNav } from '@/app/components/hackathon-nav';
+import { HackathonNav } from '@/components/custom/hackathon-nav';
 import { Hackathon, Bounty } from '@/app/lib/types';
 import { Trophy, ExternalLink, Search, LayoutGrid, List } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';

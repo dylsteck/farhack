@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { HackathonNav } from '@/app/components/hackathon-nav';
+import { HackathonNav } from '@/components/custom/hackathon-nav';
 import { Hackathon, Track } from '@/app/lib/types';
 import { AcademicCapIcon } from '@heroicons/react/20/solid';
-import { farhackSDK } from '../lib/api';
+import { farhackSDK } from '../../app/lib/api';
 
 export default async function HackathonTracks({ slug }: { slug: string }) {
 

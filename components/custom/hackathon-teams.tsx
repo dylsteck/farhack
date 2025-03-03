@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { HackathonNav } from '@/app/components/hackathon-nav';
+import { HackathonNav } from '@/components/custom/hackathon-nav';
 import { Hackathon, Team } from '@/app/lib/types';
 import { UserGroupIcon } from '@heroicons/react/20/solid';
 import CopyClipboardIcon from './copy-to-clipboard';
-import { BASE_URL } from '../lib/utils';
-import { farhackSDK } from '../lib/api';
+import { BASE_URL } from '../../app/lib/utils';
+import { farhackSDK } from '../../app/lib/api';
 
 export default async function HackathonTeams({ slug }: { slug: string }) {
 

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import FarhackLogo from '../../components/icons/farhack-logo';
+import FarhackLogo from '../../../components/custom/icons/farhack-logo';
 import { karla } from '../../lib/utils';
 
 const splitIntoTwoColumns = (images: { src: string; alt: string }[]) => {
