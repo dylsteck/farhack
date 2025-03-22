@@ -1,15 +1,17 @@
 import type { FC } from 'react';
 import Image from 'next/image';
 import farhackLogo from '../../../public/farhackLogo.png';
+import farhackLogoGradient from '../../../public/farhackLogoGradient.png';
 
 interface LogoProps {
   width?: number;
   height?: number;
   className?: string;
+  gradient?: boolean;
 }
 
 const FarhackLogo: FC<LogoProps> = (props) => {
-  const { width, height, className } = props;
+  const { width, height, className, gradient = false } = props;
 
   return (
     <Image
@@ -17,7 +19,7 @@ const FarhackLogo: FC<LogoProps> = (props) => {
       className={`${className}`}
       height={height}
       objectFit="contain"
-      src={farhackLogo}
+      src={gradient ? farhackLogoGradient : farhackLogo}
       width={width}
     />
   );

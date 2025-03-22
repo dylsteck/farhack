@@ -1,5 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { getHackathons } from "@/db/queries";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, Clock } from "lucide-react";
 
 interface Hackathon {
   id: number;
@@ -16,58 +19,69 @@ function HackathonListItem({ hackathon }: { hackathon: Hackathon }) {
   const now = new Date();
   const isLive = now >= new Date(hackathon.start_date) && now <= new Date(hackathon.end_date);
   const dateLabel = isLive ? (
-    <span className="flex items-center rounded-xl bg-white px-2.5 text-black">
-      <span className="w-2.5 h-2.5 bg-red-600 rounded-full mr-1.5"></span>
-      Live
-    </span>
+    <div className="flex items-center gap-2 text-xs font-medium">
+      <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+      <span className="text-red-400">Live</span>
+    </div>
   ) : (
-    <span className="rounded-xl bg-white px-2.5 text-black">
+    <div className="flex items-center gap-2 text-xs text-gray-400">
+      <Calendar className="h-3 w-3" />
       {hackathon.start_date.toLocaleString('default', { month: 'long', year: 'numeric' })}
-    </span>
+    </div>
   );
 
   return (
-    <div className="m-auto relative">
-      <a href={`/hackathons/${hackathon.slug}`}>
-        <div className="flex flex-col gap-2 items-center max-w-[300px] w-full">
-          <div className="flex justify-between w-full">
-            {dateLabel}
-          </div>
-          <div className="relative">
-            <img
-              src={hackathon.square_image}
-              alt={hackathon.name}
-              loading="lazy"
-              className="rounded-xl max-w-[100%]"
-            />
-            <div className="absolute bottom-0 w-full bg-gray-800 bg-opacity-50 p-2 text-center text-white">
-              {hackathon.name}
-            </div>
-          </div>
+    <a href={`/hackathons/${hackathon.slug}`} className="w-full group">
+      <Card className="flex flex-col sm:flex-row items-start gap-4 p-4 hover:bg-zinc-800 transition-all duration-200 rounded-xl border-zinc-800 bg-zinc-900 group-hover:border-zinc-700 w-full">
+        <div className="w-24 aspect-square relative shrink-0 rounded-lg overflow-hidden border border-zinc-800 shadow-md">
+          <img
+            src={hackathon.square_image}
+            alt={hackathon.name}
+            loading="lazy"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
         </div>
-      </a>
-    </div>
+        <CardContent className="p-0 flex-1 w-full flex flex-col items-start gap-2">
+        <div className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors duration-200">{hackathon.name}</div>
+          <>
+            {dateLabel}
+            {isLive && (
+              <Badge variant="outline" className="bg-red-950 text-red-400 border-red-800 text-xs">
+                <Clock className="mr-1 h-3 w-3" /> In Progress
+              </Badge>
+            )}
+          </>
+        </CardContent>
+      </Card>
+    </a>
   );
 }
 
 export default async function Hackathons() {
   const hackathons: Hackathon[] = await getHackathons() as Hackathon[];
-  if (hackathons) {
-    hackathons.sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
+
+  if (!hackathons || hackathons.length === 0) {
     return (
-      <div className="pt-5 md:pt-8">
-        <p className="pb-4 text-2xl font-medium text-center">Hackathons</p>
-        <div className="flex flex-wrap justify-center items-center gap-10">
+      <div className="flex justify-center items-center w-full py-10">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  hackathons.sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
+
+  return (
+    <section id="hackathons" className="min-w-full py-5 md:py-8">
+      <div className="w-full max-w-screen mx-auto px-2 sm:px-6 md:px-8">
+        <h2 className="text-2xl font-medium mb-6 text-white flex items-center gap-2">
+          Hackathons
+        </h2>
+        <div className="flex flex-col gap-4 w-full">
           {hackathons.map((hackathon) => (
             <HackathonListItem key={hackathon.id} hackathon={hackathon} />
           ))}
         </div>
       </div>
-    );
-  }
-  return (
-    <div className="flex justify-center items-center w-full py-10">
-      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
-    </div>
+    </section>
   );
 }
