@@ -10,7 +10,7 @@ interface LogoProps {
   gradient?: boolean;
 }
 
-const FarhackLogo: FC<LogoProps> = (props) => {
+const FarHackLogo: FC<LogoProps> = (props) => {
   const { width, height, className, gradient = false } = props;
 
   return (
@@ -25,4 +25,4 @@ const FarhackLogo: FC<LogoProps> = (props) => {
   );
 };
 
-export default FarhackLogo;
+export default FarHackLogo;

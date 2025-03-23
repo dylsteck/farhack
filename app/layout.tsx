@@ -3,20 +3,18 @@ import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { auth } from '../auth';
 import { BANNER_IMG, BASE_URL, ICON_IMG, karla } from "./lib/utils";
-import FarhackLogo from "../components/custom/icons/farhack-logo";
+import FarHackLogo from "../components/custom/icons/farhack-logo";
 import SignInWithFarcaster from "../components/custom/sign-in-with-farcaster";
 import Head from 'next/head';
 import Script from 'next/script';
 import OnchainProviders from '../components/custom/onchain-providers';
-import { headers } from 'next/headers';
-import Link from 'next/link';
-import { Package2 } from 'lucide-react';
 import FrameProvider from '../components/custom/frame-provider';
 import { Toaster } from 'sonner';
+import Nav from '@/components/custom/nav';
 
 export function generateMetadata(){
   return{
-    metadataBase: new URL('https://farhack.xyz'),
+    metadataBase: new URL(BASE_URL),
     title: {
       default: 'FarHack',
       template: '%s | FarHack',
@@ -25,8 +23,8 @@ export function generateMetadata(){
     openGraph: {
       title: 'FarHack',
       description: 'The ultimate Farcaster hackathon',
-      images: ['https://i.imgur.com/4sLMVg2.png'],
-      url: 'https://farhack.xyz',
+      images: [BANNER_IMG],
+      url: BASE_URL,
       siteName: 'FarHack',
       locale: 'en_US',
       type: 'website',
@@ -67,17 +65,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }): Promise<JSX.Element> {
   const session = await auth()
-  const headerList = await headers();
-  let pathname = '';
-  for (const [key, value] of headerList.entries()) {
-    if(key === 'referer'){
-      pathname = value;
-      break;
-    }
-  }
-  let isAdmin = false;
-  isAdmin = pathname.includes("/admin/") || pathname.endsWith("/admin");
-
   return (
     <html lang="en">
       <Head>
@@ -104,24 +91,9 @@ export default async function RootLayout({
         <SessionProvider basePath={"/api/auth"} session={session}>
           <OnchainProviders>
             <FrameProvider>
-              {isAdmin ? children : 
-                  <div className="flex flex-col gap-4 min-h-screen">
-                    <nav className="w-full bg-black/75 flex items-center justify-between p-4 pb-3 border-b border-white/20">
-                      <Link
-                          href="/"
-                          className="flex items-center gap-2 text-lg font-semibold md:text-base"
-                        >
-                          <FarhackLogo width={35} height={35} />
-                          <p className={`text-white text-2xl mr-4 ${karla.className}`}>FarHack</p>
-                        </Link>
-                      <div className="flex items-center gap-6">
-                        <SignInWithFarcaster />
-                      </div>
-                    </nav>
-                    {children}
-                    <Toaster />
-                </div>
-              }
+              <Nav />
+              {children}
+              <Toaster />
             </FrameProvider>
           </OnchainProviders>
         </SessionProvider>
