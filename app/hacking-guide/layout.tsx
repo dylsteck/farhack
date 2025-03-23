@@ -28,10 +28,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import FarHackLogo from "@/components/custom/icons/farhack-logo"
 
 interface HackingGuideLayoutProps {
   children: React.ReactNode
-  active: "introduction" | "why" | "getting-started" | "participating" | "farstack" | "next" | "documentation" | "open-ideas" | "appendix"
+  active: "introduction" | "getting-started" | "participating" | "farstack" | "next" | "documentation" | "open-ideas" | "appendix"
   title: string
 }
 
@@ -39,8 +40,6 @@ const getSectionLabel = (active: HackingGuideLayoutProps["active"]): string => {
   switch (active) {
     case "introduction":
       return "Introduction"
-    case "why":
-      return "Why Hack?"
     case "getting-started":
       return "Getting Started"
     case "participating":
@@ -91,14 +90,6 @@ export default function HackingGuideLayout({ children, active, title }: HackingG
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild isActive={active === "why"}>
-                    <Link href="/hacking-guide/why-hack" className="flex items-center gap-2">
-                      <Layers className="h-4 w-4" />
-                      <span>Why Hack?</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
                   <SidebarMenuButton asChild isActive={active === "getting-started"}>
                     <Link href="/hacking-guide/getting-started" className="flex items-center gap-2">
                       <Settings className="h-4 w-4" />
@@ -109,7 +100,7 @@ export default function HackingGuideLayout({ children, active, title }: HackingG
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild isActive={active === "participating"}>
                     <Link href="/hacking-guide/participating-in-farhack" className="flex items-center gap-2">
-                      <Users className="h-4 w-4" />
+                      <FarHackLogo gradient className="size-4" />
                       <span>Participating in FarHack</span>
                     </Link>
                   </SidebarMenuButton>

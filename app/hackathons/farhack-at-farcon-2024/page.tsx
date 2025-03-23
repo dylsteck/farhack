@@ -8,29 +8,10 @@ const splitIntoTwoColumns = (images: { src: string; alt: string }[]) => {
   return [images.slice(0, half), images.slice(half)];
 };
 
-const Nav = () => {
-  return (
-    <nav className="w-full h-16 flex items-center justify-between">
-      <ul className="w-full flex flex-row gap-1 justify-between items-center mr-[10%] mb-4">
-        <div></div>
-        <div className="flex flex-row gap-4 items-center">
-          <a
-            href="/"
-            className={`bg-[#8A63D2] text-white text-sm py-2 px-4 rounded-full ${karla.className}`}
-          >
-            Back to Home
-          </a>
-        </div>
-      </ul>
-    </nav>
-  );
-};
-
 const Info = () => {
   return (
     <div className="visible md:w-1/2 min-h-[100%] h-auto bg-black/95 overflow-y-scroll">
-      <div className="pl-10 flex-col items-center justify-center mb-5 md:mb-0">
-        <Nav />
+      <div className="mt-5 pl-10 flex-col items-center justify-center mb-5 md:mb-0">
         <div className="max-w-[90%]">
           <img
             src="https://i.imgur.com/J1Lch5m.png"

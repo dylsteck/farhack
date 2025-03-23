@@ -18,8 +18,7 @@ export default function HackingGuideIntroPage() {
       <p className="text-muted-foreground">
         Welcome to our Hacking Guide, a resource filled with potential hackathon ideas, rules of the road, community tools/docs, and everything else you'll need to get started hacking.
       </p>
-      <div className="pt-6">
-        <h2 className="text-2xl font-bold tracking-tight pb-2">Getting Started</h2>
+      <div>
         <p className="text-muted-foreground">
           This is a resource you could read before participating in a FarHack, or even content to read if you want to start vibe coding Farcaster frames for the first time. Regardless, we want to set you up for success! 
           <br /><br />
@@ -43,14 +42,6 @@ export default function HackingGuideIntroPage() {
                 </Link>
               </TableCell>
               <TableCell>Intro to the content in FarHack's Hacking Guide</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">
-                <Link href="/hacking-guide/why-hack">
-                    Why Hack?
-                </Link>
-              </TableCell>
-              <TableCell>Why we think you should hack on Farcaster</TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="font-medium">

@@ -5,7 +5,7 @@ import Link from "next/link";
 export default async function Home() {
   return (
     <div className="text-white flex flex-col gap-4 items-center mt-[12%] md:mt-[6%] p-4 pt-0">
-      <FarHackLogo className="max-w-[70%] md:max-w-[35%] lg:max-w-[25%]" gradient />
+      <FarHackLogo className="max-w-[70%] sm:max-w-[55%] md:max-w-[30%] lg:max-w-[25%]" gradient />
       <div className="text-center">
         <p className="text-white text-3xl md:text-5xl mr-4 font-semibold">FarHack</p>
         <p className="text-white text-lg md:text-xl mt-1 mr-4 font-light">The ultimate Farcaster hackathon</p>
