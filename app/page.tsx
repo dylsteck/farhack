@@ -1,25 +1,23 @@
+import FarHackLogo from "@/components/custom/icons/farhack-logo";
 import Hackathons from "../components/custom/hackathons";
+import Link from "next/link";
 
 export default async function Home() {
   return (
-    <div className="text-white flex flex-col gap-4 items-center mt-[4%] sm:mt-[2%] md:mt-[1%] p-4 pt-0">
+    <div className="text-white flex flex-col gap-4 items-center mt-[12%] md:mt-[6%] p-4 pt-0">
+      <FarHackLogo className="max-w-[70%] sm:max-w-[55%] md:max-w-[30%] lg:max-w-[25%]" gradient />
       <div className="text-center">
-        <span
-          className="text-[10vw] sm:text-[9vw] md:text-[7vw] lg:text-[42px] leading-[12vw] sm:leading-[10vw] md:leading-[8vw] lg:leading-[56px] font-karla font-bold"
-          style={{
-            WebkitTextFillColor: 'black',
-            WebkitTextStrokeWidth: '1px',
-            WebkitTextStrokeColor: '#8A63D2',
-            textShadow: '0px 3px 3px rgba(0, 0, 0, 0.25)',
-          }}
-        >
-          The ultimate Farcaster hackathon
-        </span>
-        <p className="mx-auto text-center text-[14px] sm:text-[15px] md:text-[16px] lg:text-[17px] max-w-[80%] md:max-w-[70%] lg:max-w-[60%] mt-2">
-          The strength of the Farcaster developer communities depends upon education and community interaction. FarHack runs self-serve hackathon software and in-person hackathons in service of the community.
-        </p>
+        <p className="text-white text-3xl md:text-5xl mr-4 font-semibold">FarHack</p>
+        <p className="text-white text-lg md:text-xl mt-1 mr-4 font-light">The ultimate Farcaster hackathon</p>
       </div>
-      <div>
+      <div className="flex flex-col md:flex-row gap-0.5 md:gap-2 items-center">
+        <Link href="/#hackathons">
+          <button className="bg-[#8A63D2] hover:bg-[#7952C7] text-white font-medium py-2 px-8 rounded-full mt-2 transition-all duration-300">
+            Start Hacking
+          </button>
+        </Link>
+      </div>
+      <div className="mt-[15vh] md:mt-[10vh]">
         <Hackathons />
       </div>
     </div>

@@ -1,3 +1,4 @@
+"use client";
 // eslint-disable-next-line import/no-named-as-default
 import sdk from "@farcaster/frame-sdk";
 import React from "react";

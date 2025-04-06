@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -95,9 +96,9 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
                           <p className="text-zinc-300 whitespace-pre-line">{cleanText(team.description)}</p>
                           {extractLinks(team.description).map((link, index) => (
                             <div key={index} className="mt-2">
-                              <a href={link} target="_blank" rel="noopener noreferrer" className="text-amber-500 underline flex items-center">
+                              <Link href={link} target="_blank" rel="noopener noreferrer" className="text-amber-500 underline flex items-center">
                                 {link} <ExternalLink className="ml-2 h-4 w-4" />
-                              </a>
+                              </Link>
                             </div>
                           ))}
                           {team.embeds &&
@@ -112,9 +113,9 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
                                     className="rounded-lg border border-zinc-700 object-cover"
                                   />
                                 ) : (
-                                  <a href={embed.url} target="_blank" rel="noopener noreferrer" className="text-amber-500 underline flex items-center">
+                                  <Link href={embed.url} target="_blank" rel="noopener noreferrer" className="text-amber-500 underline flex items-center">
                                     {embed.url} <ExternalLink className="ml-2 h-4 w-4" />
-                                  </a>
+                                  </Link>
                                 )}
                               </div>
                             ))}

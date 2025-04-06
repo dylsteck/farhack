@@ -7,6 +7,19 @@ import { SignInButton, AuthKitProvider, StatusAPIResponse } from "@farcaster/aut
 import React, { useState } from "react";
 import { karla } from "../../app/lib/utils";
 import { usePathname } from "next/navigation";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { LogOutIcon, UserIcon } from "lucide-react";
+import FrameLink from "./frame-link";
 
 const config = {
   relay: "https://relay.farcaster.xyz",
@@ -29,7 +42,6 @@ export default function SignInWithFarcaster() {
 function Content() {
   const { data: session } = useSession();
   const [error, setError] = React.useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const getNonce = React.useCallback(async () => {
     const nonce = await getCsrfToken();
@@ -64,28 +76,29 @@ function Content() {
           {error && <div>Unable to sign in at this time.</div>}
         </div>
       ) : (
-        <div className="relative">
-          <div className="pt-2 flex-row gap-2 items-center hidden md:flex">
-            <div className="flex flex-row gap-2 items-center bg-fcPurple text-white border-1 rounded-full px-2 py-1 pl-2 pr-2">
-              <img src={session.user?.image ?? ""} alt="User Image" className="w-8 h-8 rounded-full" />
-              <p>{session.user?.name}</p>
-            </div>
-            <div className="flex flex-row gap-2 items-center bg-red-500 text-white border-1 rounded-full px-2 py-2 pl-3 pr-3 cursor-pointer" onClick={() => signOut()}>
-              <p className="font-medium">Logout</p>
-            </div>
-          </div>
-          <div className="text-white pt-2 flex flex-col items-center md:hidden">
-            <button onClick={() => setDropdownOpen(!dropdownOpen)} className="flex flex-row gap-2 items-center bg-fcPurple text-white border-1 rounded-full px-2 py-1 pl-2 pr-2 cursor-pointer">
-              <img src={session.user?.image ?? ""} alt="User Image" className="w-8 h-8 rounded-full" />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="flex flex-row gap-2 items-center bg-fcPurple text-white border-1 rounded-full px-2 py-1 pl-2 pr-2 cursor-pointer text-md">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={session.user?.image ?? ""} alt={session.user?.name ?? ""} />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
               <p>{session.user?.name}</p>
             </button>
-            {dropdownOpen && (
-              <div className="absolute top-12 right-0 rounded-full shadow-lg bg-red-500 text-white mt-2">
-                <button onClick={() => signOut()} className="w-full text-left px-4 py-2">Logout</button>
-              </div>
-            )}
-          </div>
-        </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="min-w-32 rounded-xl" align="end" sideOffset={8}>
+            <FrameLink type="url" identifier={`https://warpcast.com/${session.user?.name}`}>
+              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+                <UserIcon className="w-4 h-4 text-white" />
+                Profile
+              </DropdownMenuItem>
+            </FrameLink>
+            <DropdownMenuItem onClick={() => signOut()} className="flex items-center gap-2 cursor-pointer">
+              <LogOutIcon className="w-4 h-4 text-red-500" />
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
     </div>
   );

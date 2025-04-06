@@ -3,6 +3,7 @@ import React from 'react';
 import { HackathonNav } from '@/components/custom/hackathon-nav';
 import { Hackathon } from '@/app/lib/types';
 import { farhackSDK } from '@/app/lib/api';
+import Link from 'next/link';
 
 export default async function HackathonBySlugPage(props: { params: Promise<any> }) {
     const params = await props.params;
@@ -12,7 +13,7 @@ export default async function HackathonBySlugPage(props: { params: Promise<any> 
     if (!hackathon) {
         return (
             <div className="flex items-center justify-center min-h-screen text-white text-2xl">
-                <p>No data found. <a href="/" className="underline">Return to home</a></p>
+                <p>No data found. <Link href="/" className="underline">Return to home</Link></p>
             </div>
         );
     }

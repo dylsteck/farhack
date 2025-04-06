@@ -1,36 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import FarhackLogo from '../../../components/custom/icons/farhack-logo';
+import FarHackLogo from '../../../components/custom/icons/farhack-logo';
 import { karla } from '../../lib/utils';
+import Link from 'next/link';
 
 const splitIntoTwoColumns = (images: { src: string; alt: string }[]) => {
   const half = Math.ceil(images.length / 2);
   return [images.slice(0, half), images.slice(half)];
 };
 
-const Nav = () => {
-  return (
-    <nav className="w-full h-16 flex items-center justify-between">
-      <ul className="w-full flex flex-row gap-1 justify-between items-center mr-[10%] mb-4">
-        <div></div>
-        <div className="flex flex-row gap-4 items-center">
-          <a
-            href="/"
-            className={`bg-[#8A63D2] text-white text-sm py-2 px-4 rounded-full ${karla.className}`}
-          >
-            Back to Home
-          </a>
-        </div>
-      </ul>
-    </nav>
-  );
-};
-
 const Info = () => {
   return (
     <div className="visible md:w-1/2 min-h-[100%] h-auto bg-black/95 overflow-y-scroll">
-      <div className="pl-10 flex-col items-center justify-center mb-5 md:mb-0">
-        <Nav />
+      <div className="mt-5 pl-10 flex-col items-center justify-center mb-5 md:mb-0">
         <div className="max-w-[90%]">
           <img
             src="https://i.imgur.com/J1Lch5m.png"
@@ -153,15 +135,15 @@ function PrizesTable() {
             return (
               <tr key={prize.company} className={borderClass}>
                 <td className="px-4 py-2">
-                  <a href={prize.company_link} target="_blank" className="underline">
+                  <Link href={prize.company_link} target="_blank" className="underline">
                     {prize.company}
-                  </a>
+                  </Link>
                 </td>
                 {prize.prizes_link.length > 0 ? (
                   <td className="px-4 py-2">
-                    <a href={prize.prizes_link} target="_blank" className="underline">
+                    <Link href={prize.prizes_link} target="_blank" className="underline">
                       {prize.prizes}
-                    </a>
+                    </Link>
                   </td>
                 ) : (
                   <td className="px-4 py-2">{prize.prizes}</td>

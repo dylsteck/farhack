@@ -17,7 +17,7 @@ export default async function HackathonYourTeamPage(props: { params: Promise<any
     }
 
     if (!slug) {
-        return <Error message={`No slug found. <a href="/" className="underline">Return to home</a>`} />;
+        return <Error message={`No slug found.`} />;
     }
 
     const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;

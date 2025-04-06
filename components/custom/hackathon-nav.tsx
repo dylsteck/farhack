@@ -31,7 +31,7 @@ export function HackathonNav({ hackathon }: { hackathon: Hackathon }) {
 
     return(
         <div>
-            <div className="text-white flex flex-col gap-1 items-start">
+            <div className="text-white flex flex-col gap-1 items-start mt-5">
                 <p className="text-4xl">{hackathon.name ? hackathon.name : "Hackathon"}</p>
                 <div className="flex flex-row gap-2 md:gap-4 items-center mt-3.5 overflow-x-clip scrollbar-hide">
                     {hackathonPages.map((page) => 

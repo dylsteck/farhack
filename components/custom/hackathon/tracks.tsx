@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import Link from 'next/link';
 
 export default function Tracks({ hackathon }: { hackathon: Hackathon }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -101,9 +102,9 @@ export default function Tracks({ hackathon }: { hackathon: Hackathon }) {
                       {extractUrl(track.description) && (
                         <CardFooter className="pt-0">
                           <Button variant="outline" size="sm" className="w-full bg-zinc-800 border-zinc-700 hover:bg-zinc-700 text-zinc-300" asChild>
-                            <a href={extractUrl(track.description)} target="_blank" rel="noopener noreferrer">
+                            <Link href={extractUrl(track.description)} target="_blank" rel="noopener noreferrer">
                               Learn More <ExternalLink className="ml-2 h-4 w-4" />
-                            </a>
+                            </Link>
                           </Button>
                         </CardFooter>
                       )}
@@ -127,9 +128,9 @@ export default function Tracks({ hackathon }: { hackathon: Hackathon }) {
                             {extractUrl(track.description) && (
                               <div className="mt-3">
                                 <Button variant="outline" size="sm" className="bg-zinc-800 border-zinc-700 hover:bg-zinc-700 text-zinc-300" asChild>
-                                  <a href={extractUrl(track.description)} target="_blank" rel="noopener noreferrer">
+                                  <Link href={extractUrl(track.description)} target="_blank" rel="noopener noreferrer">
                                     Learn More <ExternalLink className="ml-2 h-4 w-4" />
-                                  </a>
+                                  </Link>
                                 </Button>
                               </div>
                             )}

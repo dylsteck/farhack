@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { farhackSDK } from '@/app/lib/api';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 export default function AcceptTeamInvite({ params }: { params: { slug: string } }) {
   const searchParams = useSearchParams();
@@ -33,9 +34,9 @@ export default function AcceptTeamInvite({ params }: { params: { slug: string } 
       {inviteStatus === 'accepted' ? (
         <p className="p-15">
           Invite accepted!{' '}
-          <a href={`/hackathons/${params.slug}/your-team`} className="underline">
+          <Link href={`/hackathons/${params.slug}/your-team`} className="underline">
             Click here to view team
-          </a>
+          </Link>
         </p>
       ) : inviteStatus === 'failed' ? (
         <p className="p-15">Failed: Unable to process invite</p>
