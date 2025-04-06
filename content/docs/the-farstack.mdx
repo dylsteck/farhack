@@ -2,6 +2,35 @@
 title: The FarStack
 ---
 
+<img src="https://i.imgur.com/bd7LDsz.png" alt="The FarStack diagram from dwr.eth" style={{maxWidth: '450px', borderRadius: 10}} />
+
 The FarStack is the set of developer tooling and infrastructure that make up Farcaster's protocol and developer ecosystem.
 
-While [this blog post on The FarStack](https://dylansteck.com/blog/the-farstack) goes further into what all of that looks like/means, the goal of this page is to highlight the particular pieces of developer tooling in the FarStack that you could make use of.
+While [this blog post on The FarStack](https://dylansteck.com/blog/the-farstack) goes further into what all of that looks like/means, the goal of this page is to highlight the particular pieces of developer tooling in the FarStack that you could make use of. The sections below are both pillars of the ecosystem and contain tools/alpha you can use for your hackathon project.
+
+## Blockchains
+
+The FID(Farcaster ID) registry lives on OP Mainnet and ENS names, which are supported but not required by the protocol, live on the Ethereum L1(Mainnet). The other onchain aspect of the Farcaster ecosystem is the growing economy(or [Farconomy](https://dune.com/0xluc/farconomy) 😉) of Farcaster-native coins on Base. Warpcast and other apps have recently been leaning into the onchain nature of Farcaster's community through embedded/smart wallets, ticker pages in the social feed and and pushing transactions in Mini Apps.
+
+## Protocol Infra and APIs
+
+At the core of Farcaster's infrastructure sits Snapchain, a blockchain-like network for storing and syncing social data that's being implemented to replace the previous Delta Graph system. The protocol's specialized design focuses on social operations, allowing for better scaling and efficient data pruning. The Fname Server provides a unified identity layer by resolving human-readable usernames to FIDs, complementing the Snapchain protocol and enabling seamless interactions across the ecosystem.
+
+However other than just the protocol itself, an entire suite of infra and APIs has emerged, which has greatly benefitted developers who want to build on top of Farcaster. Specialized clients like Buoy provide targeted functionality for the ecosystem, serving specific developer needs beyond what general purpose clients offer. Meanwhile, key infrastructure providers like Neynar, OpenRank, and MBD have become critical to the developer ecosystem by providing API layers that abstract away much of the protocol's complexity:
+- [Neynar](https://neynar.com) offers comprehensive APIs and data products for reading and writing to Farcaster, user authentication via Sign in with Neynar (SIWN), bot creation tools, and much more.
+- [OpenRank](https://openrank.com) provides specialized ranking algorithms and data indexing that help developers surface relevant content for their users.
+- [MBD](https://mbd.xyz) delivers customizable feed generation services that enable cross-chain holistic user profiles and personalized content discovery.
+
+This robust architecture combined with the rapidly growing ecosystem of developer tools has created a powerful foundation that even established teams are embracing. Neynar, OpenRank, MBD, and other infra providers now power many of the most popular teams building on Farcaster, abstracting away protocol complexity and enabling developers to build sophisticated experiences in a fraction of the time it would take otherwise. These providers have become so essential that they're now backed by major investors and serve as the backbone for both indie developers and well-funded teams looking to enter the Farcaster ecosystem.
+
+## Clients
+
+The client layer is where users actually experience Farcaster, and the ecosystem has evolved far beyond a single app. Warpcast remains the flagship client created by the Merkle team (the team behind the protocol), offering a polished experience that has set user expectations. The open protocol approach has encouraged alternative clients to flourish—Super, Recaster, Herocast, and others each introducing new features and catering to different types of users.
+
+Looking ahead, future clients like Coinbase Wallet could bring Farcaster to millions of mainstream users, while apps that integrate Farcaster's social graph into their features like Interface, Rodeo, and Rainbow demonstrate the power of permissionless data access without building full clients. This multi-client ecosystem ensures users can choose their preferred experience without sacrificing their social connections—a fundamental strength of Farcaster's open protocol design.
+
+## Mini Apps
+
+Sitting atop the FarStack are Mini Apps(prev. Frames), which are interactive apps that can be shared and saved inside of Farcaster clients. Users can open mini apps either in a post or from a dedicated Mini Apps page, and when opened mini apps let you see an entire webpage that has context to your Farcaster identity and social graph. Mini Apps provide developers with access to user context, notifications, and access to the user's connected wallet.
+
+What makes Mini Apps so powerful is how they completely reshape app distribution and discovery. Developers don't need to compete in crowded app stores or convince users to download another app—they can build experiences that spread naturally through social sharing, instantly reaching an engaged audience. Users simply tap a mini app in their feed and immediately get an app-like experience with their Farcaster identity already connected, complete with wallet transactions, notifications, and other native features without any downloads or new accounts. This creates an unprecedented level of frictionless interaction that's spawning all kinds of creative applications—from games and utilities to commerce tools and financial apps—fundamentally changing what's possible inside social clients and potentially offering the breakthrough approach consumer crypto needs to reach mainstream users.
