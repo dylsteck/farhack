@@ -2,10 +2,11 @@
 
 import { Context, sdk, SignIn } from "@farcaster/frame-sdk";
 import { FrameSDK } from "@farcaster/frame-sdk/dist/types";
+import { Session } from "next-auth";
 import { getCsrfToken, signIn } from "next-auth/react";
 import { useCallback, useEffect } from "react";
 
-export default function FrameProvider({ children }: { children: React.ReactNode }){
+export function FrameProvider({ children, session }: { children: React.ReactNode, session: Session | null }){
   const getNonce = useCallback(async () => {
       const nonce = await getCsrfToken();
       if (!nonce) throw new Error("Unable to generate nonce");
@@ -35,7 +36,7 @@ export default function FrameProvider({ children }: { children: React.ReactNode 
     useEffect(() => {
         const init = async () => {
           const context = await sdk.context;
-          if (context?.client.clientFid) {
+          if (context?.client.clientFid && !session) {
             await handleSignIn(context.user);
           }
           setTimeout(() => {
