@@ -3,6 +3,7 @@ import { getHackathons } from "@/db/queries";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock } from "lucide-react";
+import Link from "next/link";
 
 interface Hackathon {
   id: number;
@@ -31,7 +32,7 @@ function HackathonListItem({ hackathon }: { hackathon: Hackathon }) {
   );
 
   return (
-    <a href={`/hackathons/${hackathon.slug}`} className="w-full group">
+    <Link href={`/hackathons/${hackathon.slug}`} className="w-full group">
       <Card className="flex flex-col sm:flex-row items-start gap-4 p-4 hover:bg-zinc-800 transition-all duration-200 rounded-xl border-zinc-800 bg-zinc-900 group-hover:border-zinc-700 w-full">
         <div className="w-24 aspect-square relative shrink-0 rounded-lg overflow-hidden border border-zinc-800 shadow-md">
           <img
@@ -53,7 +54,7 @@ function HackathonListItem({ hackathon }: { hackathon: Hackathon }) {
           </>
         </CardContent>
       </Card>
-    </a>
+    </Link>
   );
 }
 

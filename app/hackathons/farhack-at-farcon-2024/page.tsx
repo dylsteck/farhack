@@ -2,6 +2,7 @@
 import React from 'react';
 import FarHackLogo from '../../../components/custom/icons/farhack-logo';
 import { karla } from '../../lib/utils';
+import Link from 'next/link';
 
 const splitIntoTwoColumns = (images: { src: string; alt: string }[]) => {
   const half = Math.ceil(images.length / 2);
@@ -134,15 +135,15 @@ function PrizesTable() {
             return (
               <tr key={prize.company} className={borderClass}>
                 <td className="px-4 py-2">
-                  <a href={prize.company_link} target="_blank" className="underline">
+                  <Link href={prize.company_link} target="_blank" className="underline">
                     {prize.company}
-                  </a>
+                  </Link>
                 </td>
                 {prize.prizes_link.length > 0 ? (
                   <td className="px-4 py-2">
-                    <a href={prize.prizes_link} target="_blank" className="underline">
+                    <Link href={prize.prizes_link} target="_blank" className="underline">
                       {prize.prizes}
-                    </a>
+                    </Link>
                   </td>
                 ) : (
                   <td className="px-4 py-2">{prize.prizes}</td>
