@@ -78,7 +78,7 @@ function Content() {
       ) : (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex flex-row gap-2 items-center bg-fcPurple text-white border-1 rounded-full px-2 py-1 pl-2 pr-2 cursor-pointer">
+            <button className="flex flex-row gap-2 items-center bg-fcPurple text-white border-1 rounded-full px-2 py-1 pl-2 pr-2 cursor-pointer text-md">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={session.user?.image ?? ""} alt={session.user?.name ?? ""} />
                 <AvatarFallback>CN</AvatarFallback>

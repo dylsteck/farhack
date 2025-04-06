@@ -10,14 +10,14 @@ export default function Nav(){
     const pathname = usePathname();
     const isAdmin = pathname.includes('/admin');
     const isHackingGuide = pathname.includes('/hacking-guide');
-    const hideNavBar = isAdmin || isHackingGuide;
+    const hideNavBar = isAdmin;
 
     if(hideNavBar){
         return null;
     }
 
     return(
-        <nav className="w-full bg-black/75 flex items-center justify-between p-4 pb-3 border-b border-white/20">
+        <nav className="w-full bg-black/75 flex items-center justify-between px-3 py-2 border-b border-white/20">
             <Link
                 href="/"
                 className="flex items-center gap-2 text-lg font-semibold md:text-base"
