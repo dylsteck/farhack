@@ -9,7 +9,6 @@ import { usePathname } from "next/navigation";
 export default function Nav(){
     const pathname = usePathname();
     const isAdmin = pathname.includes('/admin');
-    const isHackingGuide = pathname.includes('/hacking-guide');
     const hideNavBar = isAdmin;
 
     if(hideNavBar){

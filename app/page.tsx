@@ -16,11 +16,6 @@ export default async function Home() {
             Start Hacking
           </button>
         </Link>
-        <Link href="/hacking-guide">
-        <button className="bg-white text-black hover:text-[#8A63D2] font-medium py-2 px-8 rounded-full mt-2 transition-all duration-300">
-          Hacking Guide
-        </button>
-      </Link>
       </div>
       <div className="mt-[15vh] md:mt-[10vh]">
         <Hackathons />
