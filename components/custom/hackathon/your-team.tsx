@@ -2,14 +2,14 @@
 
 import React, { useState } from 'react';
 import { HackathonNav } from '@/components/custom/hackathon-nav';
-import { Hackathon, Team } from '@/app/lib/types';
+import { Hackathon, Team } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { farhackSDK } from '@/app/lib/api';
+import { farhackSDK } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 

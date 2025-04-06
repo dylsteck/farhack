@@ -5,7 +5,7 @@ import "@farcaster/auth-kit/styles.css";
 import { useSession, signIn, signOut, getCsrfToken } from "next-auth/react";
 import { SignInButton, AuthKitProvider, StatusAPIResponse } from "@farcaster/auth-kit";
 import React, { useState } from "react";
-import { karla } from "../../app/lib/utils";
+import { karla } from "../../lib/utils";
 import { usePathname } from "next/navigation";
 import {
   Avatar,

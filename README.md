@@ -2,9 +2,10 @@
 
 ![FarHack banner](https://i.imgur.com/IzrcL7A.jpeg)
 
-FarHack is the ultimate Farcaster hackathon. This repo houses our in-house hackathon software.
+[FarHack](https://farhack.xyz) is the ultimate Farcaster hackathon. This repo houses our in-house hackathon software.
 
 ## Running the site locally
+
 - **Install dependencies:** `npm install`
 - **Run locally:** `npm dev`
 

@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import FarHackLogo from "./icons/farhack-logo";
-import { karla } from "@/app/lib/utils";
+import { karla } from "@/lib/utils";
 import SignInWithFarcaster from "./sign-in-with-farcaster";
 import { usePathname } from "next/navigation";
 
 export default function Nav(){
     const pathname = usePathname();
     const isAdmin = pathname.includes('/admin');
+    const isHackingGuide = pathname.includes('/hacking-guide');
     const hideNavBar = isAdmin;
 
     if(hideNavBar){

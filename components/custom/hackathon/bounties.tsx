@@ -1,12 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { HackathonNav } from '@/components/custom/hackathon-nav';
-import { Hackathon, Bounty } from '@/app/lib/types';
+import { Hackathon } from '@/lib/types';
 import { Trophy, ExternalLink, Search, LayoutGrid, List } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -15,18 +12,6 @@ import Link from 'next/link';
 export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  
-  const startDate = new Date(hackathon.start_date).toLocaleDateString(undefined, { 
-    year: 'numeric', 
-    month: 'short', 
-    day: 'numeric' 
-  });
-  
-  const endDate = new Date(hackathon.end_date).toLocaleDateString(undefined, { 
-    year: 'numeric', 
-    month: 'short', 
-    day: 'numeric' 
-  });
   
   const bounties = hackathon.bounties;
   
@@ -49,12 +34,8 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="bg-black text-white">
       <div className="container mx-auto py-6 px-4 md:px-6 max-w-7xl">
-        <div className="flex flex-col space-y-2 mb-8">
-          <HackathonNav hackathon={hackathon} />
-        </div>
-        
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
@@ -73,7 +54,7 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
                 />
               </div>
               
-              <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value as 'grid' | 'list')}>
+              <ToggleGroup type="single" value={viewMode} onValueChange={(value: 'grid' | 'list') => value && setViewMode(value)}>
                 <ToggleGroupItem value="grid" size="sm" className="data-[state=on]:bg-zinc-800">
                   <LayoutGrid className="h-4 w-4" />
                 </ToggleGroupItem>

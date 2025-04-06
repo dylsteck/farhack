@@ -35,5 +35,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# certificates
 certificates
+
+# bun
 bun.lock
+
+# fumadocs 
+.source

@@ -1,0 +1,12 @@
+// @ts-nocheck -- skip type checking
+import * as docs_7 from "../content/docs/resources/open-ideas.mdx?collection=docs&hash=1743353613259"
+import * as docs_6 from "../content/docs/resources/documentation.mdx?collection=docs&hash=1743353613259"
+import * as docs_5 from "../content/docs/resources/appendix.mdx?collection=docs&hash=1743353613259"
+import * as docs_4 from "../content/docs/the-farstack.mdx?collection=docs&hash=1743353613259"
+import * as docs_3 from "../content/docs/participating-in-farhack.mdx?collection=docs&hash=1743353613259"
+import * as docs_2 from "../content/docs/next-steps.mdx?collection=docs&hash=1743353613259"
+import * as docs_1 from "../content/docs/index.mdx?collection=docs&hash=1743353613259"
+import * as docs_0 from "../content/docs/getting-started.mdx?collection=docs&hash=1743353613259"
+import { _runtime } from "fumadocs-mdx"
+import * as _source from "../source.config"
+export const docs = _runtime.docs<typeof _source.docs>([{ info: {"path":"getting-started.mdx","absolutePath":"/Users/dylansteck/Desktop/dev/farhack/content/docs/getting-started.mdx"}, data: docs_0 }, { info: {"path":"index.mdx","absolutePath":"/Users/dylansteck/Desktop/dev/farhack/content/docs/index.mdx"}, data: docs_1 }, { info: {"path":"next-steps.mdx","absolutePath":"/Users/dylansteck/Desktop/dev/farhack/content/docs/next-steps.mdx"}, data: docs_2 }, { info: {"path":"participating-in-farhack.mdx","absolutePath":"/Users/dylansteck/Desktop/dev/farhack/content/docs/participating-in-farhack.mdx"}, data: docs_3 }, { info: {"path":"the-farstack.mdx","absolutePath":"/Users/dylansteck/Desktop/dev/farhack/content/docs/the-farstack.mdx"}, data: docs_4 }, { info: {"path":"resources/appendix.mdx","absolutePath":"/Users/dylansteck/Desktop/dev/farhack/content/docs/resources/appendix.mdx"}, data: docs_5 }, { info: {"path":"resources/documentation.mdx","absolutePath":"/Users/dylansteck/Desktop/dev/farhack/content/docs/resources/documentation.mdx"}, data: docs_6 }, { info: {"path":"resources/open-ideas.mdx","absolutePath":"/Users/dylansteck/Desktop/dev/farhack/content/docs/resources/open-ideas.mdx"}, data: docs_7 }], [])
