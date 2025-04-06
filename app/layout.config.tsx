@@ -6,13 +6,14 @@ import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
  *
  * you can customise layouts individually from:
  * Home Layout: app/(home)/layout.tsx
- * Docs Layout: app/docs/layout.tsx
+ * Docs Layout: app/hacking-guide/layout.tsx
  */
 export const baseOptions: BaseLayoutProps = {
+  githubUrl: 'https://github.com/farhackxyz/farhack',
   nav: {
     title: (
       <>
-        <FarHackLogo width={30} height={30} />
+        <FarHackLogo width={25} height={25} />
         FarHack
       </>
     ),
