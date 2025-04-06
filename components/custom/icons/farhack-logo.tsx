@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import Image from 'next/image';
-import farhackLogo from '../../../public/farhackLogo.png';
-import farhackLogoGradient from '../../../public/farhackLogoGradient.png';
+import farhackLogo from '../../../public/farhack-logo.png';
+import farhackLogoGradient from '../../../public/farhack-logo-gradient.png';
 
 interface LogoProps {
   width?: number;

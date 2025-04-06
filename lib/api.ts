@@ -48,13 +48,6 @@ class FarHackSDK {
     return this.fetcher('/api/hackathons/teams');
   }
 
-  async addTicket(user_id: string, user_address: string, hackathon_id: string, txn_hash: string, ticket_type: string, amount: number) {
-    return this.fetcher('/api/hackathons/tickets', {
-      method: 'POST',
-      body: JSON.stringify({ user_id, user_address, hackathon_id, txn_hash, ticket_type, amount })
-    });
-  }
-
   async createTeam(name: string, description: string, hackathonId: number, userId: number): Promise<Team> {
     const response = await fetch('/api/hackathons/teams', {
       method: 'POST',

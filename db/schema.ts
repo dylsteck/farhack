@@ -53,16 +53,3 @@ export const teams = pgTable("teams", {
 });
 
 export type Team = InferSelectModel<typeof teams>;
-
-export const tickets = pgTable("tickets", {
-  id: integer("id").primaryKey().notNull(),
-  user_id: integer("user_id").notNull(),
-  user_address: varchar("user_address", { length: 255 }).notNull(),
-  hackathon_id: integer("hackathon_id").notNull(),
-  txn_hash: varchar("txn_hash", { length: 255 }),
-  created_at: timestamp("created_at").defaultNow(),
-  ticket_type: text("ticket_type").notNull(),
-  amount: integer("amount"),
-});
-
-export type Ticket = InferSelectModel<typeof tickets>;

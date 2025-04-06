@@ -1,15 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { latestHackathons as hackathons } from '@/lib/data';
 import Link from 'next/link';
 import { Hackathon } from '@/lib/types';
 import { HackathonLaoyut } from '@/components/custom/hackathon/hackathon-layout';
 import { CalendarIcon } from '@radix-ui/react-icons';
+import { farhackSDK } from '@/lib/api';
 
 export default async function HackathonBySlugPage(props: { params: Promise<any> }) {
   const params = await props.params;
   const { slug } = params;
-  const hackathon = hackathons.find((h) => h.slug === slug) as unknown as Hackathon;
+  const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
 
   if (!slug || !hackathon) {
     return (

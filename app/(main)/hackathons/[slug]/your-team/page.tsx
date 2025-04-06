@@ -1,16 +1,16 @@
 import React from 'react';
-import { latestHackathons as hackathons } from '@/lib/data';
 import Link from 'next/link';
 import { Hackathon } from '@/lib/types';
 import { HackathonLaoyut } from '@/components/custom/hackathon/hackathon-layout';
 import YourTeam from '@/components/custom/hackathon/your-team';
 import { auth } from '@/auth';
+import { farhackSDK } from '@/lib/api';
 
 export default async function HackathonYourTeamPage(props: { params: Promise<any> }) {
   const session = await auth();
   const params = await props.params;
   const { slug } = params;
-  const hackathon = hackathons.find((h) => h.slug === slug) as unknown as Hackathon;
+  const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
 
   if (!slug || !hackathon || !session) {
     return (

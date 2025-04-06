@@ -4,7 +4,7 @@ import { asc, desc, eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-import { users, hackathons, invites, teams, tickets, User, Hackathon, Invite, Team, Ticket } from "./schema";
+import { users, hackathons, invites, teams, User, Hackathon, Invite, Team } from "./schema";
 
 let client = postgres(`${process.env.DATABASE_URL!}?sslmode=require`);
 let db = drizzle(client);
@@ -190,10 +190,6 @@ export async function getAdmins(): Promise<User[]> {
     .execute();
 }
 
-export async function getTickets(): Promise<Ticket[]> {
-  return await db.select().from(tickets).execute();
-}
-
 export async function handleDeleteTeam(teamId: number) {
   await db.delete(teams).where(eq(teams.id, teamId)).execute();
 }
@@ -205,16 +201,6 @@ export async function handleGenerateInvite(
 ): Promise<string> {
   const token = await createInvite(userId, teamId);
   return `${process.env.BASE_URL}/hackathons/${hackathonSlug}/teams/share-invite?token=${token}`;
-}
-
-export async function getAllTimeSales(): Promise<number> {
-  const allTimeSales = await db
-    .select({ total: sql<number>`COALESCE(SUM(${tickets.amount}), 0)::numeric` })
-    .from(tickets)
-    .execute()
-    .then(res => res[0]);
-
-  return allTimeSales?.total ?? 0;
 }
 
 interface RecentTicket {
@@ -231,31 +217,6 @@ interface RecentTicket {
   is_admin: boolean | null;
   admin_hackathons: string | null;
   hackathon_name: string | null;
-}
-
-export async function getRecentTickets(): Promise<RecentTicket[]> {
-  return await db
-    .select({
-      id: tickets.id,
-      user_id: tickets.user_id,
-      user_address: tickets.user_address,
-      hackathon_id: tickets.hackathon_id,
-      txn_hash: tickets.txn_hash,
-      ticket_type: tickets.ticket_type,
-      amount: tickets.amount,
-      created_at: tickets.created_at,
-      name: users.name,
-      image: users.image,
-      is_admin: users.is_admin,
-      admin_hackathons: users.admin_hackathons,
-      hackathon_name: hackathons.name,
-    })
-    .from(tickets)
-    .innerJoin(users, eq(tickets.user_id, users.id))
-    .innerJoin(hackathons, eq(tickets.hackathon_id, hackathons.id))
-    .orderBy(desc(tickets.created_at))
-    .limit(50)
-    .execute() as RecentTicket[];
 }
 
 export async function getTeam(type: 'teamId' | 'userId', identifier: number): Promise<Team | null> {

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Hackathon, Team } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
@@ -30,6 +30,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
   const [embedType, setEmbedType] = useState<'url' | 'image'>('url');
   const [embedUrl, setEmbedUrl] = useState('');
   const [walletAddress, setWalletAddress] = useState('');
+  const [showDeadlineDate, setShowDeadlineDate] = useState(false);
 
   const router = useRouter();
   const userId = user?.id ? Number(user.id) : undefined;
@@ -120,28 +121,41 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
     setEmbedUrl('');
   };
 
+  const deadline = hackathon.end_date ? new Date(hackathon.end_date) : null;
+  const isClosed = deadline ? deadline.getTime() < Date.now() : false;
+  const timeLeft = deadline ? Math.max(deadline.getTime() - Date.now(), 0) : 0;
+  const readableTimeLeft = timeLeft > 0 ? `${Math.floor(timeLeft / (1000 * 60 * 60))}h ${Math.floor((timeLeft / (1000 * 60)) % 60)}m` : 'Closed';
+
   return (
     <div className="bg-transparent text-black dark:text-white">
       <div className="container mx-auto py-6 px-4 md:px-6 max-w-7xl">
-        <h2 className="text-3xl font-bold mb-4">Your Team</h2>
-        <p className="text-zinc-400 mb-6">
-          Time to submission deadline: {hackathon.end_date ? new Date(hackathon.end_date).toLocaleString() : 'TBD'}
-        </p>
+        <h2 className="text-3xl font-bold mb-2">Your Team</h2>
+        <div className="text-sm text-zinc-400 cursor-pointer my-6">
+          <div className="text-md">Deadline</div>
+          <div className="text-lg font-medium" onClick={() => setShowDeadlineDate(!showDeadlineDate)}>
+            {deadline ? (
+              showDeadlineDate ? deadline.toLocaleString() : (isClosed ? 'Closed' : readableTimeLeft)
+            ) : 'TBD'}
+          </div>
+        </div>
 
         {userTeam ? (
-          <div className="mt-4">
-            <p className="text-lg">You are part of <span className="font-semibold">{userTeam.name}</span></p>
-            <p className="text-2xl font-medium mt-5">Actions</p>
-            <div className="flex space-x-4 mt-4">
-              <Button className="px-6 py-3 text-lg bg-white text-black" onClick={() => openDialog(true)}>View/Edit Team</Button>
-              <Button className="px-6 py-3 text-lg bg-green-500 hover:bg-green-600" onClick={handleGenerateInvite}>Invite Teammate</Button>
+          <div className="mt-4 border border-zinc-700 rounded-2xl p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-2xl font-semibold">{userTeam.name}</h3>
+              <div className="flex gap-2">
+                <Button className="bg-white text-black px-4 py-2" onClick={() => openDialog(true)}>Edit</Button>
+                <Button className="bg-green-500 hover:bg-green-600 px-4 py-2" onClick={handleGenerateInvite}>Invite</Button>
+              </div>
             </div>
+            <p className="text-zinc-300">{userTeam.description}</p>
           </div>
         ) : (
           <div className="mt-4">
             <p className="text-zinc-400">You are not part of any team</p>
-            <p className="text-2xl font-medium mt-5">Actions</p>
-            <Button className="mt-4 px-6 py-3 text-lg bg-white text-black" onClick={() => openDialog(false)}>Create Team</Button>
+            {!isClosed && (
+              <Button className="mt-4 px-6 py-3 text-lg bg-white text-black" onClick={() => openDialog(false)}>Create Team</Button>
+            )}
           </div>
         )}
       </div>
@@ -164,7 +178,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
               <Button onClick={addEmbed} className="bg-green-500 hover:bg-green-600">Add</Button>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="mt-6">
             <Button onClick={handleSave}>Save</Button>
             <Button onClick={() => setIsConfirmDialogOpen(true)}>Submit</Button>
           </DialogFooter>

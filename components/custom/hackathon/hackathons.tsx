@@ -3,18 +3,8 @@ import { getHackathons } from "@/db/queries";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock } from "lucide-react";
-import Link from "next/link";
-
-interface Hackathon {
-  id: number;
-  name: string;
-  description: string;
-  slug: string;
-  square_image: string;
-  start_date: Date;
-  end_date: Date;
-  created_at: Date;
-}
+import { Link } from "next-view-transitions";
+import { Hackathon } from "@/lib/types";
 
 function HackathonListItem({ hackathon }: { hackathon: Hackathon }) {
   const now = new Date();

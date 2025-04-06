@@ -1,15 +1,14 @@
-/* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { latestHackathons as hackathons } from '@/lib/data';
 import Link from 'next/link';
-import { Hackathon } from '@/lib/types';
+import { FullHackathon } from '@/lib/types';
 import { HackathonLaoyut } from '@/components/custom/hackathon/hackathon-layout';
-import Bounties from '@/components/custom/hackathon/bounties';
+import Tracks from '@/components/custom/hackathon/tracks';
+import { farhackSDK } from '@/lib/api';
 
-export default async function HackathonBounitesPage(props: { params: Promise<any> }) {
+export default async function HackathonTracksPage(props: { params: Promise<any> }) {
   const params = await props.params;
   const { slug } = params;
-  const hackathon = hackathons.find((h) => h.slug === slug) as unknown as Hackathon;
+  const hackathon = await farhackSDK.getHackathon(slug) as FullHackathon;
 
   if (!slug || !hackathon) {
     return (
@@ -21,7 +20,7 @@ export default async function HackathonBounitesPage(props: { params: Promise<any
 
   return (
     <HackathonLaoyut hackathon={hackathon}>
-      <Bounties hackathon={hackathon} />
+      <Tracks hackathon={hackathon} />
     </HackathonLaoyut>
   );
 }

@@ -90,9 +90,9 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
                           <p className="text-zinc-300 whitespace-pre-line">{cleanText(team.description)}</p>
                           {extractLinks(team.description).map((link, index) => (
                             <div key={index} className="mt-2">
-                              <Link href={link} target="_blank" rel="noopener noreferrer" className="text-amber-500 underline flex items-center">
+                              <a href={link} target="_blank" rel="noopener noreferrer" className="text-amber-500 underline flex items-center">
                                 {link} <ExternalLink className="ml-2 h-4 w-4" />
-                              </Link>
+                              </a>
                             </div>
                           ))}
                           {team.embeds &&
@@ -107,9 +107,9 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
                                     className="rounded-lg border border-zinc-700 object-cover"
                                   />
                                 ) : (
-                                  <Link href={embed.url} target="_blank" rel="noopener noreferrer" className="text-amber-500 underline flex items-center">
+                                  <a href={embed.url} target="_blank" rel="noopener noreferrer" className="text-amber-500 underline flex items-center">
                                     {embed.url} <ExternalLink className="ml-2 h-4 w-4" />
-                                  </Link>
+                                  </a>
                                 )}
                               </div>
                             ))}
@@ -117,7 +117,7 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
                             <h3 className="text-lg font-medium">Team Members</h3>
                             <div className="flex flex-wrap gap-4 mt-2">
                               {team.fids.map((fid: number) => (
-                                <Link
+                                <a
                                   key={fid}
                                   href={`https://warpcast.com/${fid}`}
                                   target="_blank"
@@ -125,7 +125,7 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
                                   className="flex items-center gap-3 text-amber-500 hover:underline"
                                 >
                                   <span className="font-medium">@{fid}</span>
-                                </Link>
+                                </a>
                               ))}
                             </div>
                           </div>

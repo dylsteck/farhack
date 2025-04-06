@@ -1,9 +1,23 @@
 /* eslint-disable @next/next/no-img-element */
-import { latestHackathons as hackathons } from '@/lib/data';
+import { farhackSDK } from '@/lib/api';
+import { Hackathon } from '@/lib/types';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 
-export default function HackathonPage() {
+export default async function HackathonPage() {
+  const hackathons = await (async () => {
+    try {
+      return await farhackSDK.getHackathons() as Hackathon[];
+    } catch (error) {
+      console.error('Failed to fetch hackathons:', error);
+      return [];
+    }
+  })();
+
+  const sortedHackathons = hackathons
+    ?.slice()
+    .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime()) || [];
+
   const formatDate = (date: Date) => {
     return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
   };
@@ -16,11 +30,11 @@ export default function HackathonPage() {
         </div>
 
         <div className="space-y-3">
-          {hackathons.map((hackathon) => {
+          {sortedHackathons.map((hackathon) => {
             const startDate = new Date(hackathon.start_date);
             const endDate = new Date(hackathon.end_date);
             const isUpcoming = new Date() < endDate;
-            
+
             return (
               <Link
                 key={hackathon.id}

@@ -42,4 +42,4 @@ certificates
 bun.lock
 
 # fumadocs 
-.source
+/.source/

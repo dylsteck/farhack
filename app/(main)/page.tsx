@@ -1,9 +1,22 @@
 /* eslint-disable @next/next/no-img-element */
 import FarHackLogo from '@/components/custom/icons/farhack-logo';
-import { latestHackathons as hackathons } from '@/lib/data';
-import Link from 'next/link';
+import { farhackSDK } from '@/lib/api';
+import { Hackathon } from '@/lib/types';
+import { Link } from 'next-view-transitions';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const hackathons = await (async () => {
+    try {
+      return await farhackSDK.getHackathons() as Hackathon[];
+    } catch (error) {
+      console.error('Failed to fetch hackathons:', error);
+      return [];
+    }
+  })();
+  const sortedHackathons = hackathons
+    ?.slice()
+    .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime()) || [];
+
   return (
     <main>
       <div className="text-black dark:text-white flex flex-col gap-4 items-center justify-center min-h-screen p-4 pt-0">
@@ -33,26 +46,32 @@ export default function HomePage() {
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-none md:flex md:flex-nowrap md:overflow-x-auto md:gap-4 gap-6 w-[90%] mx-auto md:mx-0 md:w-auto">
-            {hackathons.map((hackathon) => {
-              const startDate = new Date(hackathon.start_date);
-              const endDate = new Date(hackathon.end_date);
-              const isUpcoming = new Date() < endDate;
-              return (
-                <Link
-                  key={hackathon.id}
-                  href={`/hackathons/${hackathon.slug}`}
-                  className="group flex flex-col rounded-xl overflow-hidden md:min-w-[300px] md:w-[300px]"
-                >
-                  <div className="relative">
-                    <img
-                      src={hackathon.square_image}
-                      alt={hackathon.name}
-                      className="w-full aspect-square object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                </Link>
-              );
-            })}
+            {sortedHackathons.length > 0 ? (
+              sortedHackathons.map((hackathon) => {
+                const startDate = new Date(hackathon.start_date);
+                const endDate = new Date(hackathon.end_date);
+                const isUpcoming = new Date() < endDate;
+                return (
+                  <Link
+                    key={hackathon.id}
+                    href={`/hackathons/${hackathon.slug}`}
+                    className="group flex flex-col rounded-xl overflow-hidden md:min-w-[300px] md:w-[300px]"
+                  >
+                    <div className="relative">
+                      <img
+                        src={hackathon.square_image}
+                        alt={hackathon.name}
+                        className="w-full aspect-square object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  </Link>
+                );
+              })
+            ) : (
+              <div className="text-center text-gray-500 dark:text-gray-400 w-full">
+                No hackathons available
+              </div>
+            )}
           </div>
         </div>
       </section>

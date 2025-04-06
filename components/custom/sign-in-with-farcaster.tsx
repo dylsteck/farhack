@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { LogOutIcon, UserIcon } from "lucide-react";
-import FrameLink from "./frame-link";
+import FrameLink from "./frame/frame-link";
 
 const config = {
   relay: "https://relay.farcaster.xyz",
