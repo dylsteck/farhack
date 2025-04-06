@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { HackathonNav } from '@/components/custom/hackathon-nav';
 import { Hackathon, Team } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
@@ -11,7 +10,6 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { toast } from 'sonner';
 import { farhackSDK } from '@/lib/api';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 
 interface Embed {
   url: string;
@@ -123,33 +121,29 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="bg-transparent text-black dark:text-white">
       <div className="container mx-auto py-6 px-4 md:px-6 max-w-7xl">
-        <div className="flex flex-col space-y-2 mb-8">
-          <HackathonNav hackathon={hackathon} />
-        </div>
+        <h2 className="text-3xl font-bold mb-4">Your Team</h2>
+        <p className="text-zinc-400 mb-6">
+          Time to submission deadline: {hackathon.end_date ? new Date(hackathon.end_date).toLocaleString() : 'TBD'}
+        </p>
 
-        <div className="mt-10 text-left">
-          <p className="text-zinc-400">
-            Time to submission deadline: {hackathon.end_date ? new Date(hackathon.end_date).toLocaleString() : 'TBD'}
-          </p>
-
-          {userTeam ? (
-            <div className="mt-4">
-              <p>You are part of <span className="font-semibold">{userTeam.name}</span></p>
-              <p className="text-2xl font-medium mt-5">Actions</p>
-              <Button className="mt-4 mr-2 px-6 py-3 text-lg bg-white" onClick={() => openDialog(true)}>View/Edit Team</Button>
-              <Button className="mt-4 px-6 py-3 text-lg bg-green-500 hover:bg-green-600" onClick={handleGenerateInvite}>Invite Teammate</Button>
-              {/* <Button className="mt-4 px-6 py-3 text-lg bg-red-500 hover:bg-red-600" onClick={openDeleteDialog}>Delete Team</Button> */}
+        {userTeam ? (
+          <div className="mt-4">
+            <p className="text-lg">You are part of <span className="font-semibold">{userTeam.name}</span></p>
+            <p className="text-2xl font-medium mt-5">Actions</p>
+            <div className="flex space-x-4 mt-4">
+              <Button className="px-6 py-3 text-lg bg-white text-black" onClick={() => openDialog(true)}>View/Edit Team</Button>
+              <Button className="px-6 py-3 text-lg bg-green-500 hover:bg-green-600" onClick={handleGenerateInvite}>Invite Teammate</Button>
             </div>
-          ) : (
-            <div className="mt-4">
-              <p className="text-zinc-400">You are not part of any team</p>
-              <p className="text-2xl font-medium mt-5">Actions</p>
-              <Button className="mt-4 px-6 py-3 text-lg bg-white" onClick={() => openDialog(false)}>Create Team</Button>
-            </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="mt-4">
+            <p className="text-zinc-400">You are not part of any team</p>
+            <p className="text-2xl font-medium mt-5">Actions</p>
+            <Button className="mt-4 px-6 py-3 text-lg bg-white text-black" onClick={() => openDialog(false)}>Create Team</Button>
+          </div>
+        )}
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -157,12 +151,12 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
           <DialogHeader>
             <DialogTitle>{team?.id === 0 ? 'Create a Team' : 'Edit Team'}</DialogTitle>
           </DialogHeader>
-          <Input placeholder="Team Name" value={team?.name || ''} onChange={(e) => setTeam((prev) => prev ? { ...prev, name: e.target.value } : prev)} />
-          <Textarea placeholder="Team Description" value={team?.description || ''} onChange={(e) => setTeam((prev) => prev ? { ...prev, description: e.target.value } : prev)} />
+          <Input placeholder="Team Name" value={team?.name || ''} onChange={(e) => setTeam((prev) => prev ? { ...prev, name: e.target.value } : prev)} className="mb-4" />
+          <Textarea placeholder="Team Description" value={team?.description || ''} onChange={(e) => setTeam((prev) => prev ? { ...prev, description: e.target.value } : prev)} className="mb-4" />
           <div>
             <h3 className="text-lg font-medium">Embeds</h3>
             <div className="flex gap-2 mt-2">
-              <Input placeholder="Embed URL" value={embedUrl} onChange={(e) => setEmbedUrl(e.target.value)} />
+              <Input placeholder="Embed URL" value={embedUrl} onChange={(e) => setEmbedUrl(e.target.value)} className="flex-1" />
               <Select value={embedType} onValueChange={(value: 'url' | 'image') => setEmbedType(value)}>
                 <SelectTrigger className="w-20"><SelectValue placeholder="Type" /></SelectTrigger>
                 <SelectContent><SelectItem value="url">URL</SelectItem><SelectItem value="image">Image</SelectItem></SelectContent>

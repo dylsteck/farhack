@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { ReactNode } from 'react';
-import { HackathonNav } from '@/components/custom/hackathon-nav';
+import { HackathonNav } from './hackathon-nav';
 import { Hackathon } from '@/lib/types';
 
 export function HackathonLaoyut({ hackathon, children }: { hackathon: Hackathon, children: ReactNode }) {

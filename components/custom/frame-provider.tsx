@@ -44,7 +44,7 @@ export function FrameProvider({ children, session }: { children: React.ReactNode
           }, 500)
         }
         init()
-      }, [handleSignIn])
+      }, [handleSignIn, session])
 
     return(
         <>
