@@ -10,6 +10,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { toast } from 'sonner';
 import { farhackSDK } from '@/lib/api';
 import { useRouter } from 'next/navigation';
+import { CalendarIcon, PlusCircledIcon } from '@radix-ui/react-icons';
 
 interface Embed {
   url: string;
@@ -124,19 +125,49 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
   const deadline = hackathon.end_date ? new Date(hackathon.end_date) : null;
   const isClosed = deadline ? deadline.getTime() < Date.now() : false;
   const timeLeft = deadline ? Math.max(deadline.getTime() - Date.now(), 0) : 0;
-  const readableTimeLeft = timeLeft > 0 ? `${Math.floor(timeLeft / (1000 * 60 * 60))}h ${Math.floor((timeLeft / (1000 * 60)) % 60)}m` : 'Closed';
+
+  const getReadableTimeLeft = (ms: number) => {
+    if (ms <= 0) return 'Closed';
+    const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((ms / (1000 * 60)) % 60);
+
+    const parts = [];
+    if (days > 0) parts.push(`${days}d`);
+    if (hours > 0 || days > 0) parts.push(`${hours}h`);
+    parts.push(`${minutes}m`);
+    return parts.join(' ');
+  };
+
+  const readableTimeLeft = getReadableTimeLeft(timeLeft);
 
   return (
     <div className="bg-transparent text-black dark:text-white">
       <div className="container mx-auto py-6 px-4 md:px-6 max-w-7xl">
         <h2 className="text-3xl font-bold mb-2">Your Team</h2>
-        <div className="text-sm text-zinc-400 cursor-pointer my-6">
-          <div className="text-md">Deadline</div>
-          <div className="text-lg font-medium" onClick={() => setShowDeadlineDate(!showDeadlineDate)}>
-            {deadline ? (
-              showDeadlineDate ? deadline.toLocaleString() : (isClosed ? 'Closed' : readableTimeLeft)
-            ) : 'TBD'}
+
+        <div className="my-6 flex items-center gap-3">
+          <div className="flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2 cursor-pointer" onClick={() => setShowDeadlineDate(!showDeadlineDate)}>
+            <CalendarIcon className="w-5 h-5 text-zinc-500 dark:text-zinc-400" />
+            <div className="text-sm text-zinc-600 dark:text-zinc-400">
+              <div className="text-xs uppercase tracking-wide">Deadline</div>
+              <div className="text-base font-semibold">
+                {deadline ? (showDeadlineDate ? deadline.toLocaleString() : readableTimeLeft) : 'TBD'}
+              </div>
+            </div>
           </div>
+
+          {!userTeam && !isClosed && (
+            <div
+              onClick={() => openDialog(false)}
+              className="flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2 cursor-pointer bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+            >
+              <PlusCircledIcon className="w-5 h-5 text-zinc-600 dark:text-zinc-300" />
+              <div className="text-sm text-zinc-600 dark:text-zinc-300 font-semibold">
+                Create Team
+              </div>
+            </div>
+          )}
         </div>
 
         {userTeam ? (
@@ -150,14 +181,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
             </div>
             <p className="text-zinc-300">{userTeam.description}</p>
           </div>
-        ) : (
-          <div className="mt-4">
-            <p className="text-zinc-400">You are not part of any team</p>
-            {!isClosed && (
-              <Button className="mt-4 px-6 py-3 text-lg bg-white text-black" onClick={() => openDialog(false)}>Create Team</Button>
-            )}
-          </div>
-        )}
+        ) : null}
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
