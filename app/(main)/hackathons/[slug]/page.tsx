@@ -10,7 +10,6 @@ export default async function HackathonBySlugPage(props: { params: Promise<any> 
   const params = await props.params;
   const { slug } = params;
   const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
-
   if (!slug || !hackathon) {
     return (
       <div className="flex items-center justify-center min-h-screen text-white text-2xl">

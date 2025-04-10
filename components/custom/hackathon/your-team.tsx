@@ -10,7 +10,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { toast } from 'sonner';
 import { farhackSDK } from '@/lib/api';
 import { useRouter } from 'next/navigation';
-import { CalendarIcon, PlusCircledIcon } from '@radix-ui/react-icons';
+import { CalendarIcon, PlusCircleIcon, X, Plus, Trash2 } from 'lucide-react';
 
 interface Embed {
   url: string;
@@ -122,6 +122,12 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
     setEmbedUrl('');
   };
 
+  const removeEmbed = (index: number) => {
+    setTeam((prev) => 
+      prev ? { ...prev, embeds: prev.embeds.filter((_, i) => i !== index) } : prev
+    );
+  };
+
   const deadline = hackathon.end_date ? new Date(hackathon.end_date) : null;
   const isClosed = deadline ? deadline.getTime() < Date.now() : false;
   const timeLeft = deadline ? Math.max(deadline.getTime() - Date.now(), 0) : 0;
@@ -144,10 +150,10 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
   return (
     <div className="bg-transparent text-black dark:text-white">
       <div className="container mx-auto py-6 px-4 md:px-6 max-w-7xl">
-        <h2 className="text-3xl font-bold mb-2">Your Team</h2>
+        <h2 className="text-3xl font-bold mb-6">Your Team</h2>
 
-        <div className="my-6 flex items-center gap-3">
-          <div className="flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2 cursor-pointer" onClick={() => setShowDeadlineDate(!showDeadlineDate)}>
+        <div className="my-6 flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-3 h-14 cursor-pointer hover:bg-zinc-800/20 transition-colors" onClick={() => setShowDeadlineDate(!showDeadlineDate)}>
             <CalendarIcon className="w-5 h-5 text-zinc-500 dark:text-zinc-400" />
             <div className="text-sm text-zinc-600 dark:text-zinc-400">
               <div className="text-xs uppercase tracking-wide">Deadline</div>
@@ -160,9 +166,9 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
           {!userTeam && !isClosed && (
             <div
               onClick={() => openDialog(false)}
-              className="flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2 cursor-pointer bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+              className="flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-3 h-14 cursor-pointer bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
             >
-              <PlusCircledIcon className="w-5 h-5 text-zinc-600 dark:text-zinc-300" />
+              <PlusCircleIcon className="w-5 h-5 text-zinc-600 dark:text-zinc-300" />
               <div className="text-sm text-zinc-600 dark:text-zinc-300 font-semibold">
                 Create Team
               </div>
@@ -171,40 +177,233 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
         </div>
 
         {userTeam ? (
-          <div className="mt-4 border border-zinc-700 rounded-2xl p-6">
-            <div className="flex justify-between items-center mb-4">
+          <div className="mt-6 border border-zinc-700 rounded-2xl p-6 bg-zinc-900/30 backdrop-blur-sm">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
               <h3 className="text-2xl font-semibold">{userTeam.name}</h3>
-              <div className="flex gap-2">
-                <Button className="bg-white text-black px-4 py-2" onClick={() => openDialog(true)}>Edit</Button>
-                <Button className="bg-green-500 hover:bg-green-600 px-4 py-2" onClick={handleGenerateInvite}>Invite</Button>
+              <div className="flex flex-wrap gap-2 h-10">
+                <Button className="bg-white text-black hover:bg-zinc-100 h-10" onClick={() => openDialog(true)}>Edit</Button>
+                <Button className="bg-green-500 hover:bg-green-600 text-white h-10" onClick={handleGenerateInvite}>Invite</Button>
+                <Button variant="destructive" className="bg-red-500 hover:bg-red-600 text-white h-10" onClick={openDeleteDialog}>
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Delete
+                </Button>
               </div>
             </div>
-            <p className="text-zinc-300">{userTeam.description}</p>
+            
+            <div className="bg-zinc-800/50 rounded-xl p-4 mb-6">
+              <p className="text-zinc-300">{userTeam.description}</p>
+            </div>
+            
+            {userTeam.embeds && userTeam.embeds.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-lg font-medium mb-3 flex items-center gap-2">
+                  <span className="inline-block w-1 h-4 bg-green-500 rounded-full"></span>
+                  Embeds
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {userTeam.embeds.map((embed: Embed, idx: number) => (
+                    <div key={idx} className="p-4 rounded-lg bg-zinc-800 flex items-center justify-between h-16">
+                      <div className="truncate">
+                        <span className="inline-block px-2 py-1 text-xs bg-zinc-700 text-zinc-300 uppercase rounded-md mr-2">{embed.type}</span>
+                        <span className="text-zinc-200 truncate">{embed.url}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {userTeam.submitted_at ? (
+              <div className="bg-green-900/20 border border-green-800 rounded-lg p-4">
+                <div className="flex items-center">
+                  <div className="bg-green-500 rounded-full w-2 h-2 mr-2"></div>
+                  <p className="text-green-400">
+                    Submitted on {new Date(userTeam.submitted_at).toLocaleDateString()} at {new Date(userTeam.submitted_at).toLocaleTimeString()}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-yellow-900/20 border border-yellow-800 rounded-lg p-4">
+                <div className="flex items-center">
+                  <div className="bg-yellow-500 rounded-full w-2 h-2 mr-2"></div>
+                  <p className="text-yellow-400">Not submitted yet</p>
+                </div>
+              </div>
+            )}
           </div>
         ) : null}
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{team?.id === 0 ? 'Create a Team' : 'Edit Team'}</DialogTitle>
+        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl max-w-xl p-0 overflow-hidden">
+          <DialogHeader className="px-6 pt-6 pb-4 border-b border-zinc-800">
+            <div className="flex justify-between items-center">
+              <DialogTitle className="text-2xl font-bold">{team?.id === 0 ? 'Create a Team' : 'Edit Team'}</DialogTitle>
+            </div>
           </DialogHeader>
-          <Input placeholder="Team Name" value={team?.name || ''} onChange={(e) => setTeam((prev) => prev ? { ...prev, name: e.target.value } : prev)} className="mb-4" />
-          <Textarea placeholder="Team Description" value={team?.description || ''} onChange={(e) => setTeam((prev) => prev ? { ...prev, description: e.target.value } : prev)} className="mb-4" />
-          <div>
-            <h3 className="text-lg font-medium">Embeds</h3>
-            <div className="flex gap-2 mt-2">
-              <Input placeholder="Embed URL" value={embedUrl} onChange={(e) => setEmbedUrl(e.target.value)} className="flex-1" />
-              <Select value={embedType} onValueChange={(value: 'url' | 'image') => setEmbedType(value)}>
-                <SelectTrigger className="w-20"><SelectValue placeholder="Type" /></SelectTrigger>
-                <SelectContent><SelectItem value="url">URL</SelectItem><SelectItem value="image">Image</SelectItem></SelectContent>
-              </Select>
-              <Button onClick={addEmbed} className="bg-green-500 hover:bg-green-600">Add</Button>
+          
+          <div className="px-6 py-4 space-y-5 max-h-[70vh] overflow-y-auto">
+            <div>
+              <label className="text-sm font-medium text-zinc-400 mb-2 block">Team Name</label>
+              <Input 
+                placeholder="Enter your team name" 
+                value={team?.name || ''} 
+                onChange={(e) => setTeam((prev) => prev ? { ...prev, name: e.target.value } : prev)} 
+                className="bg-zinc-800 border-zinc-700 focus:border-green-500 focus:ring-green-500 text-white h-12"
+              />
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium text-zinc-400 mb-2 block">Description</label>
+              <Textarea 
+                placeholder="What's your team about?" 
+                value={team?.description || ''} 
+                onChange={(e) => setTeam((prev) => prev ? { ...prev, description: e.target.value } : prev)} 
+                className="bg-zinc-800 border-zinc-700 focus:border-green-500 focus:ring-green-500 text-white min-h-24"
+              />
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium text-zinc-400 mb-2 block">Wallet Address (optional)</label>
+              <Input
+                placeholder="Enter wallet address for rewards" 
+                value={walletAddress} 
+                onChange={(e) => setWalletAddress(e.target.value)} 
+                className="bg-zinc-800 border-zinc-700 focus:border-green-500 focus:ring-green-500 text-white h-12"
+              />
+            </div>
+            
+            <div>
+              <label className="flex items-center justify-between text-sm font-medium text-zinc-400 mb-2">
+                <span>Embeds</span>
+                <span className="text-xs text-zinc-500">Add links to your project repos, demos, etc.</span>
+              </label>
+              
+              <div className="flex gap-2 mb-3">
+                <Input 
+                  placeholder="https://..." 
+                  value={embedUrl} 
+                  onChange={(e) => setEmbedUrl(e.target.value)} 
+                  className="flex-1 bg-zinc-800 border-zinc-700 focus:border-green-500 focus:ring-green-500 text-white h-12"
+                />
+                <Select value={embedType} onValueChange={(value: 'url' | 'image') => setEmbedType(value)}>
+                  <SelectTrigger className="w-24 bg-zinc-800 border-zinc-700 text-white h-12">
+                    <SelectValue placeholder="Type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectItem value="url">URL</SelectItem>
+                    <SelectItem value="image">Image</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button 
+                  onClick={addEmbed} 
+                  className="bg-green-500 hover:bg-green-600 text-white rounded-lg h-12 px-4"
+                >
+                  <Plus className="h-5 w-5" />
+                </Button>
+              </div>
+              
+              {team?.embeds && team.embeds.length > 0 && (
+                <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                  {team.embeds.map((embed: Embed, idx: number) => (
+                    <div key={idx} className="p-3 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-between h-12">
+                      <div className="truncate flex-1">
+                        <span className="inline-block px-2 py-0.5 text-xs bg-zinc-700 text-zinc-300 uppercase rounded-md mr-2">{embed.type}</span>
+                        <span className="text-sm text-zinc-200 truncate">{embed.url}</span>
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6 rounded-full hover:bg-zinc-700"
+                        onClick={() => removeEmbed(idx)}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-          <DialogFooter className="mt-6">
-            <Button onClick={handleSave}>Save</Button>
-            <Button onClick={() => setIsConfirmDialogOpen(true)}>Submit</Button>
+          
+          <DialogFooter className="px-6 py-4 bg-zinc-900 border-t border-zinc-800 flex justify-end">
+            <div className="flex w-full justify-end gap-3">
+              <Button 
+                variant="outline" 
+                onClick={() => setIsDialogOpen(false)}
+                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 h-12"
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleSave}
+                className="bg-white text-black hover:bg-zinc-200 h-12"
+              >
+                Save
+              </Button>
+              <Button 
+                onClick={() => setIsConfirmDialogOpen(true)}
+                className="bg-green-500 hover:bg-green-600 text-white h-12"
+              >
+                Submit
+              </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
+        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl p-6 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">Confirm Submission</DialogTitle>
+          </DialogHeader>
+          <p className="py-4 text-zinc-300">
+            Are you sure you want to submit your team? You won&apos;t be able to make changes after submission.
+          </p>
+          <DialogFooter>
+            <div className="flex w-full justify-end gap-3 mt-4">
+              <Button 
+                variant="outline" 
+                onClick={() => setIsConfirmDialogOpen(false)}
+                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 h-12"
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleSubmit}
+                className="bg-green-500 hover:bg-green-600 text-white h-12"
+              >
+                Confirm Submission
+              </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl p-6 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-red-500">Delete Team</DialogTitle>
+          </DialogHeader>
+          <p className="py-4 text-zinc-300">
+            Are you sure you want to delete your team? This action cannot be undone.
+          </p>
+          <DialogFooter>
+            <div className="flex w-full justify-end gap-3 mt-4">
+              <Button 
+                variant="outline" 
+                onClick={() => setIsDeleteDialogOpen(false)}
+                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 h-12"
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleDeleteTeam}
+                className="bg-red-500 hover:bg-red-600 text-white h-12"
+              >
+                Delete Team
+              </Button>
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>
