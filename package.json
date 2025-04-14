@@ -3,8 +3,8 @@
   "author": "dylsteck",
   "private": true,
   "scripts": {
-    "build": "next build",
-    "dev": "next dev --turbopack",
+    "build": "next build --turbo",
+    "dev": "next dev --turbo",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "fumadocs-mdx"

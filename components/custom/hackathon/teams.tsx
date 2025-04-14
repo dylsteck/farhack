@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { FullHackathon, Team, Embed } from '@/lib/types';
-import { Users, ExternalLink, Search, LayoutGrid, List } from 'lucide-react';
+import { Users, ExternalLink, Search, LayoutGrid, List, PackageOpen } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -135,11 +135,17 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
                   ))}
                 </div>
               ) : (
-                <p className="text-center text-zinc-400">No teams available</p>
+                <div className="flex items-center justify-center gap-2 text-zinc-400">
+                  <Users className="h-5 w-5" />
+                  <p>No teams available</p>
+                </div>
               )}
             </>
           ) : (
-            <p className="text-center text-zinc-400">No teams available</p>
+            <div className="flex items-center justify-center gap-2 text-zinc-400">
+              <Users className="h-5 w-5" />
+              <p>No teams available</p>
+            </div>
           )}
         </div>
       </div>

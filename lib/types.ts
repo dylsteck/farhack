@@ -86,6 +86,7 @@ export interface SessionUser {
     submitted_at: Date | null;
     wallet_address: string;
     embeds?: Embed[];
+    created_at: Date;
   }
   
   export interface Invite {
@@ -102,3 +103,104 @@ export interface SessionUser {
   export type State = {
     count: number;
   };  
+
+  // Neynar API types
+  export interface NeynarUserDehydrated {
+    object: "user_dehydrated";
+    fid: number;
+    username: string;
+    display_name: string;
+    pfp_url: string;
+    custody_address: string;
+  }
+
+  export interface NeynarChannelDehydrated {
+    id: string;
+    name: string;
+    object: "channel_dehydrated";
+    image_url: string;
+    viewer_context?: {
+      following: boolean;
+      role: string;
+    };
+  }
+
+  export interface NeynarUserBio {
+    text: string;
+    mentioned_profiles?: NeynarUserDehydrated[];
+    mentioned_profiles_ranges?: { start: number; end: number }[];
+    mentioned_channels?: NeynarChannelDehydrated[];
+    mentioned_channels_ranges?: { start: number; end: number }[];
+  }
+
+  export interface NeynarUserLocation {
+    latitude?: number;
+    longitude?: number;
+    address?: {
+      city?: string;
+      state?: string;
+      state_code?: string;
+      country?: string;
+      country_code?: string;
+    };
+  }
+
+  export interface NeynarUserProfile {
+    bio?: NeynarUserBio;
+    location?: NeynarUserLocation;
+  }
+
+  export interface NeynarUserVerifiedAccounts {
+    platform: string;
+    username: string;
+  }
+
+  export interface NeynarVerifiedAddresses {
+    eth_addresses?: string[];
+    sol_addresses?: string[];
+    primary?: {
+      eth_address?: string;
+      sol_address?: string;
+    };
+  }
+
+  export interface NeynarUser {
+    object: "user";
+    fid: number;
+    username: string;
+    display_name: string;
+    custody_address: string;
+    pfp_url: string;
+    profile?: NeynarUserProfile;
+    follower_count?: number;
+    following_count?: number;
+    verifications?: string[];
+    verified_addresses?: NeynarVerifiedAddresses;
+    verified_accounts?: NeynarUserVerifiedAccounts[];
+    power_badge?: boolean;
+    experimental?: {
+      neynar_user_score?: number;
+    };
+    viewer_context?: {
+      following?: boolean;
+      followed_by?: boolean;
+      blocking?: boolean;
+      blocked_by?: boolean;
+    };
+  }
+
+  export interface NeynarUserSearchResponse {
+    result: {
+      users: NeynarUser[];
+      next?: {
+        cursor: string;
+      };
+    };
+  }  
+
+  export interface FarcasterNotificationPayload {
+    title: string;
+    body: string;
+    targetUrl: string;
+    tokens: string[];
+  }  

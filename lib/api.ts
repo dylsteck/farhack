@@ -1,5 +1,14 @@
-import { Team } from "./types";
+import { Team, Hackathon, FullHackathon, Invite } from "./types";
 import { BASE_URL } from "./utils";
+
+interface InviteResponse {
+  token: string;
+}
+
+type TeamAPIResponse = {
+  success: boolean;
+  team: Team;
+}
 
 class FarHackSDK {
   private baseUrl: string;
@@ -29,23 +38,23 @@ class FarHackSDK {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return response.json();
+    return response.json() as Promise<T>;
   }
 
-  async getHackathon(slug: string) {
-    return this.fetcher(`/api/hackathons/${slug}`);
+  async getHackathon(slug: string): Promise<FullHackathon> {
+    return this.fetcher<FullHackathon>(`/api/hackathons/${slug}`);
   }
 
-  async getHackathons() {
-    return this.fetcher('/api/hackathons');
+  async getHackathons(): Promise<Hackathon[]> {
+    return this.fetcher<Hackathon[]>('/api/hackathons');
   }
 
-  async getTeam(type: 'teamId' | 'userId' = 'teamId', identifier: string) {
-    return this.fetcher(`/api/hackathons/teams?type=${type}&identifier=${identifier}`);
+  async getTeam(type: 'teamId' | 'userId' = 'teamId', identifier: string): Promise<Team | null> {
+    return this.fetcher<Team | null>(`/api/hackathons/teams?type=${type}&identifier=${identifier}`);
   }
 
-  async getTeams() {
-    return this.fetcher('/api/hackathons/teams');
+  async getTeams(): Promise<Team[]> {
+    return this.fetcher<Team[]>('/api/hackathons/teams');
   }
 
   async createTeam(name: string, description: string, hackathonId: number, userId: number): Promise<Team> {
@@ -61,7 +70,8 @@ class FarHackSDK {
       throw new Error('Failed to create team');
     }
 
-    return await response.json();
+    const data = await response.json() as TeamAPIResponse;
+    return data.team;
   }
 
   async updateTeam(id: number, updates: Partial<Team>): Promise<void> {
@@ -105,7 +115,24 @@ class FarHackSDK {
       throw new Error('Failed to create invite');
     }
 
-    const data = await response.json();
+    const data = await response.json() as InviteResponse;
+    return data.token;
+  }
+
+  async createFarcasterUserInvite(hackathonSlug: string, userId: number, teamId: number, farcasterUsername: string): Promise<string> {
+    const response = await fetch(`/api/hackathons/${hackathonSlug}/invites`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, teamId, farcasterUsername }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create invite for Farcaster user');
+    }
+
+    const data = await response.json() as InviteResponse;
     return data.token;
   }
 

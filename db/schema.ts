@@ -8,6 +8,9 @@ export const users = pgTable("users", {
   image: text("image"),
   is_admin: boolean("is_admin").notNull().default(false),
   admin_hackathons: varchar("admin_hackathons"),
+  frame_added: boolean("frame_added").notNull().default(false),
+  notifications_enabled: boolean("notifications_enabled").notNull().default(false),
+  notification_token: text("notification_token"),
 });
 
 export type User = InferSelectModel<typeof users>;
@@ -50,6 +53,7 @@ export const teams = pgTable("teams", {
   hackathon_id: integer("hackathon_id").notNull(),
   wallet_address: text("wallet_address"),
   embeds: jsonb("embeds"),
+  created_at: timestamp("created_at").defaultNow(),
 });
 
 export type Team = InferSelectModel<typeof teams>;

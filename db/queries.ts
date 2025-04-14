@@ -72,7 +72,8 @@ export async function createTeam(
       hackathon_id: hackathonId,
       fids: sql`ARRAY[${sql`${userId}`}::integer]`,
       wallet_address: '',
-      embeds: sql`${emptyJsonArray}::jsonb`
+      embeds: sql`${emptyJsonArray}::jsonb`,
+      created_at: new Date()
     })
     .returning()
     .execute();
@@ -93,7 +94,10 @@ export async function createUser(
       image: image || null,
       is_admin: isAdmin,
       admin_hackathons: isAdmin ? "all" : null,
-      created_at: new Date()
+      created_at: new Date(),
+      frame_added: false,
+      notifications_enabled: false,
+      notification_token: null
     })
     .returning()
     .execute()
@@ -134,6 +138,7 @@ export async function getHackathon(slug: string): Promise<Hackathon & { teams: (
       submitted_at: teams.submitted_at,
       wallet_address: teams.wallet_address,
       embeds: teams.embeds,
+      created_at: teams.created_at,
       fids: sql<User[]>`COALESCE(json_agg(users.*) FILTER (WHERE users.id IS NOT NULL), '[]'::json)`,
     })
     .from(teams)
@@ -246,5 +251,29 @@ export async function updateTeam(team: Team): Promise<void> {
     .update(teams)
     .set(updates)
     .where(eq(teams.id, id))
+    .execute();
+}
+
+export async function updateUserFrameAdded(userId: number, frameAdded: boolean): Promise<void> {
+  await db
+    .update(users)
+    .set({ frame_added: frameAdded })
+    .where(eq(users.id, userId))
+    .execute();
+}
+
+export async function updateUserNotificationsEnabled(userId: number, enabled: boolean): Promise<void> {
+  await db
+    .update(users)
+    .set({ notifications_enabled: enabled })
+    .where(eq(users.id, userId))
+    .execute();
+}
+
+export async function updateUserNotificationToken(userId: number, token: string | null): Promise<void> {
+  await db
+    .update(users)
+    .set({ notification_token: token })
+    .where(eq(users.id, userId))
     .execute();
 }

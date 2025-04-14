@@ -14,8 +14,8 @@ export async function GET() {
       splashImageUrl: ICON_IMG,
       splashBackgroundColor: "#000000",
       homeUrl: BASE_URL,
-    },
+      webhookUrl: `${BASE_URL}/api/webhook`
+    }
   };
-
   return Response.json(config);
 }
