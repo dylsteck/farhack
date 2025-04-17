@@ -36,9 +36,11 @@ export function FrameProvider({ children, session }: { children: React.ReactNode
     useEffect(() => {
         const init = async () => {
           const context = await sdk.context;
-          if (context?.client.clientFid && !session) {
-            await handleSignIn(context.user);
-          }
+          // WIP: removing auto sign-in to promote better UX and only sign in when needed
+          // Also need to save data to the FrameContext
+          // if (context?.client.clientFid && !session) {
+          //   await handleSignIn(context.user);
+          // }
           setTimeout(() => {
             sdk.actions.ready()
           }, 500)

@@ -1,10 +1,14 @@
 import { clsx, type ClassValue } from "clsx"
-import { Karla, Lora } from "next/font/google";
+import { Inter, Karla, Lora } from "next/font/google";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+export const inter = Inter({
+  subsets: ['latin'],
+});
 
 export const lora = Lora({
   subsets: ['latin'],

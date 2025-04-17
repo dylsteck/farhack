@@ -2,6 +2,7 @@
 import FarHackLogo from '@/components/custom/icons/farhack-logo';
 import { farhackSDK } from '@/lib/api';
 import { Hackathon } from '@/lib/types';
+import { karla } from '@/lib/utils';
 import { Link } from 'next-view-transitions';
 
 export default async function HomePage() {
@@ -19,7 +20,7 @@ export default async function HomePage() {
 
   return (
     <main>
-      <div className="text-black dark:text-white flex flex-col gap-4 items-center justify-center min-h-screen p-4 pt-0">
+      <div className={`text-black dark:text-white flex flex-col gap-4 items-center justify-center min-h-screen p-4 pt-0 ${karla.className}`}>
         <FarHackLogo className="max-w-[70%] sm:max-w-[55%] md:max-w-[40%] lg:max-w-[27%]" gradient />
         <div className="text-center ml-4 mt-0.5 md:mt-1">
           <p className="text-black dark:text-white text-3xl md:text-5xl font-semibold">FarHack</p>

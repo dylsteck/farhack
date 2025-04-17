@@ -3,8 +3,9 @@ import React from 'react';
 import Link from 'next/link';
 import { Hackathon } from '@/lib/types';
 import { HackathonLaoyut } from '@/components/custom/hackathon/hackathon-layout';
-import { CalendarIcon } from '@radix-ui/react-icons';
+import { CalendarIcon, PlusCircledIcon, RocketIcon } from '@radix-ui/react-icons';
 import { farhackSDK } from '@/lib/api';
+import { Button } from '@/components/ui/button';
 
 export default async function HackathonBySlugPage(props: { params: Promise<any> }) {
   const params = await props.params;
@@ -61,6 +62,32 @@ export default async function HackathonBySlugPage(props: { params: Promise<any> 
           <p className="text-xl text-white/90 leading-relaxed">
             {hackathon.description}
           </p>
+          
+          {/* Action Buttons Section */}
+          <div className="mt-6">
+            <h2 className="text-lg font-semibold mb-2">Actions</h2>
+            <div className="h-px w-full bg-gradient-to-r from-white/5 via-white/20 to-white/5 mb-5"></div>
+            <div className="flex flex-wrap gap-4">
+              <Link href={`/hackathons/${slug}/your-team`}>
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-3 py-6 px-8 bg-zinc-800/60 hover:bg-zinc-700/80 border-zinc-700 hover:border-zinc-500 transition-all duration-200 rounded-xl shadow-md hover:shadow-lg"
+                >
+                  <PlusCircledIcon className="w-5 h-5" />
+                  <span className="font-medium">Create a team</span>
+                </Button>
+              </Link>
+              <Link href={`/hackathons/${slug}/bounties`}>
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-3 py-6 px-8 bg-zinc-800/60 hover:bg-zinc-700/80 border-zinc-700 hover:border-zinc-500 transition-all duration-200 rounded-xl shadow-md hover:shadow-lg"
+                >
+                  <RocketIcon className="w-5 h-5" />
+                  <span className="font-medium">View bounties</span>
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </HackathonLaoyut>

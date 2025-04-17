@@ -5,11 +5,7 @@ import { SessionProvider } from 'next-auth/react';
 import { ViewTransitions } from 'next-view-transitions'
 import type { ReactNode } from 'react';
 import { auth } from '@/auth';
-import { Inter } from 'next/font/google';
-
-const inter = Inter({
-  subsets: ['latin'],
-});
+import { inter } from '@/lib/utils';
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const session = await auth();
