@@ -16,6 +16,7 @@ export default async function HackathonPage() {
 
   const sortedHackathons = hackathons
     ?.slice()
+    .filter(h => !h.is_demo)
     .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime()) || [];
 
   const formatDate = (date: Date) => {

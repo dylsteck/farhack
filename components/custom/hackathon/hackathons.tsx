@@ -59,7 +59,7 @@ export default async function Hackathons() {
     );
   }
 
-  hackathons.sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
+  const filteredHackathons = hackathons.filter(h => !h.is_demo).sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
 
   return (
     <section id="hackathons" className="min-w-full py-5 md:py-8">
@@ -68,7 +68,7 @@ export default async function Hackathons() {
           Hackathons
         </h2>
         <div className="flex flex-col gap-4 w-full">
-          {hackathons.map((hackathon) => (
+          {filteredHackathons.map((hackathon) => (
             <HackathonListItem key={hackathon.id} hackathon={hackathon} />
           ))}
         </div>

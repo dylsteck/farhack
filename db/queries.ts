@@ -118,6 +118,7 @@ export async function getHackathon(slug: string): Promise<Hackathon & { teams: (
       tracks: hackathons.tracks,
       bounties: hackathons.bounties,
       schedule: hackathons.schedule,
+      is_demo: hackathons.is_demo,
     })
     .from(hackathons)
     .where(eq(hackathons.slug, slug))
@@ -152,8 +153,23 @@ export async function getHackathon(slug: string): Promise<Hackathon & { teams: (
 
 export async function getHackathons(): Promise<Hackathon[]> {
   return await db
-    .select()
+    .select({
+      id: hackathons.id,
+      name: hackathons.name,
+      description: hackathons.description,
+      start_date: hackathons.start_date,
+      end_date: hackathons.end_date,
+      created_at: hackathons.created_at,
+      square_image: hackathons.square_image,
+      slug: hackathons.slug,
+      tracks: hackathons.tracks,
+      bounties: hackathons.bounties,
+      schedule: hackathons.schedule,
+      is_demo: hackathons.is_demo,
+    })
     .from(hackathons)
+    // filter out demo hackathons for now
+    .where(eq(hackathons.is_demo, false))
     .execute();
 }
 

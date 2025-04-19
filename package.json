@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
-    "build": "next build --turbo",
+    "build": "tsx db/migrate && next build --turbo",
+    "migrate": "tsx db/migrate",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "fumadocs-mdx"
@@ -53,6 +54,7 @@
     "@types/react-dom": "19.1.2",
     "@types/uuid": "^10.0.0",
     "drizzle-kit": "^0.29.0",
+    "tsx": "^4.19.3",
     "typescript": "^5.8.2",
     "@types/mdx": "^2.0.13",
     "@tailwindcss/postcss": "^4.0.17",

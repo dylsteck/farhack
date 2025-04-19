@@ -27,6 +27,7 @@ export const hackathons = pgTable("hackathons", {
   tracks: jsonb("tracks"),
   bounties: jsonb("bounties"),
   schedule: jsonb("schedule"),
+  is_demo: boolean("is_demo").notNull().default(false),
 });
 
 export type Hackathon = InferSelectModel<typeof hackathons>;

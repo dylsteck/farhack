@@ -26,6 +26,7 @@ export interface SessionUser {
     bounties: Bounty[];
     schedule: ScheduleItem[];
     teams: Team[];
+    is_demo: boolean;
   }
   
   export interface Hackathon {
@@ -40,6 +41,7 @@ export interface SessionUser {
     tracks: Track[];
     bounties: Bounty[];
     schedule: ScheduleItem[];
+    is_demo: boolean;
   }
   
   export interface Ticket {
