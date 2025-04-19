@@ -5,7 +5,7 @@ import "@farcaster/auth-kit/styles.css";
 import { useSession, signIn, signOut, getCsrfToken } from "next-auth/react";
 import { SignInButton, AuthKitProvider, StatusAPIResponse } from "@farcaster/auth-kit";
 import React, { useState } from "react";
-import { karla } from "../../lib/utils";
+import { BASE_URL, karla } from "../../lib/utils";
 import { usePathname } from "next/navigation";
 import {
   Avatar,
@@ -24,8 +24,8 @@ import FrameLink from "./frame/frame-link";
 const config = {
   relay: "https://relay.farcaster.xyz",
   rpcUrl: "https://mainnet.optimism.io",
-  siweUri: "https://farhack.xyz",
-  domain: "farhack.xyz",
+  siweUri: BASE_URL,
+  domain: new URL(BASE_URL).hostname,
 };
 
 export default function SignInWithFarcaster() {

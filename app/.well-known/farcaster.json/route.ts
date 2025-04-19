@@ -8,7 +8,7 @@ export async function GET() {
         "signature": "MHg0MTAyYjQ1M2M2ZTM3MDg1OWIzYmRhZjIwYjBhY2NiZjU2OTlkZTBmZDhkYjY5NzlmOTQzNjJlYjJjYTEzNDljMzMwOWYyZDYyNDcxNjU2ZWQxMmJjYjVhOGQxYjc4MWE3YWViYjE5Y2E5NzllNjk2MDhlYjdkZmZkMzAyMDE0MTFi"
     },
     frame: {
-      version: "next",
+      version: "1",
       name: "FarHack",
       iconUrl: ICON_IMG,
       splashImageUrl: ICON_IMG,

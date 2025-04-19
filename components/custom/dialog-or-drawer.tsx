@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { memo, useEffect, useMemo, useState } from 'react'
 import { Dialog, DialogContent } from '@/components/ui/dialog'

@@ -29,7 +29,7 @@ export function Providers({ children, session }: ProvidersProps) {
           },
         }}
       >
-        <FrameProvider session={session}>
+        <FrameProvider>
           <RootProvider>{children}</RootProvider>
         </FrameProvider>
       </MiniKitProvider>
