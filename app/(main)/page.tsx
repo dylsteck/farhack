@@ -3,7 +3,7 @@ import FarHackLogo from '@/components/custom/icons/farhack-logo';
 import { farhackSDK } from '@/lib/api';
 import { Hackathon } from '@/lib/types';
 import { karla } from '@/lib/utils';
-import { Link } from 'next-view-transitions';
+import Link from 'next/link';
 
 export default async function HomePage() {
   const hackathons = await (async () => {

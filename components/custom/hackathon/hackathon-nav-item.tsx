@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { usePathname } from "next/navigation";
-import { Link } from 'next-view-transitions';
+import Link from 'next/link';
 
 export function HackthonNavItem({ name, slug }: { name: string, slug: string }) {
   const pathname = usePathname();

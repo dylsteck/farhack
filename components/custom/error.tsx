@@ -1,7 +1,7 @@
 "use client";
 
 import FarHackLogo from "@/components/custom/icons/farhack-logo";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 
 export default function Error({ message = 'An error occured' }: { message?: string }){
     return (
@@ -9,10 +9,8 @@ export default function Error({ message = 'An error occured' }: { message?: stri
             <div className="flex flex-col items-center justify-center text-center">
                 <FarHackLogo className="max-w-[70%] md:max-w-[35%] lg:max-w-[25%]" gradient />
                 <p className="text-white text-2xl md:text-4xl font-semibold mt-4 p-2">{message}</p>
-                <Link href="/">
-                    <a className="bg-[#8A63D2] hover:bg-[#7952C7] text-white font-medium py-2 px-8 rounded-full mt-8 transition-all duration-300 cursor-pointer inline-block">
-                        Back to Hacking
-                    </a>
+                <Link href="/" className="bg-[#8A63D2] hover:bg-[#7952C7] text-white font-medium py-2 px-8 rounded-full mt-8 transition-all duration-300 cursor-pointer inline-block">
+                    Back to Hacking
                 </Link>
             </div>
         </div>

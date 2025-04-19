@@ -3,7 +3,7 @@ import { getHackathons } from "@/db/queries";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock } from "lucide-react";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { Hackathon } from "@/lib/types";
 
 function HackathonListItem({ hackathon }: { hackathon: Hackathon }) {

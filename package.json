@@ -3,13 +3,14 @@
   "author": "dylsteck",
   "private": true,
   "scripts": {
-    "build": "next build --turbo",
     "dev": "next dev --turbo",
+    "build": "next build --turbo",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
+    "@coinbase/onchainkit": "latest",
     "@farcaster/auth-client": "^0.3.0",
     "@farcaster/auth-kit": "^0.6.0",
     "@farcaster/frame-sdk": "^0.0.35",
@@ -34,7 +35,6 @@
     "lucide-react": "^0.485.0",
     "next": "^15.3.1",
     "next-auth": "^5.0.0-beta.19",
-    "next-view-transitions": "^0.3.4",
     "ox": "^0.6.12",
     "postgres": "^3.4.5",
     "react": "^19.1.0",
@@ -43,7 +43,8 @@
     "tailwind-merge": "^3.0.2",
     "tw-animate-css": "^1.2.5",
     "uuid": "^10.0.0",
-    "vaul": "1.1.2"
+    "vaul": "1.1.2",
+    "wagmi": "^2.14.16"
   },
   "devDependencies": {
     "@types/node": "22.13.14",
