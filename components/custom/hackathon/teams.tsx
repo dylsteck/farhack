@@ -1,11 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { HackathonNav } from '@/components/custom/hackathon-nav';
-import { FullHackathon, Team, User } from '@/app/lib/types';
-import { Users, ExternalLink, Search, LayoutGrid, List } from 'lucide-react';
+import { FullHackathon, Team, Embed } from '@/lib/types';
+import { Users, ExternalLink, Search, LayoutGrid, List, PackageOpen } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -36,12 +34,8 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
     : [];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="bg-black text-white">
       <div className="container mx-auto py-6 px-4 md:px-6 max-w-7xl">
-        <div className="flex flex-col space-y-2 mb-8">
-          <HackathonNav hackathon={hackathon} />
-        </div>
-
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <h2 className="text-2xl font-semibold">Teams</h2>
@@ -73,7 +67,7 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
             <>
               {viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredTeams.map((team: any) => (
+                  {filteredTeams.map((team: Team) => (
                     <Dialog key={team.id}>
                       <DialogTrigger asChild>
                         <Card className="bg-zinc-900 border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all cursor-pointer">
@@ -96,13 +90,13 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
                           <p className="text-zinc-300 whitespace-pre-line">{cleanText(team.description)}</p>
                           {extractLinks(team.description).map((link, index) => (
                             <div key={index} className="mt-2">
-                              <Link href={link} target="_blank" rel="noopener noreferrer" className="text-amber-500 underline flex items-center">
+                              <a href={link} target="_blank" rel="noopener noreferrer" className="text-amber-500 underline flex items-center">
                                 {link} <ExternalLink className="ml-2 h-4 w-4" />
-                              </Link>
+                              </a>
                             </div>
                           ))}
                           {team.embeds &&
-                            team.embeds.map((embed: any, index: number) => (
+                            team.embeds.map((embed: Embed, index: number) => (
                               <div key={index} className="mt-4">
                                 {embed.type === 'image' ? (
                                   <Image
@@ -113,31 +107,24 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
                                     className="rounded-lg border border-zinc-700 object-cover"
                                   />
                                 ) : (
-                                  <Link href={embed.url} target="_blank" rel="noopener noreferrer" className="text-amber-500 underline flex items-center">
+                                  <a href={embed.url} target="_blank" rel="noopener noreferrer" className="text-amber-500 underline flex items-center">
                                     {embed.url} <ExternalLink className="ml-2 h-4 w-4" />
-                                  </Link>
+                                  </a>
                                 )}
                               </div>
                             ))}
                           <div className="mt-6">
                             <h3 className="text-lg font-medium">Team Members</h3>
                             <div className="flex flex-wrap gap-4 mt-2">
-                              {team.fids.map((member: User) => (
+                              {team.fids.map((fid: number) => (
                                 <a
-                                  key={member.id}
-                                  href={`https://warpcast.com/${member.name}`}
+                                  key={fid}
+                                  href={`https://warpcast.com/${fid}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="flex items-center gap-3 text-amber-500 hover:underline"
                                 >
-                                  <Image
-                                    src={member.image}
-                                    alt={member.name}
-                                    width={40}
-                                    height={40}
-                                    className="rounded-full border border-zinc-700 object-cover aspect-square"
-                                  />
-                                  <span className="font-medium">@{member.name}</span>
+                                  <span className="font-medium">@{fid}</span>
                                 </a>
                               ))}
                             </div>
@@ -148,11 +135,17 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
                   ))}
                 </div>
               ) : (
-                <p className="text-center text-zinc-400">No teams available</p>
+                <div className="flex items-center justify-center gap-2 text-zinc-400">
+                  <Users className="h-5 w-5" />
+                  <p>No teams available</p>
+                </div>
               )}
             </>
           ) : (
-            <p className="text-center text-zinc-400">No teams available</p>
+            <div className="flex items-center justify-center gap-2 text-zinc-400">
+              <Users className="h-5 w-5" />
+              <p>No teams available</p>
+            </div>
           )}
         </div>
       </div>

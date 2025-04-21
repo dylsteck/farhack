@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { farhackSDK } from '@/app/lib/api';
+import { farhackSDK } from '@/lib/api';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 

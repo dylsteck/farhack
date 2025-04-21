@@ -1,0 +1,17 @@
+{
+    "title": "FarHack",
+    "description": "The ultimate Farcaster hackathon",
+    "root": true,
+    "pages": [
+      "---Hacking Guide---",
+      "index",
+      "getting-started",
+      "participating-in-farhack",
+      "the-farstack",
+      "next-steps",
+      "---Resources---",
+      "resources/appendix",
+      "resources/documentation",
+      "resources/open-ideas"
+    ]
+}

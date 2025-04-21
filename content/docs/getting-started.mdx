@@ -1,0 +1,115 @@
+---
+title: Getting Started
+---
+
+Welcome to the **FarHack Hacking Guide**, a resource filled with potential hackathon ideas, rules of the road, community tools/docs, and everything else you'll need to get started hacking.
+
+## Why build on Farcaster?
+Before we get you fully set up with your first project, we want to kick things off by highlighting some of the key value props building on [Farcaster](https://farcaster.xyz) gives you:
+- Open social graph and data to build on top of
+- Rich [mini app](https://miniapps.farcaster.xyz) ecosystem that lets you build mobile experiences and meet users right where they are
+- Every user has a crypto wallet, which both makes it easier to find potential users and also to bring them to unique onchain actions
+- Super helpful developer ecosystem for debugging errors, testing projects, and more
+
+## Quick Start
+Let's get you set up with your first FarHack project! 
+For the fastest set up, we recommend two paths:
+
+### 1. Set up a mini app (recommended)
+To set up a mini app, run the command below in your terminal:
+
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">
+  ```
+  npm create @farcaster/mini-app
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```
+  pnpm create @farcaster/mini-app
+  ```
+  </Tab>
+  <Tab value="yarn">
+  ```
+  yarn create @farcaster/mini-app
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```
+  bunx create @farcaster/mini-app
+  ```
+  </Tab>
+</Tabs>
+
+Running the command above creates a new Farcaster mini app using the [@farcaster/mini-app](https://github.com/farcasterxyz/frames/tree/main/packages/create-mini-app) CLI. The CLI will give you the option of making a frame either with Neynar's [create-neynar-farcaster-frame](https://github.com/neynarxyz/create-neynar-farcaster-frame) template or with a simple React + Vite template.
+
+Note: If you don't have a terminal or if you're new to coding, we recommend checking out a platform such as [Replit](https://replit.com) or [Val Town](https://val.town) -- which both give you not only an online coding environment but also a built-in agent for editing your project.
+
+### 2. Query Farcaster data using Neynar
+If you want to go a bit deeper and analyze data or build a bit larger of an app, we recommend using [Neynar](https://neynar.com), the easiest way to build on Farcaster.
+
+First, head over to [neynar.com](https://neynar.com) and sign up for a plan. They even have a free tier, which is super helpful to get started playing around. Once you've signed up for a plan, you should be able to access your credentials on thier [Developer Portal](https://dev.neynar.com).
+
+In this example, we're going to use Neynar's NodeJS SDK to fetch the token balances for a particular Farcaster user.
+
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">
+  ```
+  npm install @neynar/nodejs-sdk
+  ```
+  </Tab>
+  <Tab value="pnpm">
+  ```
+  pnpm install @neynar/nodejs-sdk
+  ```
+  </Tab>
+  <Tab value="yarn">
+  ```
+  yarn add @neynar/nodejs-sdk
+  ```
+  </Tab>
+  <Tab value="bun">
+  ```
+  bun install @neynar/nodejs-sdk
+  ```
+  </Tab>
+</Tabs>
+
+Once we have Neynar's SDK set up with our credentials, we can make a request such as the one below -- which will get us data on a particular Farcaster user as well as their token balances. Combining onchain and social data can open up unique experiences where alpha from friends can lead to actions(eg. purchasing a token that you see your friend has bought).
+
+```tsx
+import { NeynarAPIClient, Configuration } from "@neynar/nodejs-sdk";
+
+const config = new Configuration({
+  apiKey: process.env.NEYNAR_API_KEY,
+});
+
+// Replace with your FID
+const fid = 3
+
+const client = new NeynarAPIClient(config);
+
+async function fetchUserBalances(fid: number) {
+  try {
+    const response = await client.fetchUserBalance({
+      fid: fid,
+      networks: ['base'],
+    });
+    console.log("User Balances:", response.user_balance);
+  } catch (error) {
+    console.error("Error fetching user balances:", error);
+  }
+}
+
+fetchUserBalances(fid);
+```
+
+## Building with AI
+The FarHack Hacking Guide is LLM friendly, so you can use our docs to help you build and debug apps. Two recommended ways to use AI to work with the Hacking Guide are:
+1. Add Hacking Guide's [llms.txt](/llms.txt) file to your docs in Cursor (recommended)
+2. Copy the contents of indivdual pages and paste them into your model of choice
+
+## Next Steps
+Congrats on getting your first FarHack project set up! You might be wondering what's next, here are a few paths that we recommend following:
+- Continue on in our docs by reading the [Participating in FarHack](/hacking-guide/participating-in-farhack) guide, which goes over how to submit your project using the FarHack hackathon software and best practices for marketing/getting feedback on your project
+- Use our LLM-friendly docs to continue building your project, which we recommend and which can get you a long way!

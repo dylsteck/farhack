@@ -2,6 +2,7 @@ import NextAuth, { Session, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { createAppClient, viemConnector } from "@farcaster/auth-client";
 import { createUser, getUser } from "./db/queries";
+import { BASE_URL } from "./lib/utils";
 
 interface ExtendedSession extends Session {
   user: User;
@@ -26,7 +27,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const verifyResponse = await appClient.verifySignInMessage({
           message: credentials?.message as string,
           signature: credentials?.signature as `0x${string}`,
-          domain: "farhack.xyz",
+          domain: new URL(BASE_URL).hostname,
           nonce: credentials.csrfToken as string,
         });
 
