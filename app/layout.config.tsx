@@ -25,10 +25,10 @@ export const baseOptions: BaseLayoutProps = {
       url: '/hackathons',
       active: 'none'
     },
-    {
-      text: 'Hacking Guide',
-      url: '/hacking-guide',
-      active: 'none'
-    }
+    // {
+    //   text: 'Hacking Guide',
+    //   url: '/hacking-guide',
+    //   active: 'none'
+    // }
   ],
 };
