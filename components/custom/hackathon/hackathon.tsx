@@ -24,7 +24,7 @@ export function HackathonDetails({ hackathon, slug }: HackathonDetailsProps) {
   });
 
   return (
-    <div className="flex flex-col lg:flex-row justify-start items-start gap-10 mt-3 md:mt-6 px-3 py-2 pb-6">
+    <div className="flex flex-col lg:flex-row justify-start items-start gap-10 mt-3 md:mt-6 py-2 pb-6">
       <div className="flex-shrink-0">
         <img
           src={hackathon.square_image}
@@ -40,7 +40,7 @@ export function HackathonDetails({ hackathon, slug }: HackathonDetailsProps) {
           </h1>
           <div className="flex flex-row gap-2 items-center">
             <CalendarIcon className="w-4 h-4" />
-            <p className="text-lg text-white/70">
+            <p className="text-lg text-black/70 dark:text-white/70">
               {startDate} - {endDate}
             </p>
           </div>
@@ -48,8 +48,6 @@ export function HackathonDetails({ hackathon, slug }: HackathonDetailsProps) {
         <p className="text-xl text-white/90 leading-relaxed">
           {hackathon.description}
         </p>
-        
-        {/* Action Buttons Section */}
         <div className="mt-6">
           <h2 className="text-lg font-semibold mb-2">Actions</h2>
           <div className="h-px w-full bg-gradient-to-r from-white/5 via-white/20 to-white/5 mb-5"></div>
@@ -57,7 +55,7 @@ export function HackathonDetails({ hackathon, slug }: HackathonDetailsProps) {
             <Link href={`/hackathons/${slug}/your-team`}>
               <Button 
                 variant="outline" 
-                className="flex items-center gap-3 py-6 px-8 bg-zinc-800/60 hover:bg-zinc-700/80 border-zinc-700 hover:border-zinc-500 transition-all duration-200 rounded-xl shadow-md hover:shadow-lg"
+                className="flex items-center gap-3 py-6 px-8 bg-neutral-100 hover:bg-neutral-200 border-neutral-300 hover:border-neutral-400 dark:bg-zinc-800/60 dark:hover:bg-zinc-700/80 dark:border-zinc-700 dark:hover:border-zinc-500 transition-all duration-200 rounded-xl shadow-md hover:shadow-lg cursor-pointer"
               >
                 <PlusCircledIcon className="w-5 h-5" />
                 <span className="font-medium">Create a team</span>
@@ -66,7 +64,7 @@ export function HackathonDetails({ hackathon, slug }: HackathonDetailsProps) {
             <Link href={`/hackathons/${slug}/bounties`}>
               <Button 
                 variant="outline" 
-                className="flex items-center gap-3 py-6 px-8 bg-zinc-800/60 hover:bg-zinc-700/80 border-zinc-700 hover:border-zinc-500 transition-all duration-200 rounded-xl shadow-md hover:shadow-lg"
+                className="flex items-center gap-3 py-6 px-8 bg-neutral-100 hover:bg-neutral-200 border-neutral-300 hover:border-neutral-400 dark:bg-zinc-800/60 dark:hover:bg-zinc-700/80 dark:border-zinc-700 dark:hover:border-zinc-500 transition-all duration-200 rounded-xl shadow-md hover:shadow-lg cursor-pointer"
               >
                 <RocketIcon className="w-5 h-5" />
                 <span className="font-medium">View bounties</span>

@@ -34,7 +34,7 @@ export default function Teams({ hackathon }: { hackathon: FullHackathon }) {
     : [];
 
   return (
-    <div className="bg-black text-white">
+    <div className="bg-inherit text-inherit">
       <div className="container mx-auto py-6 px-4 md:px-6 max-w-7xl">
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
