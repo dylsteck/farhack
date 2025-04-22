@@ -65,6 +65,10 @@ export interface SessionUser {
     id: number;
     name: string;
     description: string;
+    amount?: {
+      currency: string;
+      value: number;
+    }
   }
   
   export interface ScheduleItem {

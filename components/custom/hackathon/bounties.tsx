@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import Link from 'next/link';
+import { formatCurrency } from '@/lib/utils';
 
 export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -73,7 +74,11 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
                     <Card key={bounty.id} className="bg-zinc-900 border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-zinc-800">
                         <CardTitle className="text-lg font-semibold text-white">{bounty.name}</CardTitle>
-                        <Trophy className="h-5 w-5 text-amber-500" />
+                        {bounty.amount ? (
+                          <span className="text-amber-500 font-semibold">{formatCurrency(bounty.amount.value)}</span>
+                        ) : (
+                          <Trophy className="h-5 w-5 text-amber-500" />
+                        )}
                       </CardHeader>
                       <CardContent className="pt-4">
                         <CardDescription className="text-zinc-400 text-sm">
@@ -103,6 +108,9 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
                           </div>
                           <div className="flex-1">
                             <h3 className="text-lg font-semibold text-white">{bounty.name}</h3>
+                            {bounty.amount && (
+                              <p className="text-sm font-medium text-amber-500 mt-1">{formatCurrency(bounty.amount.value)}</p>
+                            )}
                             <p className="text-zinc-400 text-sm mt-1">
                               {cleanDescription(bounty.description)}
                             </p>
