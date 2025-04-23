@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Hackathon } from '@/lib/types';
-import { Trophy, ExternalLink, Search, LayoutGrid, List } from 'lucide-react';
+import { Hackathon, Bounty } from '@/lib/types';
+import { ExternalLink, Search, LayoutGrid, List, PackageX } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import Link from 'next/link';
+import { formatCurrency } from '@/lib/utils';
 
 export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -70,18 +71,31 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
               {viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredBounties.map((bounty) => (
-                    <Card key={bounty.id} className="bg-zinc-900 border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all">
+                    <Card key={bounty.id} className="bg-zinc-900 border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all flex flex-col">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-zinc-800">
-                        <CardTitle className="text-lg font-semibold text-white">{bounty.name}</CardTitle>
-                        <Trophy className="h-5 w-5 text-amber-500" />
+                        <div className="flex items-center gap-3">
+                          {bounty.image ? (
+                            <img 
+                              src={bounty.image} 
+                              alt={`${bounty.name} logo`}
+                              className="h-8 w-8 rounded-md object-cover flex-shrink-0"
+                            />
+                          ) : (
+                            <div className="h-8 w-8 rounded-md bg-zinc-800 flex-shrink-0"></div>
+                          )}
+                          <CardTitle className="text-lg font-semibold text-white">{bounty.name}</CardTitle>
+                        </div>
+                        {bounty.amount && (
+                          <span className="text-amber-500 font-semibold flex-shrink-0">{formatCurrency(bounty.amount.value)}</span>
+                        )}
                       </CardHeader>
-                      <CardContent className="pt-4">
+                      <CardContent className="pt-4 flex-grow">
                         <CardDescription className="text-zinc-400 text-sm">
                           {cleanDescription(bounty.description)}
                         </CardDescription>
                       </CardContent>
                       {extractUrl(bounty.description) && (
-                        <CardFooter className="pt-0">
+                        <CardFooter className="pt-0 mt-auto">
                           <Button variant="outline" size="sm" className="w-full bg-zinc-800 border-zinc-700 hover:bg-zinc-700 text-zinc-300" asChild>
                             <Link href={extractUrl(bounty.description)} target="_blank" rel="noopener noreferrer">
                               Learn More <ExternalLink className="ml-2 h-4 w-4" />
@@ -97,12 +111,21 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
                   {filteredBounties.map((bounty) => (
                     <Card key={bounty.id} className="bg-zinc-900 border-zinc-800 hover:border-zinc-700 transition-all">
                       <CardContent className="p-0">
-                        <div className="flex flex-col md:flex-row gap-4 p-4">
-                          <div className="flex items-center justify-center bg-zinc-800 rounded-md p-4 h-16 w-16">
-                            <Trophy className="h-8 w-8 text-amber-500" />
-                          </div>
-                          <div className="flex-1">
+                        <div className="flex flex-col md:flex-row items-center gap-4 p-4">
+                          {bounty.image ? (
+                            <img 
+                              src={bounty.image} 
+                              alt={`${bounty.name} logo`} 
+                              className="h-16 w-16 rounded-full object-cover flex-shrink-0"
+                            />
+                          ) : (
+                            <div className="h-16 w-16 rounded-full bg-zinc-800 flex-shrink-0"></div>
+                          )}
+                          <div className="flex-1 text-center md:text-left">
                             <h3 className="text-lg font-semibold text-white">{bounty.name}</h3>
+                            {bounty.amount && (
+                              <p className="text-sm font-medium text-amber-500 mt-1">{formatCurrency(bounty.amount.value)}</p>
+                            )}
                             <p className="text-zinc-400 text-sm mt-1">
                               {cleanDescription(bounty.description)}
                             </p>
@@ -142,7 +165,7 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
             </>
           ) : (
             <div className="flex flex-col items-center justify-center py-16 px-4 bg-zinc-900 rounded-lg border border-zinc-800">
-              <Trophy className="h-16 w-16 text-zinc-700 mb-4" />
+              <PackageX className="h-16 w-16 text-zinc-700 mb-4" />
               <h3 className="text-xl font-medium text-white text-center">No Bounties Available</h3>
               <p className="text-zinc-400 text-center mt-1">
                 Check back soon for new bounty challenges

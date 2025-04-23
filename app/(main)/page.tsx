@@ -32,11 +32,11 @@ export default async function HomePage() {
               Start Hacking
             </button>
           </Link>
-          {/* <Link href="/hacking-guide">
+          <Link href="/hacking-guide">
             <button className="bg-black dark:bg-white text-white dark:text-black hover:text-[#8A63D2] font-medium py-2 px-8 rounded-full mt-2 transition-all duration-300 cursor-pointer">
               Hacking Guide
             </button>
-          </Link> */}
+          </Link>
         </div>
       </div>
       <section id="hackathons" className="py-8 text-black dark:text-white">

@@ -26,5 +26,15 @@ const localUrl = `http://localhost:${port}`;
 
 export const BASE_URL = isDev ? localUrl : 'https://farhack.xyz';
 
-export const BANNER_IMG = 'https://i.imgur.com/4sLMVg2.png';
+export const BANNER_IMG = 'https://i.imgur.com/jhw0cQL.png';
+export const HACKING_GUIDE_BANNER_IMG = 'https://i.imgur.com/5TBXea9.png';
 export const ICON_IMG = `${BASE_URL}/icons/icon-512x512.png`;
+
+export function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0, // Assuming we don't want cents
+  }).format(amount);
+}

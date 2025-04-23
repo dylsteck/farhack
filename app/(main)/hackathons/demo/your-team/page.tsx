@@ -11,7 +11,15 @@ export default async function DemoHackathonYourTeamPage() {
   const slug = 'demo';
   const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
 
-  if (!hackathon || !session) {
+  // if (!hackathon || !session) {
+  //   return (
+  //     <div className="flex items-center justify-center min-h-screen text-white text-2xl">
+  //       <p>No data found. <Link href="/" className="underline">Return to home</Link></p>
+  //     </div>
+  //   );
+  // }
+
+  if (!hackathon) {
     return (
       <div className="flex items-center justify-center min-h-screen text-white text-2xl">
         <p>No data found. <Link href="/" className="underline">Return to home</Link></p>

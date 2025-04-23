@@ -14,8 +14,8 @@ export function HackthonNavItem({ name, slug }: { name: string, slug: string }) 
       href={`/hackathons/${parts[1]}${slug}`}
       className={`px-3 py-2 text-sm font-medium transition-colors duration-300 cursor-pointer whitespace-nowrap
         ${isSelected
-          ? 'text-white'
-          : 'text-white/70 hover:text-white'}`}
+          ? 'text-black dark:text-white'
+          : 'text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white'}`}
     >
       {name}
     </Link>
