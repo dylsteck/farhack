@@ -24,9 +24,9 @@ export default async function HackathonPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white dark:bg-black">
+    <main className="min-h-screen">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex items-center justify-between mb-8 border-b border-gray-200 dark:border-gray-800 pb-4">
+        <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-semibold text-black dark:text-white">Hackathons</h1>
         </div>
 
@@ -42,31 +42,31 @@ export default async function HackathonPage() {
                 href={`/hackathons/${hackathon.slug}`}
                 className="block group"
               >
-                <div className="bg-gray-900 dark:bg-white rounded-xl overflow-hidden border border-gray-800 dark:border-gray-200 hover:border-gray-600 dark:hover:border-gray-400 transition-all duration-200">
+                <div className="bg-white dark:bg-black rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 hover:border-gray-400 dark:hover:border-gray-600 transition-all duration-200">
                   <div className="flex items-start p-4">
                     <div className="flex-shrink-0">
                       <img
                         src={hackathon.square_image}
                         alt={hackathon.name}
-                        className="w-20 h-20 rounded-lg object-cover ring-1 ring-gray-800/10 dark:ring-gray-200/10"
+                        className="w-20 h-20 rounded-lg object-cover ring-1 ring-gray-200/10 dark:ring-gray-800/10"
                       />
                     </div>
                     <div className="ml-5 flex-1">
                       <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-medium text-white dark:text-gray-900 group-hover:text-gray-300 dark:group-hover:text-gray-600 transition-colors">
+                        <h2 className="text-lg font-medium text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
                           {hackathon.name}
                         </h2>
                         {isUpcoming && (
-                          <span className="px-3 py-1 text-xs font-medium text-emerald-400 dark:text-emerald-600 bg-emerald-400/10 dark:bg-emerald-600/10 rounded-full ring-1 ring-emerald-400/20 dark:ring-emerald-600/20">
+                          <span className="px-3 py-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-600/10 dark:bg-emerald-400/10 rounded-full ring-1 ring-emerald-600/20 dark:ring-emerald-400/20">
                             Upcoming
                           </span>
                         )}
                       </div>
-                      <p className="mt-2 text-sm text-gray-400 dark:text-gray-600 line-clamp-2">
+                      <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
                         {hackathon.description}
                       </p>
                       <div className="mt-3 flex items-center gap-3 text-xs">
-                        <span className="text-gray-500 dark:text-gray-600 flex items-center gap-1">
+                        <span className="text-gray-600 dark:text-gray-500 flex items-center gap-1">
                           <CalendarIcon className="w-4 h-4" />
                           {formatDate(startDate)}
                         </span>
