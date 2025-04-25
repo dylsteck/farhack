@@ -60,12 +60,36 @@ export function HackathonDetails({ hackathon, slug }: HackathonDetailsProps) {
         <div className="w-full mt-10 px-4 md:px-6 lg:px-8 pb-10">
           <div className="max-w-md mx-auto md:max-w-lg lg:max-w-xl">
             <div className="text-center mb-8">
-              <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-black dark:text-white">
-                {formatCurrency(totalPrizePool)}
-              </h2>
-              <p className="text-xl text-black/70 dark:text-white/70 mt-2">
-                Available in prizes
-              </p>
+              {slug === 'builders-day-at-farcon-2025' ? (
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8">
+                  <div className="text-center">
+                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white">
+                      {formatCurrency(totalPrizePool)}
+                    </h2>
+                    <p className="text-lg text-black/70 dark:text-white/70 mt-1">
+                      Partner Bounties (below)
+                    </p>
+                  </div>
+                  <span className="text-3xl md:text-4xl font-semibold text-black/70 dark:text-white/70">+</span>
+                  <div className="text-center">
+                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white">
+                      {formatCurrency(10000)}
+                    </h2>
+                    <p className="text-lg text-black/70 dark:text-white/70 mt-1">
+                      Grand Prizes
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-black dark:text-white">
+                    {formatCurrency(totalPrizePool)}
+                  </h2>
+                  <p className="text-xl text-black/70 dark:text-white/70 mt-2">
+                    Available in prizes
+                  </p>
+                </>
+              )}
             </div>
             <div className="flex flex-col gap-3">
               {hackathon.bounties.map((bounty) => (

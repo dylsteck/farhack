@@ -19,10 +19,10 @@ export async function generateMetadata(): Promise<Metadata>{
   const BUILDERS_DAY_URL = `${BASE_URL}/hackathons/builders-day-at-farcon-2025`;
   return {
     metadataBase: new URL(BUILDERS_DAY_FARCON_2025_BANNER_IMG),
-    title: "Builders Day at FarCon 2025 | FarHack",
+    title: "Builders Day at FarCon 2025",
     description: 'Builders Day is a 24-hour hackathon, running from 8:30 AM on May 1 through 8:30 AM on May 2 (the start of The Summit).',
     openGraph: {
-      title: "Builders Day at FarCon 2025 | FarHack",
+      title: "Builders Day at FarCon 2025",
       description: 'Builders Day is a 24-hour hackathon, running from 8:30 AM on May 1 through 8:30 AM on May 2 (the start of The Summit).',
       images: [BUILDERS_DAY_FARCON_2025_BANNER_IMG],
       url: BUILDERS_DAY_URL,
