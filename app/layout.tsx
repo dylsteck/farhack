@@ -8,6 +8,7 @@ import { auth } from '@/auth';
 import { BANNER_IMG, BASE_URL, ICON_IMG, inter } from '@/lib/utils';
 import { Providers } from '@/components/custom/providers';
 import { Metadata, Viewport } from 'next';
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -70,6 +71,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
           {children}
         </Providers>
       </body>
+      <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS ?? ""} />
     </html>
   );
 }

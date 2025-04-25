@@ -1,13 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
-import { FullHackathon } from '@/lib/types';
+import { Hackathon } from '@/lib/types';
 import { HackathonLaoyut } from '@/components/custom/hackathon/hackathon-layout';
-import Tracks from '@/components/custom/hackathon/tracks';
+import YourTeam from '@/components/custom/hackathon/your-team';
+import { auth } from '@/auth';
 import { farhackSDK } from '@/lib/api';
 
-export default async function DemoHackathonTracksPage() {
-  const slug = 'demo';
-  const hackathon = await farhackSDK.getHackathon(slug) as FullHackathon;
+export default async function BuildersDayYourTeamPage() {
+  const session = await auth();
+  const slug = 'builders-day-at-farcon-2025';
+  const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
 
   if (!hackathon) {
     return (
@@ -19,7 +21,7 @@ export default async function DemoHackathonTracksPage() {
 
   return (
     <HackathonLaoyut hackathon={hackathon}>
-      <Tracks hackathon={hackathon} />
+      <YourTeam user={session?.user} hackathon={hackathon} />
     </HackathonLaoyut>
   );
 }

@@ -54,7 +54,7 @@ export const viewport: Viewport = {
 
 export async function generateMetadata(): Promise<Metadata>{
   const HACKING_GUIDE_URL = `${BASE_URL}/hacking-guide`;
-  return{
+  return {
     metadataBase: new URL(BASE_URL),
     title: {
       default: 'FarHack',

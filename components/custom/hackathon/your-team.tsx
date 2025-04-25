@@ -282,19 +282,28 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
               </div>
             </div>
           </div>
-
-          {!userTeam && !isClosed && (
-            <div
-              onClick={() => openDialog(false)}
-              className="flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-3 h-14 cursor-pointer bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 transform hover:scale-105"
-            >
-              <PlusCircleIcon className="w-5 h-5 text-zinc-600 dark:text-zinc-300" />
-              <div className="text-sm text-zinc-600 dark:text-zinc-300 font-semibold">
-                Create Team
-              </div>
-            </div>
-          )}
         </div>
+
+        {!userTeam && !isClosed && (
+          <div className="mt-4">
+            {hackathon.slug === 'builders-day-at-farcon-2025' ? (
+              <div className="flex items-center gap-2 border border-neutral-300 dark:border-zinc-700 rounded-xl px-4 py-3 h-14 bg-neutral-100 dark:bg-zinc-900/50 text-neutral-700 dark:text-zinc-400 text-sm">
+                <InfoIcon className="w-5 h-5 text-neutral-500 dark:text-zinc-500" />
+                Create team will be available to attendees when the hackathon starts on May 1st.
+              </div>
+            ) : (
+              <div
+                onClick={() => openDialog(false)}
+                className="inline-flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-3 h-14 cursor-pointer bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 transform hover:scale-105"
+              >
+                <PlusCircleIcon className="w-5 h-5 text-zinc-600 dark:text-zinc-300" />
+                <div className="text-sm text-zinc-600 dark:text-zinc-300 font-semibold">
+                  Create Team
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {userTeam ? (
           <div className="mt-6 border border-zinc-700 rounded-2xl p-6 bg-zinc-900/30 backdrop-blur-sm">
