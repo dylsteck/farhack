@@ -46,7 +46,7 @@ export async function PUT(req: NextRequest) {
     }
 
     try {
-        await updateTeam({ id, ...updates });
+        await updateTeam(id, updates);
         return NextResponse.json({ message: "Team updated successfully" });
     } catch (error) {
         console.error("Error updating team:", (error as Error).message);
