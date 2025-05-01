@@ -23,6 +23,7 @@ interface ExtendedTeam extends Omit<Team, 'created_at'> {
   submitted_at: Date | null;
   wallet_address: string;
   created_at?: Date;
+  bounty_id?: number | null;
 }
 
 export default function YourTeam({ user, hackathon }: { user: any, hackathon: Hackathon }) {
@@ -37,6 +38,8 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
   const [teamMembers, setTeamMembers] = useState<string[]>([]);
   const [newTeamMemberInput, setNewTeamMemberInput] = useState('');
   const [confirmText, setConfirmText] = useState('');
+  const [selectedBountyId, setSelectedBountyId] = useState<string>('none');
+  const [isLoadingTeam, setIsLoadingTeam] = useState(false);
   
   const router = useRouter();
   const userId = user?.id ? Number(user.id) : undefined;
@@ -45,21 +48,25 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
 
   const openDialog = (editing: boolean) => {
     if (editing && userTeam) {
-      setTeam({ ...userTeam, submitted_at: userTeam.submitted_at || null, wallet_address: userTeam.wallet_address || '' });
+      setTeam({ ...userTeam, submitted_at: userTeam.submitted_at || null, wallet_address: userTeam.wallet_address || '', bounty_id: userTeam.bounty_id || null });
       setWalletAddress(userTeam.wallet_address || '');
+      setSelectedBountyId(userTeam.bounty_id != null ? String(userTeam.bounty_id) : 'none');
     } else {
+      const initialFids = userId !== undefined ? [{ id: userId }] : []; 
       setTeam({
         id: 0,
         name: '',
         description: '',
         hackathon_id: hackathon.id,
         embeds: [],
-        fids: [],
+        fids: initialFids as any,
         submitted_at: null,
         wallet_address: '',
         created_at: new Date(),
+        bounty_id: null,
       });
       setWalletAddress('');
+      setSelectedBountyId('none');
     }
     setIsDialogOpen(true);
   };
@@ -69,32 +76,68 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
   };
 
   const handleSave = async () => {
+    console.log("handleSave started");
     try {
-      if (!team) return;
+      if (!team) {
+        console.log("handleSave stopped: team is null");
+        return;
+      }
       
+      console.log("handleSave: Closing dialog");
       setIsDialogOpen(false);
       
+      const bountyIdToSend = selectedBountyId === 'none' ? null : Number(selectedBountyId);
+      
+      console.log(`handleSave: Checking team ID: ${team.id}`);
       if (team.id === 0) {
+        console.log("handleSave: Entering create path (team.id === 0)");
         const optimisticTeam = {
           ...team,
           id: -1,
           created_at: new Date(),
+          bounty_id: bountyIdToSend,
         };
         
-        router.refresh();
+        if (userId === undefined) {
+          console.error("handleSave create path STOPPED: userId is undefined");
+          toast.error("User ID is missing. Cannot create team."); 
+          console.error("User ID is undefined in handleSave");
+          setIsDialogOpen(true); 
+          return; 
+        }
         
-        const createdTeam = await farhackSDK.createTeam(team.name, team.description, hackathon.id, userId ?? -1);
+        console.log("handleSave create path: userId confirmed, proceeding to API call log");
+        console.log("Attempting to create team with:", {
+          name: team.name,
+          description: team.description,
+          hackathonId: hackathon.id,
+          userId: userId,
+        });
+
+        const createdTeam = await farhackSDK.createTeam(team.name, team.description, hackathon.id, userId);
+        console.log("Team creation API call successful:", createdTeam); 
         toast.success('Team created successfully!');
         
-        router.refresh();
+        window.location.reload();
       } else {
-        router.refresh();
+        console.log("handleSave: Entering update path");
+        router.refresh(); 
         
+        console.log("Attempting to update team with:", {
+          teamId: team.id,
+          name: team.name,
+          description: team.description,
+          embeds: team.embeds,
+          wallet_address: walletAddress,
+          bounty_id: bountyIdToSend,
+        });
+
         await farhackSDK.updateTeam(team.id, { 
           name: team.name, 
           description: team.description, 
           embeds: team.embeds,
-          wallet_address: walletAddress 
+          wallet_address: walletAddress,
+          bounty_id: bountyIdToSend,
         });
         
         toast.success('Team updated successfully!');
@@ -102,6 +145,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
         router.refresh();
       }
     } catch (error) {
+      console.error("Error caught in handleSave:", error);
       setIsDialogOpen(true);
       toast.error(`Error: ${(error as Error).message}`);
     }
@@ -290,7 +334,16 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
               </div>
             )}
           </div>
-        ) : null}
+        ) : (
+          <div className="mt-6">
+            {isLoadingTeam && (
+              <div className="animate-pulse border border-zinc-700 rounded-2xl p-6 bg-zinc-900/30">
+                <div className="h-6 w-48 bg-zinc-800 rounded mb-4"></div>
+                <div className="h-20 bg-zinc-800 rounded mb-4"></div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -454,6 +507,45 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
                 </div>
               )}
             </div>
+            
+            <div>
+              <label className="text-sm font-medium text-zinc-400 mb-2 block flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trophy"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                Choose a Bounty
+              </label>
+              <Select 
+                value={selectedBountyId}
+                onValueChange={(value) => {
+                  console.log("Bounty selected:", value);
+                  if (value !== undefined) {
+                    setSelectedBountyId(value);
+                  }
+                }}
+              >
+                <SelectTrigger className="bg-zinc-800 border-zinc-700 focus:border-zinc-500 focus:ring-zinc-500 text-white h-12">
+                  <SelectValue placeholder="Select a bounty">
+                    {selectedBountyId === 'none' ? 'None' : 
+                      (hackathon.bounties?.find(b => String(b.id) === selectedBountyId)?.name || 'Select a bounty')}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent position="popper" className="bg-zinc-800 border-zinc-700 text-white hide-bounty-check">
+                  <SelectItem value="none" className="pl-2">None</SelectItem>
+                  {hackathon.bounties?.map((bounty) => (
+                    <SelectItem key={bounty.id} value={String(bounty.id)} className="pl-2">
+                      {bounty.name} {bounty.amount ? `(${bounty.amount.value} ${bounty.amount.currency})` : ''}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <style>{`
+                .hide-bounty-check [role="option"] .lucide-check {
+                  display: none !important;
+                }
+              `}</style>
+              <p className="text-xs text-zinc-500 mt-2">
+                Note: If you select &apos;None&apos;, you are still eligible for the grand prize. Choosing a specific bounty helps judges categorize your project.
+              </p>
+            </div>
           </div>
           
           <DialogFooter className="px-6 py-4 bg-zinc-900 border-t border-zinc-800 flex justify-end">
@@ -466,7 +558,11 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
                 Cancel
               </Button>
               <Button 
-                onClick={handleSave}
+                onClick={() => {
+                  console.log("Create/Save button clicked");
+                  handleSave();
+                }}
+                type="button"
                 className="bg-zinc-700 hover:bg-zinc-600 text-white h-12 cursor-pointer"
               >
                 {team?.id === 0 ? 'Create' : 'Save'}
