@@ -12,6 +12,7 @@ import { farhackSDK } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { CalendarIcon, PlusCircleIcon, X, Plus, Trash2, Users, Clock, InfoIcon, Link2Icon, WalletIcon, AlertTriangleIcon } from 'lucide-react';
 import Image from 'next/image';
+import FrameLink from '../frame/frame-link';
 
 interface Embed {
   url: string;
@@ -253,7 +254,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
         {!userTeam && !isClosed && (
           <div className="mt-4">
             {hackathon.slug === 'builders-day-at-farcon-2025' ? (
-              <a href="https://forms.gle/r1HJNVTdT8bomttk6" target="_blank" rel="noopener noreferrer" className="block">
+              <FrameLink type="url" identifier="https://forms.gle/r1HJNVTdT8bomttk6">
                 <div className="flex items-start gap-3 border border-neutral-300 dark:border-zinc-700 rounded-xl px-4 py-3 min-h-14 bg-neutral-100 dark:bg-zinc-900/50 text-neutral-700 dark:text-zinc-400 text-sm hover:bg-neutral-200 dark:hover:bg-zinc-800/70 transition-colors cursor-pointer">
                   <InfoIcon className="w-5 h-5 text-neutral-500 dark:text-zinc-500 flex-shrink-0 mt-0.5" />
                   <span className="flex flex-col">
@@ -261,7 +262,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
                     <span className="text-xs text-neutral-500 dark:text-zinc-500 mt-1">Make sure to submit before the deadline: May 2nd at 8:30 AM EST.</span>
                   </span>
                 </div>
-              </a>
+              </FrameLink>
             ) : (
               <div
                 onClick={() => openDialog(false)}

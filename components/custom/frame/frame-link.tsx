@@ -1,6 +1,6 @@
 'use client';
 
-import sdk from "@farcaster/frame-sdk";
+import { useMiniKit, useOpenUrl, useViewProfile } from "@coinbase/onchainkit/minikit";
 import React from "react";
 
 export default function FrameLink({
@@ -12,16 +12,18 @@ export default function FrameLink({
     type: 'url' | 'profile',
     children: React.ReactNode
 }){
+    const { context } = useMiniKit();
+    const viewProfile = useViewProfile();
+    const openUrl = useOpenUrl();
 
-    const handleOnClick = async() => {
-        const context = await sdk.context;
+    const handleOnClick = () => {
         if(context !== undefined){
             switch(type){
                 case 'url':
-                    await sdk.actions.openUrl(identifier);
+                    openUrl(identifier);
                     break;
                 case 'profile':
-                    await sdk.actions.viewProfile({ fid: parseInt(identifier) })
+                    viewProfile(parseInt(identifier))
                 default:
                     break;
             }
@@ -32,7 +34,7 @@ export default function FrameLink({
                     break;
                 case 'profile':
                     window.open(`https://warpcast.com/~/profiles/${identifier}`)
-                    await sdk.actions.viewProfile({ fid: parseInt(identifier) })
+                    viewProfile(parseInt(identifier));
                 default:
                     break;
             }
