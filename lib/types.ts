@@ -94,6 +94,7 @@ export interface SessionUser {
     wallet_address: string;
     embeds?: Embed[];
     created_at: Date;
+    bounty_id?: number | null;
   }
   
   export interface Invite {

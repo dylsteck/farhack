@@ -10,9 +10,8 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { toast } from 'sonner';
 import { farhackSDK } from '@/lib/api';
 import { useRouter } from 'next/navigation';
-import { CalendarIcon, PlusCircleIcon, X, Plus, Trash2, Users, Clock, InfoIcon, Link2Icon, WalletIcon, AlertTriangleIcon, Search } from 'lucide-react';
+import { CalendarIcon, PlusCircleIcon, X, Plus, Trash2, Users, Clock, InfoIcon, Link2Icon, WalletIcon, AlertTriangleIcon } from 'lucide-react';
 import Image from 'next/image';
-import { useDebounce } from '@/hooks/use-debounce';
 
 interface Embed {
   url: string;
@@ -24,6 +23,7 @@ interface ExtendedTeam extends Omit<Team, 'created_at'> {
   submitted_at: Date | null;
   wallet_address: string;
   created_at?: Date;
+  bounty_id?: number | null;
 }
 
 export default function YourTeam({ user, hackathon }: { user: any, hackathon: Hackathon }) {
@@ -36,17 +36,11 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
   const [walletAddress, setWalletAddress] = useState('');
   const [showDeadlineDate, setShowDeadlineDate] = useState(false);
   const [teamMembers, setTeamMembers] = useState<string[]>([]);
-  const [newTeamMember, setNewTeamMember] = useState('');
+  const [newTeamMemberInput, setNewTeamMemberInput] = useState('');
   const [confirmText, setConfirmText] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<NeynarUser[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const [showSearchResults, setShowSearchResults] = useState(false);
-  const searchResultsRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [selectedBountyId, setSelectedBountyId] = useState<string>('none');
+  const [isLoadingTeam, setIsLoadingTeam] = useState(false);
   
-  const debouncedSearchQuery = useDebounce(searchQuery, 300);
-
   const router = useRouter();
   const userId = user?.id ? Number(user.id) : undefined;
   const teams = (hackathon as any).teams || [];
@@ -54,21 +48,25 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
 
   const openDialog = (editing: boolean) => {
     if (editing && userTeam) {
-      setTeam({ ...userTeam, submitted_at: userTeam.submitted_at || null, wallet_address: userTeam.wallet_address || '' });
+      setTeam({ ...userTeam, submitted_at: userTeam.submitted_at || null, wallet_address: userTeam.wallet_address || '', bounty_id: userTeam.bounty_id || null });
       setWalletAddress(userTeam.wallet_address || '');
+      setSelectedBountyId(userTeam.bounty_id != null ? String(userTeam.bounty_id) : 'none');
     } else {
+      const initialFids = userId !== undefined ? [{ id: userId }] : []; 
       setTeam({
         id: 0,
         name: '',
         description: '',
         hackathon_id: hackathon.id,
         embeds: [],
-        fids: [],
+        fids: initialFids as any,
         submitted_at: null,
         wallet_address: '',
         created_at: new Date(),
+        bounty_id: null,
       });
       setWalletAddress('');
+      setSelectedBountyId('none');
     }
     setIsDialogOpen(true);
   };
@@ -78,32 +76,68 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
   };
 
   const handleSave = async () => {
+    console.log("handleSave started");
     try {
-      if (!team) return;
+      if (!team) {
+        console.log("handleSave stopped: team is null");
+        return;
+      }
       
+      console.log("handleSave: Closing dialog");
       setIsDialogOpen(false);
       
+      const bountyIdToSend = selectedBountyId === 'none' ? null : Number(selectedBountyId);
+      
+      console.log(`handleSave: Checking team ID: ${team.id}`);
       if (team.id === 0) {
+        console.log("handleSave: Entering create path (team.id === 0)");
         const optimisticTeam = {
           ...team,
           id: -1,
           created_at: new Date(),
+          bounty_id: bountyIdToSend,
         };
         
-        router.refresh();
+        if (userId === undefined) {
+          console.error("handleSave create path STOPPED: userId is undefined");
+          toast.error("User ID is missing. Cannot create team."); 
+          console.error("User ID is undefined in handleSave");
+          setIsDialogOpen(true); 
+          return; 
+        }
         
-        const createdTeam = await farhackSDK.createTeam(team.name, team.description, hackathon.id, userId ?? -1);
+        console.log("handleSave create path: userId confirmed, proceeding to API call log");
+        console.log("Attempting to create team with:", {
+          name: team.name,
+          description: team.description,
+          hackathonId: hackathon.id,
+          userId: userId,
+        });
+
+        const createdTeam = await farhackSDK.createTeam(team.name, team.description, hackathon.id, userId);
+        console.log("Team creation API call successful:", createdTeam); 
         toast.success('Team created successfully!');
         
-        router.refresh();
+        window.location.reload();
       } else {
-        router.refresh();
+        console.log("handleSave: Entering update path");
+        router.refresh(); 
         
+        console.log("Attempting to update team with:", {
+          teamId: team.id,
+          name: team.name,
+          description: team.description,
+          embeds: team.embeds,
+          wallet_address: walletAddress,
+          bounty_id: bountyIdToSend,
+        });
+
         await farhackSDK.updateTeam(team.id, { 
           name: team.name, 
           description: team.description, 
           embeds: team.embeds,
-          wallet_address: walletAddress 
+          wallet_address: walletAddress,
+          bounty_id: bountyIdToSend,
         });
         
         toast.success('Team updated successfully!');
@@ -111,6 +145,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
         router.refresh();
       }
     } catch (error) {
+      console.error("Error caught in handleSave:", error);
       setIsDialogOpen(true);
       toast.error(`Error: ${(error as Error).message}`);
     }
@@ -154,16 +189,6 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
     }
   };
 
-  const handleInviteFarcasterUser = async (username: string) => {
-    if (!userTeam) return;
-    try {
-      const token = await farhackSDK.createFarcasterUserInvite(hackathon.slug, userId ?? -1, userTeam.id, username);
-      toast.success(`Invite sent to @${username}!`);
-    } catch (error) {
-      toast.error(`Error sending invite: ${(error as Error).message}`);
-    }
-  };
-
   const addEmbed = () => {
     if (!embedUrl.trim()) return;
     setTeam((prev) => prev ? { ...prev, embeds: [...prev.embeds, { url: embedUrl, type: embedType }] } : prev);
@@ -177,10 +202,12 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
   };
 
   const addTeamMember = () => {
-    if (!newTeamMember.trim()) return;
-    setTeamMembers((prev) => [...prev, newTeamMember.trim()]);
-    setNewTeamMember('');
-    setSearchQuery('');
+    const memberToAdd = newTeamMemberInput.trim();
+    if (!memberToAdd) return;
+    if (!teamMembers.includes(memberToAdd)) {
+      setTeamMembers((prev) => [...prev, memberToAdd]);
+    }
+    setNewTeamMemberInput('');
   };
 
   const removeTeamMember = (index: number) => {
@@ -206,67 +233,6 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
 
   const readableTimeLeft = getReadableTimeLeft(timeLeft);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        searchResultsRef.current && 
-        !searchResultsRef.current.contains(event.target as Node) && 
-        searchInputRef.current && 
-        !searchInputRef.current.contains(event.target as Node)
-      ) {
-        setShowSearchResults(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  useEffect(() => {
-    async function searchUsers() {
-      if (!debouncedSearchQuery || debouncedSearchQuery.length < 2) {
-        setSearchResults([]);
-        setShowSearchResults(false);
-        return;
-      }
-
-      setIsSearching(true);
-      setShowSearchResults(true);
-
-      try {
-        const response = await fetch(`/api/search/farcaster?q=${encodeURIComponent(debouncedSearchQuery)}&limit=5`);
-        
-        const data = await response.json();
-
-        if (!response.ok) {
-          const errorMessage = data?.message || `Failed to search users (status: ${response.status})`;
-          throw new Error(errorMessage);
-        }
-
-        const users = data?.result?.users || [];
-        setSearchResults(users);
-
-      } catch (error) {
-        console.error('[Search Component] Error searching users:', error);
-        toast.error(error instanceof Error ? error.message : 'An unknown error occurred during search');
-        setSearchResults([]);
-      } finally {
-        setIsSearching(false);
-      }
-    }
-
-    searchUsers();
-  }, [debouncedSearchQuery]);
-
-  const handleUserSelect = (user: NeynarUser) => {
-    setNewTeamMember(user.username);
-    setSearchQuery('');
-    setShowSearchResults(false);
-    setTeamMembers((prev) => [...prev, user.username]);
-  };
-
   return (
     <div className="bg-transparent text-black dark:text-white">
       <div className="container mx-auto py-6 px-4 md:px-6 max-w-7xl">
@@ -282,19 +248,33 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
               </div>
             </div>
           </div>
-
-          {!userTeam && !isClosed && (
-            <div
-              onClick={() => openDialog(false)}
-              className="flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-3 h-14 cursor-pointer bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 transform hover:scale-105"
-            >
-              <PlusCircleIcon className="w-5 h-5 text-zinc-600 dark:text-zinc-300" />
-              <div className="text-sm text-zinc-600 dark:text-zinc-300 font-semibold">
-                Create Team
-              </div>
-            </div>
-          )}
         </div>
+
+        {!userTeam && !isClosed && (
+          <div className="mt-4">
+            {hackathon.slug === 'builders-day-at-farcon-2025' ? (
+              <a href="https://forms.gle/r1HJNVTdT8bomttk6" target="_blank" rel="noopener noreferrer" className="block">
+                <div className="flex items-start gap-3 border border-neutral-300 dark:border-zinc-700 rounded-xl px-4 py-3 min-h-14 bg-neutral-100 dark:bg-zinc-900/50 text-neutral-700 dark:text-zinc-400 text-sm hover:bg-neutral-200 dark:hover:bg-zinc-800/70 transition-colors cursor-pointer">
+                  <InfoIcon className="w-5 h-5 text-neutral-500 dark:text-zinc-500 flex-shrink-0 mt-0.5" />
+                  <span className="flex flex-col">
+                    <span className="font-semibold">Click here to create and submit your team</span>
+                    <span className="text-xs text-neutral-500 dark:text-zinc-500 mt-1">Make sure to submit before the deadline: May 2nd at 8:30 AM EST.</span>
+                  </span>
+                </div>
+              </a>
+            ) : (
+              <div
+                onClick={() => openDialog(false)}
+                className="inline-flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-3 h-14 cursor-pointer bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 transform hover:scale-105"
+              >
+                <PlusCircleIcon className="w-5 h-5 text-zinc-600 dark:text-zinc-300" />
+                <div className="text-sm text-zinc-600 dark:text-zinc-300 font-semibold">
+                  Create Team
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {userTeam ? (
           <div className="mt-6 border border-zinc-700 rounded-2xl p-6 bg-zinc-900/30 backdrop-blur-sm">
@@ -359,11 +339,20 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
               </div>
             )}
           </div>
-        ) : null}
+        ) : (
+          <div className="mt-6">
+            {isLoadingTeam && (
+              <div className="animate-pulse border border-zinc-700 rounded-2xl p-6 bg-zinc-900/30">
+                <div className="h-6 w-48 bg-zinc-800 rounded mb-4"></div>
+                <div className="h-20 bg-zinc-800 rounded mb-4"></div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl max-w-xl p-0 overflow-hidden animate-in fade-in-50 slide-in-from-bottom-10 duration-300">
+        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl max-w-xl p-0 overflow-hidden">
           <DialogHeader className="px-6 pt-6 pb-4 border-b border-zinc-800">
             <div className="flex justify-between items-center">
               <DialogTitle className="text-2xl font-bold">{team?.id === 0 ? 'Create a Team' : 'Edit Team'}</DialogTitle>
@@ -426,64 +415,14 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
               <div className="flex gap-2 mb-3">
                 <div className="relative flex-1">
                   <div className="relative">
-                    <Input 
-                      ref={searchInputRef}
-                      placeholder="Search for username..." 
-                      value={searchQuery}
-                      onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                        if (e.target.value) {
-                          setShowSearchResults(true);
-                        }
-                      }}
-                      onFocus={() => {
-                        if (searchQuery && searchResults.length > 0) {
-                          setShowSearchResults(true);
-                        }
-                      }}
-                      className="flex-1 bg-zinc-800 border-zinc-700 focus:border-zinc-500 focus:ring-zinc-500 text-white h-12 pl-10"
+                    <Input
+                      placeholder="Enter username..."
+                      value={newTeamMemberInput}
+                      onChange={(e) => setNewTeamMemberInput(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && addTeamMember()}
+                      className="flex-1 bg-zinc-800 border-zinc-700 focus:border-zinc-500 focus:ring-zinc-500 text-white h-12"
                     />
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-zinc-400" />
                   </div>
-                  
-                  {showSearchResults && (
-                    <div 
-                      ref={searchResultsRef}
-                      className="absolute top-full left-0 right-0 mt-1 max-h-60 overflow-y-auto bg-zinc-800 border border-zinc-700 rounded-lg shadow-lg z-10"
-                    >
-                      {isSearching ? (
-                        <div className="p-3 text-center text-zinc-400">Searching...</div>
-                      ) : searchResults.length > 0 ? (
-                        <div>
-                          {searchResults.map((user) => (
-                            <div 
-                              key={user.fid}
-                              onClick={() => handleUserSelect(user)}
-                              className="p-3 flex items-center gap-3 hover:bg-zinc-700 cursor-pointer"
-                            >
-                              {user.pfp_url && (
-                                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                                  <Image 
-                                    src={user.pfp_url} 
-                                    alt={user.display_name || user.username} 
-                                    width={32} 
-                                    height={32}
-                                    className="object-cover"
-                                  />
-                                </div>
-                              )}
-                              <div>
-                                <div className="text-white font-medium">{user.display_name}</div>
-                                <div className="text-zinc-400 text-sm">@{user.username}</div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : searchQuery.length > 1 ? (
-                        <div className="p-3 text-center text-zinc-400">No users found</div>
-                      ) : null}
-                    </div>
-                  )}
                 </div>
                 
                 <Button 
@@ -502,24 +441,14 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
                         <Users className="h-4 w-4 text-zinc-400" />
                         <span className="text-sm text-zinc-200">@{member}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        {userTeam && (
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => handleInviteFarcasterUser(member)}
-                            className="h-8 px-2 text-xs text-zinc-300 hover:bg-zinc-700"
-                          >
-                            Invite
-                          </Button>
-                        )}
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                      <div className="flex items-center">
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           className="h-6 w-6 rounded-full hover:bg-zinc-700"
                           onClick={() => removeTeamMember(idx)}
                         >
-                          <X className="h-3 w-3" />
+                          <X className="h-3 w-3 text-zinc-400" />
                         </Button>
                       </div>
                     </div>
@@ -583,6 +512,45 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
                 </div>
               )}
             </div>
+            
+            <div>
+              <label className="text-sm font-medium text-zinc-400 mb-2 block flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trophy"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                Choose a Bounty
+              </label>
+              <Select 
+                value={selectedBountyId}
+                onValueChange={(value) => {
+                  console.log("Bounty selected:", value);
+                  if (value !== undefined) {
+                    setSelectedBountyId(value);
+                  }
+                }}
+              >
+                <SelectTrigger className="bg-zinc-800 border-zinc-700 focus:border-zinc-500 focus:ring-zinc-500 text-white h-12">
+                  <SelectValue placeholder="Select a bounty">
+                    {selectedBountyId === 'none' ? 'None' : 
+                      (hackathon.bounties?.find(b => String(b.id) === selectedBountyId)?.name || 'Select a bounty')}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent position="popper" className="bg-zinc-800 border-zinc-700 text-white hide-bounty-check">
+                  <SelectItem value="none" className="pl-2">None</SelectItem>
+                  {hackathon.bounties?.map((bounty) => (
+                    <SelectItem key={bounty.id} value={String(bounty.id)} className="pl-2">
+                      {bounty.name} {bounty.amount ? `(${bounty.amount.value} ${bounty.amount.currency})` : ''}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <style>{`
+                .hide-bounty-check [role="option"] .lucide-check {
+                  display: none !important;
+                }
+              `}</style>
+              <p className="text-xs text-zinc-500 mt-2">
+                Note: If you select &apos;None&apos;, you are still eligible for the grand prize. Choosing a specific bounty helps judges categorize your project.
+              </p>
+            </div>
           </div>
           
           <DialogFooter className="px-6 py-4 bg-zinc-900 border-t border-zinc-800 flex justify-end">
@@ -595,8 +563,12 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
                 Cancel
               </Button>
               <Button 
-                onClick={handleSave}
-                className="bg-zinc-700 hover:bg-zinc-600 text-white h-12"
+                onClick={() => {
+                  console.log("Create/Save button clicked");
+                  handleSave();
+                }}
+                type="button"
+                className="bg-zinc-700 hover:bg-zinc-600 text-white h-12 cursor-pointer"
               >
                 {team?.id === 0 ? 'Create' : 'Save'}
               </Button>
@@ -606,7 +578,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
       </Dialog>
       
       <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl p-6 max-w-md animate-in fade-in-50 slide-in-from-bottom-10 duration-300">
+        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl p-6 max-w-md">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold">Confirm Submission</DialogTitle>
           </DialogHeader>
@@ -661,7 +633,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
       </Dialog>
       
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl p-6 max-w-md animate-in fade-in-50 slide-in-from-bottom-10 duration-300">
+        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl p-6 max-w-md">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-red-500">Delete Team</DialogTitle>
           </DialogHeader>

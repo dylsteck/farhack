@@ -1,14 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import Link from 'next/link';
-import { Hackathon } from '@/lib/types';
+import { FullHackathon } from '@/lib/types';
 import { HackathonLaoyut } from '@/components/custom/hackathon/hackathon-layout';
-import Bounties from '@/components/custom/hackathon/bounties';
+import Teams from '@/components/custom/hackathon/teams';
 import { farhackSDK } from '@/lib/api';
 
-export default async function DemoHackathonBounitesPage() {
-  const slug = 'demo';
-  const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
+export default async function BuildersDayTeamsPage() {
+  const slug = 'builders-day-at-farcon-2025';
+  const hackathon = await farhackSDK.getHackathon(slug) as FullHackathon;
 
   if (!hackathon) {
     return (
@@ -20,7 +19,7 @@ export default async function DemoHackathonBounitesPage() {
 
   return (
     <HackathonLaoyut hackathon={hackathon}>
-      <Bounties hackathon={hackathon} />
+      <Teams hackathon={hackathon} />
     </HackathonLaoyut>
   );
 }

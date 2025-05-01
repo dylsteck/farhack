@@ -12,7 +12,7 @@ export default async function HackathonYourTeamPage(props: { params: Promise<any
   const { slug } = params;
   const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
 
-  if (!slug || !hackathon || !session) {
+  if (!hackathon) {
     return (
       <div className="flex items-center justify-center min-h-screen text-white text-2xl">
         <p>No data found. <Link href="/" className="underline">Return to home</Link></p>

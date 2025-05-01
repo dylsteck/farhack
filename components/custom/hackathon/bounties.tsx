@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import React, { useState } from 'react';
@@ -35,7 +36,7 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
   };
 
   return (
-    <div className="bg-black text-white">
+    <div>
       <div className="container mx-auto py-6 px-4 md:px-6 max-w-7xl">
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -45,21 +46,21 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
       
             <div className="flex items-center gap-3 w-full md:w-auto">
               <div className="relative w-full md:w-64">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-500" />
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
                   placeholder="Search bounties..."
-                  className="pl-9 bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-500 focus-visible:ring-zinc-700"
+                  className="pl-9"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
               
               <ToggleGroup type="single" value={viewMode} onValueChange={(value: 'grid' | 'list') => value && setViewMode(value)}>
-                <ToggleGroupItem value="grid" size="sm" className="data-[state=on]:bg-zinc-800">
+                <ToggleGroupItem value="grid" size="sm">
                   <LayoutGrid className="h-4 w-4" />
                 </ToggleGroupItem>
-                <ToggleGroupItem value="list" size="sm" className="data-[state=on]:bg-zinc-800">
+                <ToggleGroupItem value="list" size="sm">
                   <List className="h-4 w-4" />
                 </ToggleGroupItem>
               </ToggleGroup>
@@ -71,8 +72,8 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
               {viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredBounties.map((bounty) => (
-                    <Card key={bounty.id} className="bg-zinc-900 border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all flex flex-col">
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-zinc-800">
+                    <Card key={`bounty-${bounty.name}`} className="overflow-hidden transition-all flex flex-col">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b">
                         <div className="flex items-center gap-3">
                           {bounty.image ? (
                             <img 
@@ -81,24 +82,24 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
                               className="h-8 w-8 rounded-md object-cover flex-shrink-0"
                             />
                           ) : (
-                            <div className="h-8 w-8 rounded-md bg-zinc-800 flex-shrink-0"></div>
+                            <div className="h-8 w-8 rounded-md bg-muted flex-shrink-0"></div>
                           )}
-                          <CardTitle className="text-lg font-semibold text-white">{bounty.name}</CardTitle>
+                          <CardTitle className="text-lg font-semibold">{bounty.name}</CardTitle>
                         </div>
                         {bounty.amount && (
                           <span className="text-amber-500 font-semibold flex-shrink-0">{formatCurrency(bounty.amount.value)}</span>
                         )}
                       </CardHeader>
                       <CardContent className="pt-4 flex-grow">
-                        <CardDescription className="text-zinc-400 text-sm">
+                        <CardDescription>
                           {cleanDescription(bounty.description)}
                         </CardDescription>
                       </CardContent>
                       {extractUrl(bounty.description) && (
                         <CardFooter className="pt-0 mt-auto">
-                          <Button variant="outline" size="sm" className="w-full bg-zinc-800 border-zinc-700 hover:bg-zinc-700 text-zinc-300" asChild>
+                          <Button variant="outline" size="sm" className="w-full" asChild>
                             <Link href={extractUrl(bounty.description)} target="_blank" rel="noopener noreferrer">
-                              Learn More <ExternalLink className="ml-2 h-4 w-4" />
+                              View Docs <ExternalLink className="ml-2 h-4 w-4" />
                             </Link>
                           </Button>
                         </CardFooter>
@@ -109,7 +110,7 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
               ) : (
                 <div className="space-y-4">
                   {filteredBounties.map((bounty) => (
-                    <Card key={bounty.id} className="bg-zinc-900 border-zinc-800 hover:border-zinc-700 transition-all">
+                    <Card key={bounty.id} className="transition-all">
                       <CardContent className="p-0">
                         <div className="flex flex-col md:flex-row items-center gap-4 p-4">
                           {bounty.image ? (
@@ -119,21 +120,21 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
                               className="h-16 w-16 rounded-full object-cover flex-shrink-0"
                             />
                           ) : (
-                            <div className="h-16 w-16 rounded-full bg-zinc-800 flex-shrink-0"></div>
+                            <div className="h-16 w-16 rounded-full bg-muted flex-shrink-0"></div>
                           )}
                           <div className="flex-1 text-center md:text-left">
-                            <h3 className="text-lg font-semibold text-white">{bounty.name}</h3>
+                            <h3 className="text-lg font-semibold">{bounty.name}</h3>
                             {bounty.amount && (
                               <p className="text-sm font-medium text-amber-500 mt-1">{formatCurrency(bounty.amount.value)}</p>
                             )}
-                            <p className="text-zinc-400 text-sm mt-1">
+                            <p className="text-muted-foreground text-sm mt-1">
                               {cleanDescription(bounty.description)}
                             </p>
                             {extractUrl(bounty.description) && (
                               <div className="mt-3">
-                                <Button variant="outline" size="sm" className="bg-zinc-800 border-zinc-700 hover:bg-zinc-700 text-zinc-300" asChild>
+                                <Button variant="outline" size="sm" asChild>
                                   <Link href={extractUrl(bounty.description)} target="_blank" rel="noopener noreferrer">
-                                    Learn More <ExternalLink className="ml-2 h-4 w-4" />
+                                    View Docs <ExternalLink className="ml-2 h-4 w-4" />
                                   </Link>
                                 </Button>
                               </div>
@@ -147,15 +148,15 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
               )}
               
               {filteredBounties.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-12 px-4 bg-zinc-900 rounded-lg border border-zinc-800">
-                  <Search className="h-12 w-12 text-zinc-700 mb-4" />
-                  <h3 className="text-xl font-medium text-white text-center">No matching bounties</h3>
-                  <p className="text-zinc-400 text-center mt-1">
+                <div className="flex flex-col items-center justify-center py-12 px-4 rounded-lg border">
+                  <Search className="h-12 w-12 text-muted-foreground mb-4" />
+                  <h3 className="text-xl font-medium text-center">No matching bounties</h3>
+                  <p className="text-muted-foreground text-center mt-1">
                     Try adjusting your search query
                   </p>
                   <Button 
                     variant="outline" 
-                    className="mt-4 bg-zinc-800 border-zinc-700 hover:bg-zinc-700 text-zinc-300"
+                    className="mt-4"
                     onClick={() => setSearchQuery('')}
                   >
                     Clear search
@@ -164,10 +165,10 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
               )}
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center py-16 px-4 bg-zinc-900 rounded-lg border border-zinc-800">
-              <PackageX className="h-16 w-16 text-zinc-700 mb-4" />
-              <h3 className="text-xl font-medium text-white text-center">No Bounties Available</h3>
-              <p className="text-zinc-400 text-center mt-1">
+            <div className="flex flex-col items-center justify-center py-16 px-4 rounded-lg border">
+              <PackageX className="h-16 w-16 text-muted-foreground mb-4" />
+              <h3 className="text-xl font-medium text-center">No Bounties Available</h3>
+              <p className="text-muted-foreground text-center mt-1">
                 Check back soon for new bounty challenges
               </p>
             </div>

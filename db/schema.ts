@@ -55,6 +55,7 @@ export const teams = pgTable("teams", {
   wallet_address: text("wallet_address"),
   embeds: jsonb("embeds"),
   created_at: timestamp("created_at").defaultNow(),
+  bounty_id: integer("bounty_id"),
 });
 
 export type Team = InferSelectModel<typeof teams>;

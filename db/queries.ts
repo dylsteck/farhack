@@ -60,7 +60,8 @@ export async function createTeam(
   name: string,
   description: string,
   hackathonId: number,
-  userId: number
+  userId: number,
+  bountyId?: number | null
 ): Promise<Team> {
   const emptyJsonArray = JSON.stringify([]);
   const result = await db
@@ -73,7 +74,8 @@ export async function createTeam(
       fids: sql`ARRAY[${sql`${userId}`}::integer]`,
       wallet_address: '',
       embeds: sql`${emptyJsonArray}::jsonb`,
-      created_at: new Date()
+      created_at: new Date(),
+      bounty_id: bountyId
     })
     .returning()
     .execute();
@@ -140,6 +142,7 @@ export async function getHackathon(slug: string): Promise<Hackathon & { teams: (
       wallet_address: teams.wallet_address,
       embeds: teams.embeds,
       created_at: teams.created_at,
+      bounty_id: teams.bounty_id,
       fids: sql<User[]>`COALESCE(json_agg(users.*) FILTER (WHERE users.id IS NOT NULL), '[]'::json)`,
     })
     .from(teams)
@@ -175,7 +178,18 @@ export async function getHackathons(): Promise<Hackathon[]> {
 
 export async function getTeams(): Promise<Team[]> {
   return await db
-    .select()
+    .select({
+      id: teams.id,
+      fids: teams.fids,
+      name: teams.name,
+      description: teams.description,
+      submitted_at: teams.submitted_at,
+      hackathon_id: teams.hackathon_id,
+      wallet_address: teams.wallet_address,
+      embeds: teams.embeds,
+      created_at: teams.created_at,
+      bounty_id: teams.bounty_id,
+    })
     .from(teams)
     .execute();
 }
@@ -243,31 +257,69 @@ interface RecentTicket {
 export async function getTeam(type: 'teamId' | 'userId', identifier: number): Promise<Team | null> {
   if (type === 'teamId') {
     return await db
-      .select()
+      .select({
+        id: teams.id,
+        fids: teams.fids,
+        name: teams.name,
+        description: teams.description,
+        submitted_at: teams.submitted_at,
+        hackathon_id: teams.hackathon_id,
+        wallet_address: teams.wallet_address,
+        embeds: teams.embeds,
+        created_at: teams.created_at,
+        bounty_id: teams.bounty_id,
+      })
       .from(teams)
       .where(eq(teams.id, identifier))
       .limit(1)
       .execute()
-      .then((res: Team[]) => res[0] || null);
+      .then((res) => res[0] || null);
   } else if (type === 'userId') {
     return await db
-      .select()
+      .select({
+        id: teams.id,
+        fids: teams.fids,
+        name: teams.name,
+        description: teams.description,
+        submitted_at: teams.submitted_at,
+        hackathon_id: teams.hackathon_id,
+        wallet_address: teams.wallet_address,
+        embeds: teams.embeds,
+        created_at: teams.created_at,
+        bounty_id: teams.bounty_id,
+      })
       .from(teams)
       .where(sql`${identifier} = ANY(${teams.fids})`)
       .limit(1)
       .execute()
-      .then((res: Team[]) => res[0] || null);
+      .then((res) => res[0] || null);
   }
   return null;
 }
 
-export async function updateTeam(team: Team): Promise<void> {
-  const { id, ...updates } = team;
-  await db
-    .update(teams)
-    .set(updates)
-    .where(eq(teams.id, id))
-    .execute();
+interface TeamUpdatePayload {
+  name?: string;
+  description?: string;
+  embeds?: any;
+  wallet_address?: string;
+  submitted_at?: Date | null;
+  bounty_id?: number | null;
+}
+
+export async function updateTeam(teamId: number, payload: TeamUpdatePayload): Promise<void> {
+  const updateData: Partial<Team> = {};
+  if (payload.name !== undefined) updateData.name = payload.name;
+  if (payload.description !== undefined) updateData.description = payload.description;
+  if (payload.embeds !== undefined) updateData.embeds = payload.embeds;
+  if (payload.wallet_address !== undefined) updateData.wallet_address = payload.wallet_address;
+  if (payload.submitted_at !== undefined) updateData.submitted_at = payload.submitted_at;
+  if (payload.bounty_id !== undefined) updateData.bounty_id = payload.bounty_id;
+
+  if (Object.keys(updateData).length === 0) {
+    return;
+  }
+
+  await db.update(teams).set(updateData).where(eq(teams.id, teamId)).execute();
 }
 
 export async function updateUserFrameAdded(userId: number, frameAdded: boolean): Promise<void> {
