@@ -92,9 +92,9 @@ export function HackathonDetails({ hackathon, slug }: HackathonDetailsProps) {
               )}
             </div>
             <div className="flex flex-col gap-3">
-              {hackathon.bounties.map((bounty) => (
+              {hackathon.bounties.map((bounty, id) => (
                 <div
-                  key={bounty.id}
+                  key={`${hackathon.slug}-bounty-${id}`}
                   className="flex items-center gap-4 p-4 rounded-xl border bg-neutral-50 dark:bg-zinc-900/80 border-neutral-200 dark:border-zinc-700/60 shadow-sm hover:border-neutral-300 dark:hover:border-zinc-600 transition-colors duration-200"
                 >
                   <div className="flex-shrink-0 size-10 rounded-full bg-neutral-200 dark:bg-zinc-700/80 flex items-center justify-center overflow-hidden">

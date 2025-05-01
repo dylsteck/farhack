@@ -10,9 +10,8 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { toast } from 'sonner';
 import { farhackSDK } from '@/lib/api';
 import { useRouter } from 'next/navigation';
-import { CalendarIcon, PlusCircleIcon, X, Plus, Trash2, Users, Clock, InfoIcon, Link2Icon, WalletIcon, AlertTriangleIcon, Search } from 'lucide-react';
+import { CalendarIcon, PlusCircleIcon, X, Plus, Trash2, Users, Clock, InfoIcon, Link2Icon, WalletIcon, AlertTriangleIcon } from 'lucide-react';
 import Image from 'next/image';
-import { useDebounce } from '@/hooks/use-debounce';
 
 interface Embed {
   url: string;
@@ -36,17 +35,9 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
   const [walletAddress, setWalletAddress] = useState('');
   const [showDeadlineDate, setShowDeadlineDate] = useState(false);
   const [teamMembers, setTeamMembers] = useState<string[]>([]);
-  const [newTeamMember, setNewTeamMember] = useState('');
+  const [newTeamMemberInput, setNewTeamMemberInput] = useState('');
   const [confirmText, setConfirmText] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<NeynarUser[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const [showSearchResults, setShowSearchResults] = useState(false);
-  const searchResultsRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
   
-  const debouncedSearchQuery = useDebounce(searchQuery, 300);
-
   const router = useRouter();
   const userId = user?.id ? Number(user.id) : undefined;
   const teams = (hackathon as any).teams || [];
@@ -154,16 +145,6 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
     }
   };
 
-  const handleInviteFarcasterUser = async (username: string) => {
-    if (!userTeam) return;
-    try {
-      const token = await farhackSDK.createFarcasterUserInvite(hackathon.slug, userId ?? -1, userTeam.id, username);
-      toast.success(`Invite sent to @${username}!`);
-    } catch (error) {
-      toast.error(`Error sending invite: ${(error as Error).message}`);
-    }
-  };
-
   const addEmbed = () => {
     if (!embedUrl.trim()) return;
     setTeam((prev) => prev ? { ...prev, embeds: [...prev.embeds, { url: embedUrl, type: embedType }] } : prev);
@@ -177,10 +158,12 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
   };
 
   const addTeamMember = () => {
-    if (!newTeamMember.trim()) return;
-    setTeamMembers((prev) => [...prev, newTeamMember.trim()]);
-    setNewTeamMember('');
-    setSearchQuery('');
+    const memberToAdd = newTeamMemberInput.trim();
+    if (!memberToAdd) return;
+    if (!teamMembers.includes(memberToAdd)) {
+      setTeamMembers((prev) => [...prev, memberToAdd]);
+    }
+    setNewTeamMemberInput('');
   };
 
   const removeTeamMember = (index: number) => {
@@ -205,67 +188,6 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
   };
 
   const readableTimeLeft = getReadableTimeLeft(timeLeft);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        searchResultsRef.current && 
-        !searchResultsRef.current.contains(event.target as Node) && 
-        searchInputRef.current && 
-        !searchInputRef.current.contains(event.target as Node)
-      ) {
-        setShowSearchResults(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  useEffect(() => {
-    async function searchUsers() {
-      if (!debouncedSearchQuery || debouncedSearchQuery.length < 2) {
-        setSearchResults([]);
-        setShowSearchResults(false);
-        return;
-      }
-
-      setIsSearching(true);
-      setShowSearchResults(true);
-
-      try {
-        const response = await fetch(`/api/search/farcaster?q=${encodeURIComponent(debouncedSearchQuery)}&limit=5`);
-        
-        const data = await response.json();
-
-        if (!response.ok) {
-          const errorMessage = data?.message || `Failed to search users (status: ${response.status})`;
-          throw new Error(errorMessage);
-        }
-
-        const users = data?.result?.users || [];
-        setSearchResults(users);
-
-      } catch (error) {
-        console.error('[Search Component] Error searching users:', error);
-        toast.error(error instanceof Error ? error.message : 'An unknown error occurred during search');
-        setSearchResults([]);
-      } finally {
-        setIsSearching(false);
-      }
-    }
-
-    searchUsers();
-  }, [debouncedSearchQuery]);
-
-  const handleUserSelect = (user: NeynarUser) => {
-    setNewTeamMember(user.username);
-    setSearchQuery('');
-    setShowSearchResults(false);
-    setTeamMembers((prev) => [...prev, user.username]);
-  };
 
   return (
     <div className="bg-transparent text-black dark:text-white">
@@ -372,7 +294,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl max-w-xl p-0 overflow-hidden animate-in fade-in-50 slide-in-from-bottom-10 duration-300">
+        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl max-w-xl p-0 overflow-hidden">
           <DialogHeader className="px-6 pt-6 pb-4 border-b border-zinc-800">
             <div className="flex justify-between items-center">
               <DialogTitle className="text-2xl font-bold">{team?.id === 0 ? 'Create a Team' : 'Edit Team'}</DialogTitle>
@@ -435,64 +357,14 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
               <div className="flex gap-2 mb-3">
                 <div className="relative flex-1">
                   <div className="relative">
-                    <Input 
-                      ref={searchInputRef}
-                      placeholder="Search for username..." 
-                      value={searchQuery}
-                      onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                        if (e.target.value) {
-                          setShowSearchResults(true);
-                        }
-                      }}
-                      onFocus={() => {
-                        if (searchQuery && searchResults.length > 0) {
-                          setShowSearchResults(true);
-                        }
-                      }}
-                      className="flex-1 bg-zinc-800 border-zinc-700 focus:border-zinc-500 focus:ring-zinc-500 text-white h-12 pl-10"
+                    <Input
+                      placeholder="Enter username..."
+                      value={newTeamMemberInput}
+                      onChange={(e) => setNewTeamMemberInput(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && addTeamMember()}
+                      className="flex-1 bg-zinc-800 border-zinc-700 focus:border-zinc-500 focus:ring-zinc-500 text-white h-12"
                     />
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-zinc-400" />
                   </div>
-                  
-                  {showSearchResults && (
-                    <div 
-                      ref={searchResultsRef}
-                      className="absolute top-full left-0 right-0 mt-1 max-h-60 overflow-y-auto bg-zinc-800 border border-zinc-700 rounded-lg shadow-lg z-10"
-                    >
-                      {isSearching ? (
-                        <div className="p-3 text-center text-zinc-400">Searching...</div>
-                      ) : searchResults.length > 0 ? (
-                        <div>
-                          {searchResults.map((user) => (
-                            <div 
-                              key={user.fid}
-                              onClick={() => handleUserSelect(user)}
-                              className="p-3 flex items-center gap-3 hover:bg-zinc-700 cursor-pointer"
-                            >
-                              {user.pfp_url && (
-                                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                                  <Image 
-                                    src={user.pfp_url} 
-                                    alt={user.display_name || user.username} 
-                                    width={32} 
-                                    height={32}
-                                    className="object-cover"
-                                  />
-                                </div>
-                              )}
-                              <div>
-                                <div className="text-white font-medium">{user.display_name}</div>
-                                <div className="text-zinc-400 text-sm">@{user.username}</div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : searchQuery.length > 1 ? (
-                        <div className="p-3 text-center text-zinc-400">No users found</div>
-                      ) : null}
-                    </div>
-                  )}
                 </div>
                 
                 <Button 
@@ -511,24 +383,14 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
                         <Users className="h-4 w-4 text-zinc-400" />
                         <span className="text-sm text-zinc-200">@{member}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        {userTeam && (
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => handleInviteFarcasterUser(member)}
-                            className="h-8 px-2 text-xs text-zinc-300 hover:bg-zinc-700"
-                          >
-                            Invite
-                          </Button>
-                        )}
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                      <div className="flex items-center">
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           className="h-6 w-6 rounded-full hover:bg-zinc-700"
                           onClick={() => removeTeamMember(idx)}
                         >
-                          <X className="h-3 w-3" />
+                          <X className="h-3 w-3 text-zinc-400" />
                         </Button>
                       </div>
                     </div>
@@ -605,7 +467,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
               </Button>
               <Button 
                 onClick={handleSave}
-                className="bg-zinc-700 hover:bg-zinc-600 text-white h-12"
+                className="bg-zinc-700 hover:bg-zinc-600 text-white h-12 cursor-pointer"
               >
                 {team?.id === 0 ? 'Create' : 'Save'}
               </Button>
@@ -615,7 +477,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
       </Dialog>
       
       <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl p-6 max-w-md animate-in fade-in-50 slide-in-from-bottom-10 duration-300">
+        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl p-6 max-w-md">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold">Confirm Submission</DialogTitle>
           </DialogHeader>
@@ -670,7 +532,7 @@ export default function YourTeam({ user, hackathon }: { user: any, hackathon: Ha
       </Dialog>
       
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl p-6 max-w-md animate-in fade-in-50 slide-in-from-bottom-10 duration-300">
+        <DialogContent className="bg-zinc-900 border-zinc-700 text-white rounded-xl p-6 max-w-md">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-red-500">Delete Team</DialogTitle>
           </DialogHeader>

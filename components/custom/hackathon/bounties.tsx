@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import React, { useState } from 'react';
@@ -71,7 +72,7 @@ export default function Bounties({ hackathon }: { hackathon: Hackathon }) {
               {viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredBounties.map((bounty) => (
-                    <Card key={bounty.id} className="overflow-hidden transition-all flex flex-col">
+                    <Card key={`bounty-${bounty.name}`} className="overflow-hidden transition-all flex flex-col">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b">
                         <div className="flex items-center gap-3">
                           {bounty.image ? (
