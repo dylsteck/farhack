@@ -41,7 +41,7 @@ export default function FrameLink({
         }
     }
     return(
-        <div className="w-auto" onClick={() => handleOnClick()}>
+        <div className="w-auto cursor-pointer" onClick={() => handleOnClick()}>
             {children}
         </div>
     )
