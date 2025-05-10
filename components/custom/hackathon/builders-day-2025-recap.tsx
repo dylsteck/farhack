@@ -75,38 +75,44 @@ export default function BuildersDay2025Recap({ children }: { children?: React.Re
           <div className="w-full border-b border-neutral-200 dark:border-white/10">
             <div className="w-full m-1 mt-0 md:mt-3.5 pb-1"></div>
           </div>
-          <div className="w-full py-8 px-2">
+          <div className="w-full py-4 px-2 md:py-8">
             <div className="max-w-full mx-auto">
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-10 text-center bg-gradient-to-r from-orange-500 to-purple-600 dark:from-orange-400 dark:to-purple-500 bg-clip-text text-transparent">Builders Day 2025 Recap</h1>
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-                <div className="md:col-span-1 lg:col-span-1 md:row-span-2 rounded-xl p-4 md:p-6 flex items-center justify-center">
-                  <div className="w-full h-full max-w-xs mx-auto flex items-center justify-center">
+              {/* Banner Section - Improved for Desktop */}
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-3 md:gap-6 mb-8">
+                <div className="md:col-span-3 lg:col-span-5 rounded-xl overflow-hidden relative">
+                  <div className="w-full h-full">
                     <Image 
                       src="https://i.imgur.com/AWLzIaQ.png" 
                       alt="Builders Day 2025" 
-                      className="w-full h-auto rounded-xl shadow-lg border-2 border-orange-500 dark:border-orange-600"
-                      width={400}
-                      height={300}
+                      className="w-full h-auto md:h-full md:object-cover rounded-xl md:rounded-r-none shadow-lg border-2 border-orange-500 dark:border-orange-600"
+                      width={600}
+                      height={450}
+                      priority
                     />
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-purple-600/20 rounded-xl md:rounded-r-none"></div>
                   </div>
                 </div>
-                <div className="md:col-span-2 lg:col-span-3 rounded-xl p-4 md:p-6 flex items-center">
-                  <div className="text-center md:text-left">
-                    <p className="text-xl md:text-2xl text-black/80 dark:text-white/80 font-medium">Celebrating the incredible projects and teams that made Builders Day 2025 an unforgettable event</p>
+                <div className="md:col-span-3 lg:col-span-7 rounded-xl bg-gradient-to-r from-orange-500/10 to-purple-600/10 dark:from-orange-950/30 dark:to-purple-950/30 p-6 md:p-8 flex flex-col justify-center">
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4 bg-gradient-to-r from-orange-500 to-purple-600 dark:from-orange-400 dark:to-purple-500 bg-clip-text text-transparent">Builders Day</h2>
+                  <p className="text-2xl md:text-3xl text-black/80 dark:text-white/80 font-medium">24 hours. 20 projects. $24,000 in prizes. <br className="hidden md:block"/> Unlimited hacker energy.</p>
+                  <div className="grid grid-cols-3 gap-4 mt-6">
+                    <div className="rounded-lg bg-emerald-950/80 dark:bg-emerald-950/90 p-4 text-center backdrop-blur-sm shadow-md border border-emerald-800/30">
+                      <h3 className="text-3xl md:text-4xl font-bold text-emerald-400">39</h3>
+                      <p className="text-white/90 font-medium">Hackers</p>
+                    </div>
+                    <div className="rounded-lg bg-blue-950/80 dark:bg-blue-950/90 p-4 text-center backdrop-blur-sm shadow-md border border-blue-800/30">
+                      <h3 className="text-3xl md:text-4xl font-bold text-blue-400">20</h3>
+                      <p className="text-white/90 font-medium">Projects</p>
+                    </div>
+                    <div className="rounded-lg bg-amber-950/80 dark:bg-amber-950/90 p-4 text-center backdrop-blur-sm shadow-md border border-amber-800/30">
+                      <h3 className="text-3xl md:text-4xl font-bold text-amber-400">$24K</h3>
+                      <p className="text-white/90 font-medium">Prizes</p>
+                    </div>
                   </div>
                 </div>
-                <div className="md:col-span-2 lg:col-span-1 rounded-xl p-4 md:p-6 flex flex-col items-center justify-center border border-neutral-200 dark:border-neutral-800 backdrop-blur-sm">
-                  <h3 className="text-5xl font-bold bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent">39</h3>
-                  <p className="text-neutral-700 dark:text-neutral-300 font-medium">Hackers</p>
-                </div>
-                <div className="md:col-span-2 lg:col-span-1 rounded-xl p-4 md:p-6 flex flex-col items-center justify-center border border-neutral-200 dark:border-neutral-800 backdrop-blur-sm">
-                  <h3 className="text-5xl font-bold bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">20</h3>
-                  <p className="text-neutral-700 dark:text-neutral-300 font-medium">Projects</p>
-                </div>
-                <div className="md:col-span-2 lg:col-span-1 rounded-xl p-4 md:p-6 flex flex-col items-center justify-center border border-neutral-200 dark:border-neutral-800 backdrop-blur-sm">
-                  <h3 className="text-5xl font-bold bg-gradient-to-r from-amber-500 to-yellow-600 bg-clip-text text-transparent">$24,000</h3>
-                  <p className="text-neutral-700 dark:text-neutral-300 font-medium">Total Prizes</p>
-                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                 <div className="col-span-1 md:col-span-3 lg:col-span-4 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl p-4 md:p-6">
                   <h2 className="text-2xl font-semibold mb-8 text-center">
                     <Trophy className="inline-block mr-2 mb-1 animate-bounce" size={28} />
@@ -144,7 +150,7 @@ export default function BuildersDay2025Recap({ children }: { children?: React.Re
                             </React.Fragment>
                           ))}
                         </p>
-                        <p className="text-emerald-600 dark:text-emerald-400 font-bold text-xl mt-2">{winners[1].prize}</p>
+                        {/* <p className="text-emerald-600 dark:text-emerald-400 font-bold text-xl mt-2">{winners[1].prize}</p> */}
                       </div>
                     </div>
                     <div className="order-1 md:order-2 w-full md:w-1/3 h-auto pb-6 md:h-[260px] bg-gradient-to-b from-amber-50 to-amber-100 dark:from-amber-900/30 dark:to-amber-800/20 rounded-t-lg border border-amber-200 dark:border-amber-700/50 shadow-xl relative mb-14 md:mb-0 transition-transform duration-300 hover:scale-105">
@@ -173,7 +179,7 @@ export default function BuildersDay2025Recap({ children }: { children?: React.Re
                             </FrameLink>
                           </span>
                         </p>
-                        <p className="text-emerald-600 dark:text-emerald-400 font-bold text-xl mt-2">{winners[0].prize}</p>
+                        {/* <p className="text-emerald-600 dark:text-emerald-400 font-bold text-xl mt-2">{winners[0].prize}</p> */}
                       </div>
                     </div>
                     <div className="order-3 w-full md:w-1/3 h-auto pb-6 md:h-[180px] bg-gradient-to-b from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/10 rounded-t-lg border border-orange-200 dark:border-orange-800/30 shadow-lg relative mb-14 md:mb-0 transition-transform duration-300 hover:scale-105">
@@ -202,55 +208,87 @@ export default function BuildersDay2025Recap({ children }: { children?: React.Re
                             </FrameLink>
                           </span>
                         </p>
-                        <p className="text-emerald-600 dark:text-emerald-400 font-bold text-xl mt-2">{winners[2].prize}</p>
+                        {/* <p className="text-emerald-600 dark:text-emerald-400 font-bold text-xl mt-2">{winners[2].prize}</p> */}
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="col-span-1 md:col-span-3 lg:col-span-4 bg-white dark:bg-zinc-900/40 rounded-xl p-4 md:p-6">
                   <h2 className="text-2xl font-semibold mb-6 text-center">All Projects</h2>
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse">
-                      <thead>
-                        <tr className="border-b border-neutral-200 dark:border-neutral-700">
-                          <th className="px-4 py-3 text-left font-semibold">Project</th>
-                          <th className="px-4 py-3 text-left font-semibold">Teammates</th>
-                          <th className="px-4 py-3 text-right font-semibold">Award</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {allProjects.map((project, index) => (
-                          <tr key={index} className="border-b border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-zinc-800/50 transition-colors">
-                            <td className="px-4 py-3 font-medium">
-                              <div className="hover:text-blue-600 dark:hover:text-blue-400 hover:underline">
-                                <FrameLink 
-                                  identifier={project.link} 
-                                  type="url" 
-                                >
-                                  {project.name}
-                                </FrameLink>
-                              </div>
-                            </td>
-                            <td className="px-4 py-3">
-                              {renderTeammates(project)}
-                            </td>
-                            <td className="px-4 py-3 text-right">
-                              {project.award ? (
-                                <div className="inline-flex items-center justify-end px-3 py-1.5 rounded-full bg-gradient-to-r from-neutral-100/80 to-neutral-200/80 dark:from-zinc-800/80 dark:to-zinc-700/80 shadow-sm">
-                                  {project.award === "First Place" && <Trophy size={18} className={`${styles.gold} mr-2`} />}
-                                  {project.award === "Second Place" && <Medal size={18} className={`${styles.silver} mr-2`} />}
-                                  {project.award === "Third Place" && <Award size={18} className={`${styles.bronze} mr-2`} />}
-                                  {project.award === "Most Interoperable" && <Star size={18} className="text-blue-500 mr-2" />}
-                                  <span className="font-medium">
-                                    {project.award}
-                                  </span>
-                                </div>
-                              ) : null}
-                            </td>
+                  <div className="overflow-x-auto -mx-4 px-4">
+                    <div className="hidden md:block">
+                      <table className="w-full border-collapse">
+                        <thead>
+                          <tr className="border-b border-neutral-200 dark:border-neutral-700">
+                            <th className="px-4 py-3 text-left font-semibold">Project</th>
+                            <th className="px-4 py-3 text-left font-semibold">Teammates</th>
+                            <th className="px-4 py-3 text-right font-semibold">Award</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {allProjects.map((project, index) => (
+                            <tr key={index} className="border-b border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-zinc-800/50 transition-colors">
+                              <td className="px-4 py-3 font-medium">
+                                <div className="hover:text-blue-600 dark:hover:text-blue-400 hover:underline">
+                                  <FrameLink 
+                                    identifier={project.link} 
+                                    type="url" 
+                                  >
+                                    {project.name}
+                                  </FrameLink>
+                                </div>
+                              </td>
+                              <td className="px-4 py-3">
+                                {renderTeammates(project)}
+                              </td>
+                              <td className="px-4 py-3 text-right">
+                                {project.award ? (
+                                  <div className="inline-flex items-center justify-end px-5 py-2.5 rounded-full bg-zinc-900/90 text-white shadow-md border border-zinc-700/50 min-w-32">
+                                    {project.award === "First Place" && <Trophy size={18} className="text-yellow-400 mr-2.5" />}
+                                    {project.award === "Second Place" && <Medal size={18} className="text-gray-400 mr-2.5" />}
+                                    {project.award === "Third Place" && <Award size={18} className="text-amber-600 mr-2.5" />}
+                                    {project.award === "Most Interoperable" && <Star size={18} className="text-blue-400 mr-2.5" />}
+                                    <span className="font-medium whitespace-nowrap">
+                                      {project.award}
+                                    </span>
+                                  </div>
+                                ) : null}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    
+                    {/* Mobile view - card layout */}
+                    <div className="md:hidden space-y-4">
+                      {allProjects.map((project, index) => (
+                        <div key={index} className="border border-neutral-200 dark:border-neutral-800 rounded-lg p-4">
+                          <div className="font-medium text-lg mb-2">
+                            <FrameLink 
+                              identifier={project.link} 
+                              type="url" 
+                            >
+                              {project.name}
+                            </FrameLink>
+                          </div>
+                          <div className="text-sm mb-3">
+                            {renderTeammates(project)}
+                          </div>
+                          {project.award && (
+                            <div className="inline-flex items-center px-5 py-2.5 rounded-full bg-zinc-900/90 text-white shadow-md border border-zinc-700/50 min-w-32">
+                              {project.award === "First Place" && <Trophy size={18} className="text-yellow-400 mr-2.5" />}
+                              {project.award === "Second Place" && <Medal size={18} className="text-gray-400 mr-2.5" />}
+                              {project.award === "Third Place" && <Award size={18} className="text-amber-600 mr-2.5" />}
+                              {project.award === "Most Interoperable" && <Star size={18} className="text-blue-400 mr-2.5" />}
+                              <span className="font-medium whitespace-nowrap">
+                                {project.award}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
                 {children && <div className="col-span-1 md:col-span-3 lg:col-span-4">{children}</div>}
