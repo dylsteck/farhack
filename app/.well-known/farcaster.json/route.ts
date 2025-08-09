@@ -15,6 +15,9 @@ export async function GET() {
       splashBackgroundColor: "#000000",
       homeUrl: BASE_URL,
       webhookUrl: `${BASE_URL}/api/webhook`
+    },
+    "baseBuilder": {
+      "allowedAddresses": ["0x8342A48694A74044116F330db5050a267b28dD85"],
     }
   };
   return Response.json(config);
