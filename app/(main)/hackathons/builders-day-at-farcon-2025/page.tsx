@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { HackathonDetails } from '@/components/custom/hackathon/hackathon';
 import { Metadata, Viewport } from 'next';
 import { BASE_URL, BUILDERS_DAY_FARCON_2025_BANNER_IMG, ICON_IMG } from '@/lib/utils';
+import BuildersDay2025Recap from '@/components/custom/hackathon/builders-day-2025-recap';
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -46,7 +47,7 @@ export async function generateMetadata(): Promise<Metadata>{
         version: "next",
         imageUrl: BUILDERS_DAY_FARCON_2025_BANNER_IMG,
         button: {
-          title: "View Hackathon",
+          title: "View Recap",
           action: {
             type: "launch_frame",
             name: "FarHack",
@@ -61,36 +62,5 @@ export async function generateMetadata(): Promise<Metadata>{
 }
 
 export default async function BuildersDayPage() {
-  const slug = 'builders-day-at-farcon-2025';
-  const hackathon = await farhackSDK.getHackathon(slug) as Hackathon;
-  if (!slug || !hackathon) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-white text-2xl">
-        <p>
-          No data found.{' '}
-          <Link href="/" className="underline">
-            Return to home
-          </Link>
-        </p>
-      </div>
-    );
-  }
-
-  const startDate = new Date(hackathon.start_date).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
-  const endDate = new Date(hackathon.end_date).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
-  return (
-    <HackathonLaoyut hackathon={hackathon}>
-      <HackathonDetails hackathon={hackathon} slug={slug} />
-    </HackathonLaoyut>
-  );
+  return <BuildersDay2025Recap />
 }
