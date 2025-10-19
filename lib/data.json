@@ -1,0 +1,22 @@
+{
+  "hackathons": [
+    {
+      "id": 1,
+      "name": "FarHack at FarCon",
+      "description": "The ultimate Farcaster hackathon",
+      "start_date": "2024-05-03T09:00:00Z",
+      "end_date": "2024-05-05T09:00:00Z",
+      "square_image": "https://i.imgur.com/m2qIvVE.png",
+      "slug": "farhack-at-farcon-2024"
+    },
+    {
+      "id": 5,
+      "name": "Builders Day @ FarCon 2025",
+      "description": "Builders Day is a 24-hour hackathon, running from 8:30 AM on May 1 through 8:30 AM on May 2 (the start of The Summit). Hackers will need to submit their projects on the dedicated FarHack portal by 8:30 AM on May 2 in order to be considered for bounties and prizes.",
+      "start_date": "2025-05-01T14:00:00Z",
+      "end_date": "2025-05-02T12:30:00Z",
+      "square_image": "https://i.imgur.com/AWLzIaQ.png",
+      "slug": "builders-day-at-farcon-2025"
+    }
+  ]
+}

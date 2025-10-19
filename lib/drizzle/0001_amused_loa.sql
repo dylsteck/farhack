@@ -1,1 +1,0 @@
-ALTER TABLE "teams" ADD COLUMN "bounty_id" integer;

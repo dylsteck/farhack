@@ -2,7 +2,7 @@
 
 ![FarHack banner](https://i.imgur.com/IzrcL7A.jpeg)
 
-[FarHack](https://farhack.xyz) is the ultimate Farcaster hackathon. This repo houses our in-house hackathon software.
+[FarHack](https://farhack.xyz) is the ultimate Farcaster hackathon
 
 ## Running the site locally
 
@@ -11,4 +11,4 @@
 
 ## License
 
-FarHack's website and hackathon software are licensed under the MIT License.
+FarHack's website is licensed under the MIT License.

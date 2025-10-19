@@ -1,16 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import Link from 'next/link';
-import { Hackathon } from '@/lib/types';
-import { HackathonLaoyut } from '@/components/custom/hackathon/hackathon-layout';
-import { CalendarIcon, PlusCircledIcon, RocketIcon } from '@radix-ui/react-icons';
-import { farhackSDK } from '@/lib/api';
-import { Button } from '@/components/ui/button';
-import { HackathonDetails } from '@/components/custom/hackathon/hackathon';
+import { getHackathon } from '@/lib/data';
 import { Metadata, Viewport } from 'next';
 import { BASE_URL, BUILDERS_DAY_FARCON_2025_BANNER_IMG, ICON_IMG } from '@/lib/utils';
-import BuildersDay2025Recap from '@/components/custom/hackathon/builders-day-2025-recap';
-
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -62,5 +54,33 @@ export async function generateMetadata(): Promise<Metadata>{
 }
 
 export default async function BuildersDayPage() {
-  return <BuildersDay2025Recap />
+  const hackathon = await getHackathon('builders-day-at-farcon-2025');
+  
+  if (!hackathon) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-white text-2xl">
+        <p>Hackathon not found</p>
+      </div>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-black text-white">
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <img
+            src={hackathon.square_image}
+            alt={hackathon.name}
+            className="w-32 h-32 mx-auto rounded-xl mb-6"
+          />
+          <h1 className="text-4xl font-bold mb-4">{hackathon.name}</h1>
+          <p className="text-xl text-gray-300 leading-relaxed">{hackathon.description}</p>
+          <div className="mt-6 text-gray-400">
+            <p>{new Date(hackathon.start_date).toLocaleDateString()} - {new Date(hackathon.end_date).toLocaleDateString()}</p>
+          </div>
+          {/* TODO: add winners data back here from previous commits */}
+        </div>
+      </div>
+    </main>
+  );
 }

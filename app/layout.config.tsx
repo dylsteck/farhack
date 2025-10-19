@@ -9,7 +9,7 @@ import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
  * Docs Layout: app/hacking-guide/layout.tsx
  */
 export const baseOptions: BaseLayoutProps = {
-  githubUrl: 'https://github.com/farhackxyz/farhack',
+  githubUrl: 'https://github.com/dylsteck/farhack',
   nav: {
     title: (
       <>

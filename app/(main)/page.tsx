@@ -1,22 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import FarHackLogo from '@/components/custom/icons/farhack-logo';
-import { farhackSDK } from '@/lib/api';
-import { Hackathon } from '@/lib/types';
+import { getHackathons, Hackathon } from '@/lib/data';
 import { karla } from '@/lib/utils';
 import Link from 'next/link';
 
 export default async function HomePage() {
-  const hackathons = await (async () => {
-    try {
-      return await farhackSDK.getHackathons() as Hackathon[];
-    } catch (error) {
-      console.error('Failed to fetch hackathons:', error);
-      return [];
-    }
-  })();
+  const hackathons = await getHackathons();
   const sortedHackathons = hackathons
-    ?.slice()
-    .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime()) || [];
+    .slice()
+    .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
 
   return (
     <main>
