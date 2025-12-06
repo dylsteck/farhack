@@ -23,7 +23,8 @@ const docsOptions: DocsLayoutProps = {
         const meta = source.getNodeMeta(node);
         if (!meta) return option;
 
-        const color = `var(--${meta.file.dirname}-color, var(--color-fd-foreground))`;
+        // Use a default color since meta.file.dirname is not available in v16
+        const color = `var(--color-fd-foreground)`;
 
         return {
           ...option,

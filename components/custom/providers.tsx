@@ -1,7 +1,7 @@
 "use client";
 
 import { MiniAppProvider } from '@/components/custom/miniapp/miniapp-provider';
-import { RootProvider } from 'fumadocs-ui/provider';
+import { RootProvider } from 'fumadocs-ui/provider/next';
 import type { ReactNode } from 'react';
 
 interface ProvidersProps {
@@ -11,7 +11,7 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <MiniAppProvider>
-      <RootProvider>{children}</RootProvider>
+        <RootProvider>{children}</RootProvider>
     </MiniAppProvider>
   );
 }
