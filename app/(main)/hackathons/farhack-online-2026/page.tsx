@@ -104,8 +104,8 @@ export default async function FarConRomePage() {
         </div>
 
         <div className="mb-12">
-          <h2 className={`text-2xl font-bold mb-2 text-center ${funnelDisplay.className}`}>Three Tracks, One Goal</h2>
-          <p className="text-gray-400 text-center mb-8">Choose the track that fits your vision and start building.</p>
+          <h2 className={`text-2xl font-bold mb-2 text-center ${funnelDisplay.className}`}>All tracks lead to Rome</h2>
+          <p className="text-gray-400 text-center mb-8">Hack on what excites you. Every track leads to the stage in Rome.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {tracks.map((track) => (
               <div
@@ -131,7 +131,7 @@ export default async function FarConRomePage() {
             >
               FarCon Rome
             </a>
-            {' '}in May 2026 — in front of builders, founders, and the Farcaster community.
+            {' '}in May 2026 — in front of the Farcaster community.
           </p>
         </div>
       </div>
