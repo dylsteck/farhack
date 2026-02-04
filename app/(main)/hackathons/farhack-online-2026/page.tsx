@@ -65,7 +65,7 @@ const tracks = [
   },
   {
     name: "Agents",
-    description: "Build autonomous agents that bring intelligence to the Farcaster network — from content curation to onchain actions and beyond.",
+    description: "Build autonomous agents that bring intelligence to the Farcaster network, from content curation to agentic commerce and beyond.",
   },
 ];
 
