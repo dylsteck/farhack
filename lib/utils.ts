@@ -38,7 +38,7 @@ export const BASE_URL = isDev ? localUrl : 'https://farhack.xyz';
 
 export const BANNER_IMG = 'https://i.imgur.com/jhw0cQL.png';
 export const BUILDERS_DAY_FARCON_2025_BANNER_IMG = 'https://i.imgur.com/9b4Fbo2.png';
-export const FARCON_ROME_2026_BANNER_IMG = 'https://i.imgur.com/m2qIvVE.png';
+export const FARCON_ROME_2026_BANNER_IMG = `${BASE_URL}/farhack-online-2026.png`;
 export const HACKING_GUIDE_BANNER_IMG = 'https://i.imgur.com/5TBXea9.png';
 export const ICON_IMG = `${BASE_URL}/icons/icon-512x512.png`;
 

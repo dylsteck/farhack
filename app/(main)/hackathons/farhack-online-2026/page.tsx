@@ -12,7 +12,7 @@ export const viewport: Viewport = {
 export async function generateMetadata(): Promise<Metadata> {
   const FARHACK_ONLINE_URL = `${BASE_URL}/hackathons/farhack-online-2026`;
   return {
-    metadataBase: new URL(FARCON_ROME_2026_BANNER_IMG),
+    metadataBase: new URL(BASE_URL),
     title: "FarHack Online 2026",
     description: 'Two weeks to build the future of Farcaster. Hack on Miniapps, Clients, or Agents — top projects showcase live at FarCon Rome.',
     openGraph: {
@@ -101,6 +101,14 @@ export default async function FarConRomePage() {
               Online
             </span>
           </div>
+          <a
+            href="https://forms.gle/kLgD3sdfAmn27tGq5"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-block px-8 py-3 text-lg font-semibold text-white bg-violet-600 hover:bg-violet-500 rounded-xl transition-colors"
+          >
+            Apply Now
+          </a>
         </div>
 
         <div className="mb-12">
