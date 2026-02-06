@@ -17,6 +17,15 @@
       "end_date": "2025-05-02T12:30:00Z",
       "square_image": "https://i.imgur.com/AWLzIaQ.png",
       "slug": "builders-day-at-farcon-2025"
+    },
+    {
+      "id": 6,
+      "name": "FarHack Online 2026",
+      "description": "Two weeks to build the future of Farcaster. Hack on Miniapps, Clients, or Agents — top projects showcase live at FarCon Rome.",
+      "start_date": "2026-04-01T00:00:00Z",
+      "end_date": "2026-04-14T23:59:00Z",
+      "square_image": "/farhack-online-2026.png",
+      "slug": "farhack-online-2026"
     }
   ]
 }
