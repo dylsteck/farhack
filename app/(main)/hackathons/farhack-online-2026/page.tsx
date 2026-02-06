@@ -14,10 +14,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(BASE_URL),
     title: "FarHack Online 2026",
-    description: 'Two weeks to build the future of Farcaster. Hack on Miniapps, Clients, or Agents — top projects showcase live at FarCon Rome.',
+    description: 'Two weeks to build the future of Farcaster. Hack on Miniapps, Clients, or Agents. Top projects showcase live at FarCon Rome.',
     openGraph: {
       title: "FarHack Online 2026",
-      description: 'Two weeks to build the future of Farcaster. Hack on Miniapps, Clients, or Agents — top projects showcase live at FarCon Rome.',
+      description: 'Two weeks to build the future of Farcaster. Hack on Miniapps, Clients, or Agents. Top projects showcase live at FarCon Rome.',
       images: [FARCON_ROME_2026_BANNER_IMG],
       url: FARHACK_ONLINE_URL,
       siteName: 'FarHack',
@@ -139,7 +139,7 @@ export default async function FarConRomePage() {
             >
               FarCon Rome
             </a>
-            {' '}in May 2026 — in front of the Farcaster community.
+            {' '}in May 2026, in front of the Farcaster community.
           </p>
           <p className="text-gray-400 mt-4 text-sm">
             Hosted by{' '}
@@ -161,6 +161,21 @@ export default async function FarConRomePage() {
               Builders Garden
             </a>
           </p>
+        </div>
+
+        <div className="text-center mt-8 border border-gray-800 rounded-xl p-8 bg-gray-900">
+          <h2 className={`text-2xl font-bold mb-3 ${funnelDisplay.className}`}>Not ready to hack yet?</h2>
+          <p className="text-gray-300 max-w-xl mx-auto">
+            Join our online bootcamp to learn the basics of building on Farcaster, from Miniapps to Agents, and get ready to hack.
+          </p>
+          <a
+            href="https://luma.com/f7ok6tbp"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-block px-8 py-3 text-lg font-semibold text-white bg-gray-800 hover:bg-gray-700 rounded-xl ring-1 ring-gray-700 transition-colors"
+          >
+            Join the Bootcamp
+          </a>
         </div>
       </div>
     </main>
