@@ -141,6 +141,26 @@ export default async function FarConRomePage() {
             </a>
             {' '}in May 2026 — in front of the Farcaster community.
           </p>
+          <p className="text-gray-400 mt-4 text-sm">
+            Hosted by{' '}
+            <a
+              href="https://farcaster.xyz/urbe-eth"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-400 hover:text-purple-300 underline"
+            >
+              urbe.eth
+            </a>
+            {' '}and{' '}
+            <a
+              href="https://farcaster.xyz/builders-garden"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-400 hover:text-purple-300 underline"
+            >
+              Builders Garden
+            </a>
+          </p>
         </div>
       </div>
     </main>
