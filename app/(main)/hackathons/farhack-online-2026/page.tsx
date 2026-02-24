@@ -219,7 +219,7 @@ export default async function FarConRomePage() {
         </div>
 
         {/* Footer sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Hosted by */}
           <div className="border border-gray-800/60 rounded-xl p-8 bg-gray-900/40">
             <h3 className={`text-lg font-semibold mb-2 ${funnelDisplay.className}`}>Hosted by</h3>
@@ -259,6 +259,22 @@ export default async function FarConRomePage() {
               className="inline-block px-6 py-2.5 text-sm font-semibold text-white bg-gray-800 hover:bg-gray-700 rounded-lg ring-1 ring-gray-700 transition-colors duration-200 cursor-pointer"
             >
               Join the Bootcamp
+            </a>
+          </div>
+
+          {/* Sponsor / Partner */}
+          <div className="border border-violet-500/20 rounded-xl p-8 bg-violet-500/5">
+            <h3 className={`text-lg font-semibold mb-2 ${funnelDisplay.className}`}>Sponsor & Bounties</h3>
+            <p className="text-sm text-gray-400 mb-4">
+              Want to set up bounties or sponsor a track? Let&apos;s talk about how to get your tools in front of builders.
+            </p>
+            <a
+              href="https://farcaster.xyz/limone.eth"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-6 py-2.5 text-sm font-semibold text-white bg-violet-600 hover:bg-violet-500 rounded-lg transition-colors duration-200 cursor-pointer"
+            >
+              Get in Touch
             </a>
           </div>
         </div>
