@@ -125,7 +125,7 @@ export default async function FarConRomePage() {
             </p>
             <div className="mt-8 flex items-center justify-center gap-3 flex-wrap">
               <span className="px-4 py-1.5 text-sm font-medium text-violet-300 bg-violet-500/10 rounded-full ring-1 ring-violet-500/20">
-                April 2026
+                April 6–19, 2026
               </span>
               <span className="px-4 py-1.5 text-sm font-medium text-cyan-300 bg-cyan-500/10 rounded-full ring-1 ring-cyan-500/20">
                 Online
