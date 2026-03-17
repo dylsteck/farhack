@@ -218,6 +218,16 @@ export default async function FarConRomePage() {
           </div>
         </div>
 
+        {/* Sponsors */}
+        <div className="mb-20 text-center">
+          <h2 className={`text-2xl md:text-3xl font-bold mb-10 ${funnelDisplay.className}`}>Partners</h2>
+          <div className="flex items-center justify-center gap-8 flex-wrap">
+            <a href="https://www.privy.io" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity duration-200">
+              <img src="/sponsors/privy.svg" alt="Privy" className="h-10" />
+            </a>
+          </div>
+        </div>
+
         {/* Footer sections */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Hosted by */}
