@@ -223,7 +223,13 @@ export default async function FarConRomePage() {
           <h2 className={`text-2xl md:text-3xl font-bold mb-10 ${funnelDisplay.className}`}>Partners</h2>
           <div className="flex items-center justify-center gap-8 flex-wrap">
             <a href="https://www.privy.io" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity duration-200">
-              <img src="/sponsors/privy.svg" alt="Privy" className="h-10" />
+              <img src="/sponsors/privy.svg" alt="Privy" className="h-7" />
+            </a>
+            <a href="https://farcaster.xyz" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity duration-200">
+              <img src="/sponsors/farcaster.svg" alt="Farcaster" className="h-7" />
+            </a>
+            <a href="https://neynar.com" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity duration-200">
+              <img src="/sponsors/neynar.svg" alt="Neynar" className="h-10" />
             </a>
           </div>
         </div>
