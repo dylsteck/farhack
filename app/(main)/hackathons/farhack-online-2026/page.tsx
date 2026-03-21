@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { HackathonPartnerLogo } from '@/components/custom/hackathon-partner-logo';
 import React from 'react';
 import { getHackathon } from '@/lib/data';
 import { Metadata, Viewport } from 'next';
@@ -223,13 +224,28 @@ export default async function FarConRomePage() {
           <h2 className={`text-2xl md:text-3xl font-bold mb-10 text-foreground ${funnelDisplay.className}`}>Partners</h2>
           <div className="flex items-center justify-center gap-8 flex-wrap">
             <a href="https://www.privy.io" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity duration-200">
-              <img src="/sponsors/privy.svg" alt="Privy" className="h-7" />
+              <HackathonPartnerLogo
+                srcLight="/sponsors/privy-on-light.svg"
+                srcDark="/sponsors/privy.svg"
+                alt="Privy"
+                className="h-7 w-auto"
+              />
             </a>
             <a href="https://farcaster.xyz" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity duration-200">
-              <img src="/sponsors/farcaster.svg" alt="Farcaster" className="h-7" />
+              <HackathonPartnerLogo
+                srcLight="/sponsors/farcaster-on-light.svg"
+                srcDark="/sponsors/farcaster.svg"
+                alt="Farcaster"
+                className="h-7 w-auto"
+              />
             </a>
             <a href="https://neynar.com" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity duration-200">
-              <img src="/sponsors/neynar.svg" alt="Neynar" className="h-10" />
+              <HackathonPartnerLogo
+                srcLight="/sponsors/neynar-on-light.svg"
+                srcDark="/sponsors/neynar.svg"
+                alt="Neynar"
+                className="h-10 w-auto"
+              />
             </a>
           </div>
         </div>
