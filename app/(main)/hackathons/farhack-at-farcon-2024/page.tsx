@@ -10,7 +10,7 @@ const splitIntoTwoColumns = (images: { src: string; alt: string }[]) => {
 
 const Info = () => {
   return (
-    <div className="visible md:w-1/2 min-h-[100%] h-auto bg-black/95 overflow-y-scroll">
+    <div className="visible md:w-1/2 min-h-[100%] h-auto bg-background dark:bg-black/95 overflow-y-scroll border-b border-border md:border-b-0 md:border-r">
       <div className="mt-5 pl-10 flex-col items-center justify-center mb-5 md:mb-0">
         <div className="max-w-[90%]">
           <img
@@ -20,14 +20,14 @@ const Info = () => {
             loading="lazy"
           />
         </div>
-        <p className={`pt-5 text-white font-light ${karla.className} max-w-[90%]`}>
+        <p className={`pt-5 text-foreground font-light ${karla.className} max-w-[90%]`}>
           Thanks so much to everyone who attended the inaugural FarHack! {`I'm`} thrilled that we were able to spend a weekend uplifting and celebrating developers, and the quality of projects built was off the charts. Hope to see you at another FarHack soon!
         </p>
         <div className="mt-1">
           <Link
             target="_blank"
             href="https://warpcast.com/dylsteck.eth"
-            className="flex flex-row items-center gap-2 max-w-[50%] md:max-w-[30%]"
+            className="flex flex-row items-center gap-2 max-w-[50%] md:max-w-[30%] text-foreground"
           >
             <img
               src="https://i.imgur.com/Gk94uKf.png"
@@ -35,7 +35,7 @@ const Info = () => {
               className="w-5 h-5 rounded-full"
               loading="lazy"
             />
-            <p className={`text-white font-medium ${karla.className}`}>- dylsteck.eth</p>
+            <p className={`font-medium ${karla.className}`}>- dylsteck.eth</p>
           </Link>
         </div>
         <div className="hidden md:block">
@@ -51,7 +51,7 @@ const MasonryGrid = () => {
   const [leftColumn, rightColumn] = splitIntoTwoColumns(masonryGridImages);
 
   return (
-    <div className="w-full md:w-1/2 min-h-[100%] h-auto bg-[#0c0c0c]/95 grid grid-cols-2 gap-4 p-4 pt-5 overflow-y-scroll">
+    <div className="w-full md:w-1/2 min-h-[100%] h-auto bg-muted/50 dark:bg-[#0c0c0c]/95 grid grid-cols-2 gap-4 p-4 pt-5 overflow-y-scroll">
       <div className="flex flex-col gap-8">
         {leftColumn && leftColumn.map((image, index) => (
           <div key={index}>
@@ -72,9 +72,11 @@ const MasonryGrid = () => {
 
 function OverallWinnersTable() {
   return (
-    <div className={`bg-white/90 rounded-md max-w-[90%] mt-10 ${karla.className} text-black`}>
-      <p className="text-black font-medium pl-3 pt-3 pb-2">Overall Winners</p>
-      <hr className="border-black" />
+    <div
+      className={`rounded-md max-w-[90%] mt-10 ${karla.className} border border-gray-200 bg-white/95 text-foreground dark:border-gray-700 dark:bg-gray-950/95 dark:text-gray-100`}
+    >
+      <p className="font-medium pl-3 pt-3 pb-2 text-foreground dark:text-gray-100">Overall Winners</p>
+      <hr className="border-gray-200 dark:border-gray-700" />
       <table className="w-full text-left rounded-md overflow-x-scroll">
         <thead>
           <tr>
@@ -84,20 +86,24 @@ function OverallWinnersTable() {
             <th className="px-4 py-2">Team</th>
           </tr>
         </thead>
-        <tbody className="border-collapse border-t border-black">
+        <tbody className="border-collapse border-t border-gray-200 dark:border-gray-600">
           {overallWinners.map((winner) => {
             return (
-              <tr key={winner.place} className="border-b border-black">
+              <tr key={winner.place} className="border-b border-gray-200 dark:border-gray-700">
                 <td className="px-4 py-2">{winner.place}</td>
                 <td className="px-4 py-2">
-                  <Link target="_blank" href={winner.project_link} className="underline">{winner.name}</Link>
+                  <Link target="_blank" href={winner.project_link} className="underline text-primary">
+                    {winner.name}
+                  </Link>
                 </td>
                 <td className="px-4 py-2">{winner.description}</td>
                 <td className="px-4 py-2">
                   {winner.team.map((name, index) => {
                     return (
                       <span key={index} className="mr-2">
-                        <Link target="_blank" href={`https://warpcast.com/${name}`} className="underline">@{name}</Link>
+                        <Link target="_blank" href={`https://warpcast.com/${name}`} className="underline text-primary">
+                          @{name}
+                        </Link>
                         {index !== winner.team.length - 1 ? ',' : ''}
                       </span>
                     );
@@ -114,30 +120,32 @@ function OverallWinnersTable() {
 
 function PrizesTable() {
   return (
-    <div className={`bg-white/90 rounded-md border-2 border-black max-w-[90%] mt-10 mb-10 ${karla.className} text-black`}>
-      <p className="text-black font-medium pl-3 pt-3 pb-2">Prizes</p>
-      <table className="w-full text-left rounded-md border-collapse border-t border-black overflow-x-scroll">
+    <div
+      className={`rounded-md border-2 border-gray-200 bg-white/95 max-w-[90%] mt-10 mb-10 ${karla.className} text-foreground dark:border-gray-700 dark:bg-gray-950/95 dark:text-gray-100`}
+    >
+      <p className="font-medium pl-3 pt-3 pb-2 text-foreground dark:text-gray-100">Prizes</p>
+      <table className="w-full text-left rounded-md border-collapse border-t border-gray-200 dark:border-gray-600 overflow-x-scroll">
         <thead>
           <tr>
-            <th className="px-4 py-2 border-b border-black">Company</th>
-            <th className="px-4 py-2 border-b border-black">Prizes</th>
-            <th className="px-4 py-2 border-b border-black">Amounts</th>
-            <th className="px-4 py-2 border-b border-black">Winners</th>
+            <th className="px-4 py-2 border-b border-gray-200 dark:border-gray-600">Company</th>
+            <th className="px-4 py-2 border-b border-gray-200 dark:border-gray-600">Prizes</th>
+            <th className="px-4 py-2 border-b border-gray-200 dark:border-gray-600">Amounts</th>
+            <th className="px-4 py-2 border-b border-gray-200 dark:border-gray-600">Winners</th>
           </tr>
         </thead>
         <tbody>
           {prizes.map((prize, index) => {
-            const borderClass = index === 0 ? '' : 'border-t border-black';
+            const borderClass = index === 0 ? '' : 'border-t border-gray-200 dark:border-gray-700';
             return (
               <tr key={prize.company} className={borderClass}>
                 <td className="px-4 py-2">
-                  <Link href={prize.company_link} target="_blank" className="underline">
+                  <Link href={prize.company_link} target="_blank" className="underline text-primary">
                     {prize.company}
                   </Link>
                 </td>
                 {prize.prizes_link.length > 0 ? (
                   <td className="px-4 py-2">
-                    <Link href={prize.prizes_link} target="_blank" className="underline">
+                    <Link href={prize.prizes_link} target="_blank" className="underline text-primary">
                       {prize.prizes}
                     </Link>
                   </td>
@@ -153,7 +161,7 @@ function PrizesTable() {
                           <Link
                             target="_blank"
                             href={`https://warpcast.com/${name}`}
-                            className="underline"
+                            className="underline text-primary"
                           >
                             @{name}
                           </Link>
@@ -380,7 +388,7 @@ const prizes = [
 
 export default function Page() {
   return (
-    <main className="w-full h-full flex flex-col md:flex-row overflow-y-hidden">
+    <main className="flex h-full min-h-screen w-full flex-col overflow-y-hidden bg-background md:flex-row">
       <Info />
       <MasonryGrid />
     </main>

@@ -58,24 +58,24 @@ export default async function BuildersDayPage() {
   
   if (!hackathon) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-white text-2xl">
+      <div className="flex items-center justify-center min-h-screen text-foreground text-2xl">
         <p>Hackathon not found</p>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-background text-foreground">
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
           <img
             src={hackathon.square_image}
             alt={hackathon.name}
-            className="w-32 h-32 mx-auto rounded-xl mb-6"
+            className="w-32 h-32 mx-auto rounded-xl mb-6 ring-1 ring-gray-950/10 dark:ring-white/10"
           />
-          <h1 className="text-4xl font-bold mb-4">{hackathon.name}</h1>
-          <p className="text-xl text-gray-300 leading-relaxed">{hackathon.description}</p>
-          <div className="mt-6 text-gray-400">
+          <h1 className="text-4xl font-bold mb-4 text-foreground">{hackathon.name}</h1>
+          <p className="text-xl text-muted-foreground leading-relaxed">{hackathon.description}</p>
+          <div className="mt-6 text-muted-foreground">
             <p>{new Date(hackathon.start_date).toLocaleDateString()} - {new Date(hackathon.end_date).toLocaleDateString()}</p>
           </div>
           {/* TODO: add winners data back here from previous commits */}
