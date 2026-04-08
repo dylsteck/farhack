@@ -80,15 +80,16 @@ const tracks = [
     tagline: "Miniapps should assume agents are first-class actors.",
   },
   {
-    name: "Clients & Interfaces",
-    description: "Reimagine the Farcaster client experience for an agent-native world.",
+    name: "Snaps",
+    url: "https://docs.farcaster.xyz/snap",
+    description: "Build nimble, interactive apps embedded inside casts.",
     bullets: [
-      "Agent-aware feeds and timelines",
-      "Publishing tools that support human-agent co-authoring",
-      "Agent identity and badges in the social layer",
-      "Client-level controls for agent interactions",
+      "Interactive snaps with buttons, sliders & inputs",
+      "Agent-driven snaps that act on behalf of users in the feed",
+      "Stateful experiences powered by the snap key-value store",
+      "New primitives that push what a cast can do",
     ],
-    tagline: "How does social look when not all participants are human?",
+    tagline: "Apps that live inside the feed, not beside it.",
   },
 ];
 
@@ -191,7 +192,20 @@ export default async function FarConRomePage() {
                 key={track.name}
                 className="bg-gray-50/90 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 rounded-xl p-6 hover:border-gray-400 dark:hover:border-gray-700 transition-colors duration-200"
               >
-                <h3 className={`text-lg font-semibold mb-3 text-foreground ${funnelDisplay.className}`}>{track.name}</h3>
+                <h3 className={`text-lg font-semibold mb-3 text-foreground ${funnelDisplay.className}`}>
+                  {'url' in track && track.url ? (
+                    <a
+                      href={track.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-violet-700 dark:text-violet-300 hover:text-violet-800 dark:hover:text-violet-200 transition-colors"
+                    >
+                      {track.name} ↗
+                    </a>
+                  ) : (
+                    track.name
+                  )}
+                </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4">{track.description}</p>
                 <ul className="space-y-2 mb-4">
                   {track.bullets.map((bullet) => (
