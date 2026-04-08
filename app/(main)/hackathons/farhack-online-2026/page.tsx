@@ -80,11 +80,11 @@ const tracks = [
     tagline: "Miniapps should assume agents are first-class actors.",
   },
   {
-    name: "Snap",
+    name: "Snaps",
     url: "https://docs.farcaster.xyz/snap",
     description: "Build nimble, interactive apps embedded inside casts.",
     bullets: [
-      "Server-rendered snaps that respond to buttons, sliders, and text input",
+      "Interactive snaps with buttons, sliders & inputs",
       "Agent-driven snaps that act on behalf of users in the feed",
       "Stateful experiences powered by the snap key-value store",
       "New primitives that push what a cast can do",
