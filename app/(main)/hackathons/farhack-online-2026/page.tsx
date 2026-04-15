@@ -261,6 +261,14 @@ export default async function FarConRomePage() {
                 className="h-10 w-auto"
               />
             </a>
+            <a href="https://base.org" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity duration-200">
+              <HackathonPartnerLogo
+                srcLight="/sponsors/base-on-light.svg"
+                srcDark="/sponsors/base.svg"
+                alt="Base"
+                className="h-7 w-auto"
+              />
+            </a>
           </div>
         </div>
 
