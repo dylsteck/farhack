@@ -69,7 +69,7 @@ const tracks = [
     tagline: "Agents aren\u2019t features. They are network participants.",
   },
   {
-    name: "Agentic Miniapps",
+    name: "Miniapps",
     description: "Design miniapps that are built for agents and humans.",
     bullets: [
       "Agent-powered or generated miniapps",
@@ -127,10 +127,13 @@ export default async function FarConRomePage() {
             </p>
             <div className="mt-8 flex items-center justify-center gap-3 flex-wrap">
               <span className="px-4 py-1.5 text-sm font-medium text-violet-700 dark:text-violet-300 bg-violet-500/15 dark:bg-violet-500/10 rounded-full ring-1 ring-violet-500/25 dark:ring-violet-500/20">
-                April 6–19, 2026
+                April 6–26, 2026
               </span>
               <span className="px-4 py-1.5 text-sm font-medium text-cyan-700 dark:text-cyan-300 bg-cyan-500/15 dark:bg-cyan-500/10 rounded-full ring-1 ring-cyan-500/25 dark:ring-cyan-500/20">
                 Online
+              </span>
+              <span className="px-4 py-1.5 text-sm font-medium text-amber-700 dark:text-amber-300 bg-amber-500/15 dark:bg-amber-500/10 rounded-full ring-1 ring-amber-500/25 dark:ring-amber-500/20">
+                $3,000 in prizes
               </span>
             </div>
             <a
@@ -218,6 +221,21 @@ export default async function FarConRomePage() {
                 <p className="text-sm text-muted-foreground italic">{track.tagline}</p>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Prizes */}
+        <div className="mb-20">
+          <h2 className={`text-2xl md:text-3xl font-bold mb-10 text-center text-foreground ${funnelDisplay.className}`}>Prizes</h2>
+          <div className="relative rounded-2xl p-px bg-gradient-to-b from-amber-500/50 to-amber-500/10 dark:from-amber-500/60 dark:to-amber-500/10">
+            <div className="rounded-2xl bg-gray-50 dark:bg-gray-950 p-8 md:p-10 text-center">
+              <p className={`text-4xl md:text-5xl font-bold mb-3 text-foreground ${funnelDisplay.className}`}>
+                $3,000 <span className="text-amber-600 dark:text-amber-400">in total prizes</span>
+              </p>
+              <p className="text-muted-foreground max-w-3xl mx-auto whitespace-nowrap overflow-x-auto">
+                <strong className="text-foreground">$1,000</strong> awarded to the best project in each track — Agents, Miniapps, and Snaps.
+              </p>
+            </div>
           </div>
         </div>
 
