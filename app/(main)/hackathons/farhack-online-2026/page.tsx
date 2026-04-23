@@ -137,13 +137,16 @@ export default async function FarConRomePage() {
               </span>
             </div>
             <a
-              href="https://forms.gle/kLgD3sdfAmn27tGq5"
+              href="https://forms.gle/mBpBx4Q5xsP7zyFN9"
               target="_blank"
               rel="noopener noreferrer"
               className="mt-10 inline-block px-10 py-3.5 text-lg font-semibold text-white bg-violet-600 hover:bg-violet-500 rounded-xl transition-colors duration-200 cursor-pointer shadow-lg shadow-violet-600/25 dark:shadow-violet-600/20"
             >
-              Apply Now
+              Submit Project
             </a>
+            <p className="mt-4 text-sm text-muted-foreground">
+              Final submission deadline: <strong className="text-foreground">Sunday, April 26 · 11:59pm UTC</strong>
+            </p>
           </div>
         </div>
 
