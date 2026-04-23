@@ -144,6 +144,9 @@ export default async function FarConRomePage() {
             >
               Submit Project
             </a>
+            <p className="mt-4 text-sm text-muted-foreground">
+              Final submission deadline: <strong className="text-foreground">Sunday, April 26 · 11:59pm UTC</strong>
+            </p>
           </div>
         </div>
 
